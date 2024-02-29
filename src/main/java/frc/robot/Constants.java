@@ -57,14 +57,14 @@ public class Constants {
   public static class SwerveConsts {
     // Gains for module velocity error -> voltage
     public static final TunableNumber
-      kDriveS = new TunableNumber("S", 0, "Module Drive"),
-      kDriveP = new TunableNumber("P", 1.5e-2, "Module Drive");
+      kDriveS = new TunableNumber("S", 0.2, "Module Drive"),
+      kDriveP = new TunableNumber("P", 0.015, "Module Drive");
 
     // Gains for module azimuth error (degrees) -> voltage
     public static final TunableNumber
-      kAzimuthS = new TunableNumber("S", 0, "Module Azimuth"),
-      kAzimuthP = new TunableNumber("P", 0.0065, "Module Azimuth"),
-      kAzimuthD = new TunableNumber("D", 0.00005, "Module Azimuth");
+      kAzimuthS = new TunableNumber("S", 0.2, "Module Azimuth"),
+      kAzimuthP = new TunableNumber("P", 0.09, "Module Azimuth"),
+      kAzimuthD = new TunableNumber("D", 0.00065, "Module Azimuth");
 
     // Whether azimuth motor is inverted, use for mk4i's
     public static final boolean kAzimuthInverted = true;
