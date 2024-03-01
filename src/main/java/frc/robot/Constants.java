@@ -82,9 +82,9 @@ public class Constants {
 
     public static final int kNEOIntakeVoltage = 3;
     public static final int kNEOCurrentLimit = 40;
-    public static final int kShootSpeed = -1; 
-    public static final double kSpitSpeed = -0.35;
-    public static final double kHoldSpeed = -0.05;
+    public static final int kShootVoltage = -12; 
+    public static final double kSpitVoltage = -4.2;
+    public static final double kHoldVoltage = -0.6;
   }
 
   /** Data for each individual swerve module. */

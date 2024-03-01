@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
 
     // If inverted and has a game piece, apply tension to hold in a piece
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && m_inverted) {holdingMotor.set(ShooterConsts.kHoldSpeed);}},
+      () -> {if (m_holding && m_inverted) {holdingMotor.setVoltage(ShooterConsts.kHoldVoltage);}},
       Shooter::stop
     ));
   }
@@ -82,7 +82,7 @@ public class Shooter extends SubsystemBase {
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_motor.set(m_inverted ? -ShooterConsts.kSpitSpeed : ShooterConsts.kSpitSpeed);
+        m_motor.setVoltage(m_inverted ? -ShooterConsts.kSpitVoltage : ShooterConsts.kSpitVoltage);
         m_holding = false;
       },
       Shooter::stop
