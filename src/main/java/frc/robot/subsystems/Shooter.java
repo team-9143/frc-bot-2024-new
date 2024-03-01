@@ -7,6 +7,7 @@ import frc.robot.Constants.ShooterConsts;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -30,10 +31,11 @@ public class Shooter extends SubsystemBase {
 
   /** Used to invert wheels */
   private static boolean m_inverted = false;
+    private final static CANSparkMax 
+      m_motor = new CANSparkMax(DeviceConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless),
+      neoMotorWithSparksMax = new CANSparkMax(DeviceConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless);
 
-  private static final CANSparkMax m_motor = new CANSparkMax(DeviceConsts.kShooterID, MotorType.kBrushless);
-
-  private static final CANSparkMax neoMotorWithSparksMax = new CANSparkMax(DeviceConsts.kShooterID, MotorType.kBrushless);
+    static { neoMotorWithSparksMax.follow(m_motor); }
 
   private static final RelativeEncoder m_encoder = m_motor.getEncoder();
 
@@ -46,6 +48,10 @@ public class Shooter extends SubsystemBase {
       () -> {if (m_holding && m_inverted) {holdingMotor.set(ShooterConsts.kHoldSpeed);}},
       Shooter::stop
     ));
+  }
+
+  public Command invert(){
+    return startEnd(() -> m_inverted = false, () -> m_inverted = true);
   }
 
   public double getSpeed() {return m_motor.get();}
@@ -62,6 +68,14 @@ public class Shooter extends SubsystemBase {
       },
       Shooter::stop
     );
+  }
+
+  public Command getFeedCommand(){
+    return startEnd(
+      () -> {
+        holdingMotor.setVoltage(12);
+      },
+      Shooter::stop);
   }
 
   /** @return a command to spit a game piece at partial speed for amp */

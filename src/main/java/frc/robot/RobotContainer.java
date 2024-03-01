@@ -94,7 +94,21 @@ public class RobotContainer {
     OI.DRIVER_CONTROLLER.onFalse(btn.Y, cXStance::cancel);
   }
 
-  private static void configureOperator() {}
+  private static void configureOperator() {
+    // Button 'A' (hold) sets subsystem to fast
+    final var cFast = new StartEndCommand(
+      () -> ExampleStateSubsystem.getInstance().setState(ExampleStateSubsystem.States.FAST),
+      () -> ExampleStateSubsystem.getInstance().setState(ExampleStateSubsystem.States.STOP),
+      ExampleStateSubsystem.getInstance()
+    );
+    OI.OPERATOR_CONTROLLER.onTrue(btn.A, cFast::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.A, cFast::cancel);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.RB, Shooter.getInstance()::getShootCommand);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.RB, Shooter.getInstance().getShootCommand()::cancel);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.X, Shooter.getInstance()::invert);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.X, Shooter.getInstance().invert()::cancel);
+
+  }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
   public static void stop() {
