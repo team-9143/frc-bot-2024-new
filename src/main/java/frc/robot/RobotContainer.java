@@ -95,24 +95,19 @@ public class RobotContainer {
   }
 
   private static void configureOperator() {
-    // Button 'A' (hold) sets subsystem to fast
-    final var cFast = new StartEndCommand(
-      () -> ExampleStateSubsystem.getInstance().setState(ExampleStateSubsystem.States.FAST),
-      () -> ExampleStateSubsystem.getInstance().setState(ExampleStateSubsystem.States.STOP),
-      ExampleStateSubsystem.getInstance()
-    );
-    OI.OPERATOR_CONTROLLER.onTrue(btn.A, cFast::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.A, cFast::cancel);
-
+    // TODO(shooter): This is wrong, do not use a RunCommand here, just use the Command returned by the getShootCommand function (what this will actually do is continuously run getShootCommand while RB is held)
+    // TODO(shooter): add documentation in this format: Button 'A' (hold) sets subsystem to fast
     final var cShoot = new RunCommand(Shooter.getInstance()::getShootCommand, Shooter.getInstance());
-    final var cFeed = new RunCommand(Shooter.getInstance()::invert, (Subsystem[]) null);
-
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
+
+    // TODO(shooter): add documentation in this format: Button 'A' (hold) sets subsystem to fast
+    final var cFeed = new RunCommand(Shooter.getInstance()::invert);
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeed::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeed::cancel);
-    //new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).onTrue(new )
 
+    // TODO(shooter): whats this?
+    //new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).onTrue(new )
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */

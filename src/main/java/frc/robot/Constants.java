@@ -79,12 +79,12 @@ public class Constants {
   }
 
   public static class ShooterConsts {
+    public static final byte kShooterID = 12; // TODO(shooter): Can't use 12 b/c of swerve
 
-    public static final int kNEOIntakeVoltage = 3;
-    public static final int kNEOCurrentLimit = 40;
-    public static final int kShootVoltage = -12; 
-    public static final double kSpitVoltage = -4.2;
-    public static final double kHoldVoltage = -0.6;
+    public static final int kSourceIntakeVolts = 3;
+    public static final int kShootVolts = -12;
+    public static final double kSpitVolts = -4.2;
+    public static final double kHoldVolts = -0.6;
   }
 
   /** Data for each individual swerve module. */

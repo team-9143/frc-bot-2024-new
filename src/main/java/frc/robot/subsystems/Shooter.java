@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DeviceConsts;
 import frc.robot.Constants.PhysConsts;
 import frc.robot.Constants.ShooterConsts;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,15 +24,15 @@ public class Shooter extends SubsystemBase {
   }
 
   TalonFX holdingMotor = new TalonFX(0);
-  
+
   /** Used to apply tension if a game piece is being held in the intake. */
   private static boolean m_holding = false;
 
   /** Used to invert wheels */
   private static boolean m_inverted = false;
-    private final static CANSparkMax 
-      m_motor = new CANSparkMax(DeviceConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless),
-      neoMotorWithSparksMax = new CANSparkMax(DeviceConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless);
+    private final static CANSparkMax
+      m_motor = new CANSparkMax(ShooterConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless),
+      neoMotorWithSparksMax = new CANSparkMax(ShooterConsts.kShooterID, CANSparkLowLevel.MotorType.kBrushless);
 
     static { neoMotorWithSparksMax.follow(m_motor); }
 
@@ -45,12 +44,12 @@ public class Shooter extends SubsystemBase {
 
     // If inverted and has a game piece, apply tension to hold in a piece
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && m_inverted) {holdingMotor.setVoltage(ShooterConsts.kHoldVoltage);}},
+      () -> {if (m_holding && m_inverted) {holdingMotor.setVoltage(ShooterConsts.kHoldVolts);}},
       Shooter::stop
     ));
   }
 
-  public Command invert(){
+  public Command invert() {
     return startEnd(() -> m_inverted = false, () -> m_inverted = true);
   }
 
@@ -59,18 +58,18 @@ public class Shooter extends SubsystemBase {
   public static void stop() {
     m_motor.stopMotor();
   }
-                                 
+
   /** @return a command to intake a game piece */
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_motor.setVoltage(m_inverted ? ShooterConsts.kNEOIntakeVoltage : -ShooterConsts.kNEOIntakeVoltage * 4);
+        m_motor.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4);
       },
       Shooter::stop
     );
   }
 
-  public Command getFeedCommand(){
+  public Command getFeedCommand() {
     return startEnd(
       () -> {
         holdingMotor.setVoltage(12);
@@ -82,7 +81,7 @@ public class Shooter extends SubsystemBase {
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_motor.setVoltage(m_inverted ? -ShooterConsts.kSpitVoltage : ShooterConsts.kSpitVoltage);
+        m_motor.setVoltage(m_inverted ? -ShooterConsts.kSpitVolts : ShooterConsts.kSpitVolts);
         m_holding = false;
       },
       Shooter::stop
