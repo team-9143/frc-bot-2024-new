@@ -103,10 +103,15 @@ public class RobotContainer {
     );
     OI.OPERATOR_CONTROLLER.onTrue(btn.A, cFast::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.A, cFast::cancel);
-    OI.OPERATOR_CONTROLLER.onTrue(btn.RB, Shooter.getInstance()::getShootCommand);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.RB, Shooter.getInstance().getShootCommand()::cancel);
-    OI.OPERATOR_CONTROLLER.onTrue(btn.X, Shooter.getInstance()::invert);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.X, Shooter.getInstance().invert()::cancel);
+
+    final var cShoot = new RunCommand(Shooter.getInstance()::getShootCommand, Shooter.getInstance());
+    final var cFeed = new RunCommand(Shooter.getInstance()::invert, (Subsystem[]) null);
+
+    OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeed::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeed::cancel);
+    //new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).onTrue(new )
 
   }
 
