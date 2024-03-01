@@ -59,35 +59,36 @@ public class Constants {
       kDriveS = new TunableNumber("S", 0.15, "Module Drive"),
       kDriveP = new TunableNumber("P", 0.015, "Module Drive");
 
-    // Gains for module azimuth error (degrees) -> voltage
-    public static final TunableNumber
-      kAzimuthS = new TunableNumber("S", 0.095, "Module Azimuth"),
-      kAzimuthP = new TunableNumber("P", 0.085, "Module Azimuth"),
-      kAzimuthD = new TunableNumber("D", 0.00065, "Module Azimuth");
-
     // Whether azimuth motor is inverted, use for mk4i's
     public static final boolean kAzimuthInverted = true;
 
-    // TODO(user): Update swerve module ID's, locations, and cancoder offsets
     public static final SwerveModuleConstants
       kSwerve_fl = new SwerveModuleConstants(
+        "SwerveFL",
+        0.095, 0.085, 0.00065, // Gains
+        -0.100341, // Offset
         11, 12, 13,
-        -0.100341,
         new Translation2d(0.14605, 0.24765)
       ),
       kSwerve_fr = new SwerveModuleConstants(
+        "SwerveFR",
+        0.095, 0.085, 0.00065, // Gains
+        -0.673096, // Offset
         21, 22, 23,
-        -0.673096,
         new Translation2d(0.14605, -0.24765)
       ),
       kSwerve_bl = new SwerveModuleConstants(
+        "SwerveBL",
+        0.095, 0.085, 0.00065, // Gains
+        -0.086670, // Offset
         31, 32, 33,
-        -0.086670,
         new Translation2d(-0.24765, 0.24765)
       ),
       kSwerve_br = new SwerveModuleConstants(
+        "SwerveBR",
+        0.095, 0.085, 0.00065, // Gains
+        -0.687012, // Offset
         41, 42, 43,
-        -0.687012,
         new Translation2d(-0.24765, -0.24765)
       );
   }

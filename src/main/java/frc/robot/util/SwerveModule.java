@@ -31,8 +31,12 @@ public class SwerveModule {
   private final CANcoder cancoder;
   private final Supplier<Double> rotationSupplier;
 
-  private final PIDController speed_controller;
+  private final PIDController drive_controller;
   private final PIDController azimuth_controller;
+
+  private final TunableNumber kS;
+  private final TunableNumber kP;
+  private final TunableNumber kD;
 
   protected SwerveModule(SwerveModuleConstants constants) {
     drive_motor = new CANSparkMax(constants.drive_ID, MotorType.kBrushless);
@@ -53,15 +57,18 @@ public class SwerveModule {
     positionSignal.setUpdateFrequency(50);
     rotationSupplier = () -> positionSignal.refresh().getValue() * 360d; // UNIT: ccw degrees
 
-    // Configure speed PID controller
-    speed_controller = new PIDController(SwerveConsts.kDriveP.getAsDouble(), 0, 0);
-    SwerveConsts.kDriveP.bind(speed_controller::setP);
-    speed_controller.setSetpoint(0);
+    // Configure drive PID controller
+    drive_controller = new PIDController(SwerveConsts.kDriveP.getAsDouble(), 0, 0);
+    SwerveConsts.kDriveP.bind(drive_controller::setP);
+    drive_controller.setSetpoint(0);
 
     // Configure azimuth PID controller
-    azimuth_controller = new PIDController(SwerveConsts.kAzimuthP.getAsDouble(), 0, SwerveConsts.kAzimuthD.getAsDouble());
-    SwerveConsts.kAzimuthP.bind(azimuth_controller::setP);
-    SwerveConsts.kAzimuthD.bind(azimuth_controller::setD);
+    kS = new TunableNumber("S", constants.kS, constants.name);
+    kP = new TunableNumber("P", constants.kP, constants.name);
+    kD = new TunableNumber("D", constants.kD, constants.name);
+    azimuth_controller = new PIDController(kP.getAsDouble(), 0, kD.getAsDouble());
+    kP.bind(azimuth_controller::setP);
+    kD.bind(azimuth_controller::setD);
     azimuth_controller.enableContinuousInput(-180, 180);
     azimuth_controller.setSetpoint(0);
   }
@@ -76,7 +83,7 @@ public class SwerveModule {
     // Calculate and set azimuth motor speed
     azimuth_motor.setVoltage(
       Math.max(-DriveConsts.kMaxModuleAzimuthVoltage, Math.min(DriveConsts.kMaxModuleAzimuthVoltage, // Clamp to nominal voltage
-        SwerveConsts.kAzimuthS.getAsDouble() * Math.signum(angle - getAngle()) // Simple static feedforward
+        kS.getAsDouble() * Math.signum(angle - getAngle()) // Simple static feedforward
         + azimuth_controller.calculate(getAngle(), angle) // Azimuth feedback controller
       ))
     );
@@ -86,7 +93,7 @@ public class SwerveModule {
       Math.max(-PhysConsts.kNEOMaxVoltage, Math.min(PhysConsts.kNEOMaxVoltage, // Clamp to nominal voltage
         SwerveConsts.kDriveS.getAsDouble() * Math.signum(speed) // Simple static feedforward
         + (PhysConsts.kNEOMaxVoltage * speed/DriveConsts.kMaxLinearVelMetersPerSecond) // Simple velocity feedforward
-        + speed_controller.calculate(getVelocity(), speed) // Velocity adjustment feedback controller
+        + drive_controller.calculate(getVelocity(), speed) // Velocity adjustment feedback controller
       )) * Math.abs(Math.cos(getAngleError() * Math.PI/180)) // Scale velocity down if not at proper angle
     );
   }
@@ -119,6 +126,11 @@ public class SwerveModule {
     return azimuth_controller.getPositionError();
   }
 
+  /** @return the current error in the velocity of the module (UNIT: meters/s) */
+  public double getVelocityError() {
+    return drive_controller.getPositionError();
+  }
+
   /** @return the distance traveled by the module (UNIT: meters) */
   public double getDistance() {
     return drive_encoder.getPosition();
@@ -129,30 +141,43 @@ public class SwerveModule {
     azimuth_motor.stopMotor();
 
     azimuth_controller.reset();
-    speed_controller.reset();
+    drive_controller.reset();
   }
 
   /** Basic constants for the construction of a {@link SwerveModule}. */
   public static class SwerveModuleConstants {
+    public final String name;
+
+    public final double kS;
+    public final double kP;
+    public final double kD;
+    public final double cancoderOffset;
+
     public final int drive_ID;
     public final int azimuth_ID;
     public final int cancoder_ID;
-
-    public final double cancoderOffset;
     public final Translation2d location;
 
     /**
+     * @param name name of the swerve module for data retrieval
+     * @param kS azimuth S gain
+     * @param kP azimuth P gain
+     * @param kD azimuth D gain
+     * @param cancoderOffsetRotations additive cancoder offset (UNIT: ccw rotations)
      * @param drive_ID driving motor ID (Spark Max with brushless motor)
      * @param azimuth_ID azimuth motor ID (Spark Max with brushless motor)
      * @param cancoder_ID cancoder ID
-     * @param cancoderOffsetRotations additive cancoder offset (UNIT: ccw rotations)
      * @param location location of the wheel relative to the center of rotation of the robot (forward, left) (UNIT: meters)
      */
-    public SwerveModuleConstants(int drive_ID, int azimuth_ID, int cancoder_ID, double cancoderOffsetRotations, Translation2d location) {
+    public SwerveModuleConstants(String name, double kS, double kP, double kD, double cancoderOffsetRotations, int drive_ID, int azimuth_ID, int cancoder_ID, Translation2d location) {
+      this.name = name;
+      this.kS = kS;
+      this.kP = kP;
+      this.kD = kD;
+      this.cancoderOffset = cancoderOffsetRotations;
       this.drive_ID = drive_ID;
       this.azimuth_ID = azimuth_ID;
       this.cancoder_ID = cancoder_ID;
-      this.cancoderOffset = cancoderOffsetRotations;
       this.location = location;
     }
   }
