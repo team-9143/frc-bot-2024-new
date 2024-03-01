@@ -17,7 +17,6 @@ public class Constants {
 
   /** Ports and properties of non-motor devices. */
   public static class DeviceConsts {
-    // TODO(user): Update ID's
     public static final byte kDriverPort = 0;
     public static final byte kOperatorPort = 1;
     public static final byte kPigeonID = 5;
@@ -28,7 +27,6 @@ public class Constants {
     public static final double kPigeonRollOffset = 0;
   }
 
-  // TODO(user): Fix all physical robot constraints as design dictates
   /** Physical parts of the robot, such as gearboxes or wheel diameters. */
   public static class PhysConsts {
     public static final int kNEOMaxVoltage = 12; // NEO V1.1 nominal voltage
