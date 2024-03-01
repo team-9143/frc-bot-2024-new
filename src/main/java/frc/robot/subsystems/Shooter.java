@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DeviceConsts;
 import frc.robot.Constants.PhysConsts;
+import frc.robot.Constants.ShooterConsts;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -37,14 +38,12 @@ public class Shooter extends SubsystemBase {
   private static final RelativeEncoder m_encoder = m_motor.getEncoder();
 
   private Shooter() {
-    m_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox); // UNIT: rotations
-    m_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox); // UNIT: rpm
     m_encoder.setMeasurementPeriod(20);
     m_encoder.setPosition(0);
 
     // If inverted and has a game piece, apply tension to hold in a piece
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && m_inverted) {holdingMotor.set(IntakeConstants.kHoldSpeed);}},
+      () -> {if (m_holding && m_inverted) {holdingMotor.set(ShooterConsts.kHoldSpeed);}},
       Shooter::stop
     ));
   }
@@ -56,22 +55,10 @@ public class Shooter extends SubsystemBase {
   }
                                  
   /** @return a command to intake a game piece */
-  public Command getIntakeCommand() {
-    return startEnd(
-      () -> {
-        m_motor.set(m_inverted ? -PhysConsts.kNEOMaxVoltage : PhysConsts.kNEOCurrentLimit);
-        m_holding = true;
-      },
-      Shooter::stop
-    );
-  }
-
-  /** @return a command to shoot a game piece at full speed for shooter */
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_motor.set(m_inverted ? -IntakeConstants.kShootSpeed : IntakeConstants.kShootSpeed);
-        m_holding = false;
+        m_motor.setVoltage(m_inverted ? ShooterConsts.kNEOIntakeVoltage : -ShooterConsts.kNEOIntakeVoltage * 4);
       },
       Shooter::stop
     );
@@ -81,7 +68,7 @@ public class Shooter extends SubsystemBase {
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_motor.set(m_inverted ? -IntakeConstants.kSpitSpeed : IntakeConstants.kSpitSpeed);
+        m_motor.set(m_inverted ? -ShooterConsts.kSpitSpeed : ShooterConsts.kSpitSpeed);
         m_holding = false;
       },
       Shooter::stop

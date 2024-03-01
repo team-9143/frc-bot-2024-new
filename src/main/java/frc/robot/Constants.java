@@ -78,6 +78,15 @@ public class Constants {
     public static final int kPeriodMs = 10;
   }
 
+  public static class ShooterConsts {
+
+    public static final int kNEOIntakeVoltage = 3;
+    public static final int kNEOCurrentLimit = 40;
+    public static final int kShootSpeed = -1; 
+    public static final double kSpitSpeed = -0.35;
+    public static final double kHoldSpeed = -0.05;
+  }
+
   /** Data for each individual swerve module. */
   public static class SwerveConsts {
     // Gains for module velocity error -> voltage
