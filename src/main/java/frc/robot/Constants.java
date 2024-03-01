@@ -11,9 +11,8 @@ public class Constants {
   public static class Config {
     /** {@code true} to stream log file data to NetworkTables (takes up bandwith and processing time, but useful for concurrent running and visualization) */
     public static final boolean NTStream = false;
-    // TODO(dev): Figure out how to store in local computer directory
-    /** Directory for log file. Leave blank to store in USB or roboRIO. */
-    public static final String DATA_LOG_DIR = ""; // "C:/Users/Robotics/Desktop/logs/";
+    /** Directory for log file. Leave blank to store in roboRIO or RIO-attached USB. */
+    public static final String DATA_LOG_DIR = "";
   }
 
   /** Ports and properties of non-motor devices. */
