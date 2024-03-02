@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MountPoseConfigs;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 
+// TODO(dev/user): Remove unecessary portions of this class
 /**
  * This class implements configuration and angle measurement functionality of a Pigeon 2. It is meant mainly to be used to stop unauthorized resetting of this data, as it should only be changed by the odometry.
  * <p> Roll should increase to robot-right, pitch to robot-front, and yaw counter-clockwise. </p>

@@ -20,11 +20,6 @@ public class Constants {
     public static final byte kDriverPort = 0;
     public static final byte kOperatorPort = 1;
     public static final byte kPigeonID = 2;
-
-    // TODO(user): Update pigeon offsets
-    // Pitch and roll offsets - REMEMBER TO UPDATE
-    public static final double kPigeonPitchOffset = 0;
-    public static final double kPigeonRollOffset = 0;
   }
 
   /** Physical parts of the robot, such as gearboxes or wheel diameters. */
