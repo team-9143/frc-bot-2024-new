@@ -38,8 +38,9 @@ public class Constants {
     // Upper bound drivetrain constraints
     public static final double kMaxLinearVelMetersPerSecond = PhysConsts.kSwerveDriveRPS * PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters * 0.75; // 75% of theoretical max (motor RPS * gearbox * wheel circumfrence * 80%)
     public static final double kMaxTurnVelRadiansPerSecond = kMaxLinearVelMetersPerSecond / Constants.SwerveConsts.kSwerve_fl.location.getDistance(new Translation2d()); // ω = velocity / radius (assuming square swerve drivetrain)
-    public static final double kMaxModuleAzimuthVoltage = 0.65 * PhysConsts.kNEOMaxVoltage; // Maximum azimuth motor voltage
-    public static final double kMaxModuleDriveVoltage = 0.9 * PhysConsts.kNEOMaxVoltage; // Maximum drive motor voltage (to avoid brownouts)
+    public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysConsts.kNEOMaxVoltage; // Maximum azimuth motor voltage
+    public static final double kModuleDriveMaxVoltage = 0.9 * PhysConsts.kNEOMaxVoltage; // Maximum drive motor voltage (to avoid brownouts)
+    public static final int kModuleAzimuthCurrentLimit = 30;
 
     // Multipliers for all teleop driving
     public static final double kTeleopSpeedMult = 1;

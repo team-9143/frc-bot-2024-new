@@ -40,8 +40,10 @@ public class SwerveModule {
 
   protected SwerveModule(SwerveModuleConstants constants) {
     drive_motor = new CANSparkMax(constants.drive_ID, MotorType.kBrushless);
+    drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
     azimuth_motor = new CANSparkMax(constants.azimuth_ID, MotorType.kBrushless);
     azimuth_motor.setInverted(SwerveConsts.kAzimuthInverted);
+    azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit);
 
     // Configure drive encoder
     drive_encoder = drive_motor.getEncoder();
@@ -82,7 +84,7 @@ public class SwerveModule {
   protected void drive(double speed, double angle) {
     // Calculate and set azimuth motor speed
     azimuth_motor.setVoltage(
-      Math.max(-DriveConsts.kMaxModuleAzimuthVoltage, Math.min(DriveConsts.kMaxModuleAzimuthVoltage, // Clamp to nominal voltage
+      Math.max(-DriveConsts.kModuleAzimuthMaxVoltage, Math.min(DriveConsts.kModuleAzimuthMaxVoltage, // Clamp to nominal voltage
         kS.getAsDouble() * Math.signum(angle - getAngle()) // Simple static feedforward
         + azimuth_controller.calculate(getAngle(), angle) // Azimuth feedback controller
       ))
