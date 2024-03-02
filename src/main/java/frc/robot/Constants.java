@@ -80,8 +80,8 @@ public class Constants {
 
   public static class ShooterConsts {
     public static final byte kFeedMotorID = 3;
-    public static final byte kBottomShooterMotorID = 4;
-    public static final byte kTopShooterMotorID = 5;
+    public static final byte kTopShooterMotorID = 4;
+    public static final byte kBottomShooterMotorID = 5;
     public static final double kSourceIntakeVolts = 3;
     public static final double kShootVolts = -12;
     public static final double kHoldingVolts = 12;
