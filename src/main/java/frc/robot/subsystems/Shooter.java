@@ -48,8 +48,8 @@ public class Shooter extends SubsystemBase {
   }
 
   // TODO(shooter): if this is a command, it should say so. Add docs. Also, why is this a command? Finally, why is inverted set to false during the duration of the command? And why doesn't it require any subsystem?
-  public Command invert() {
-    return startEnd(() -> m_inverted = false, () -> m_inverted = true);
+  public void invert() {
+    m_inverted = m_inverted == true ? false : true;
   }
 
   public double getSpeed() {return m_motor.get();} // TODO(shooter): Document units. Do we need this method for anything? If we do, it should be returning RPM or RPS measured by encoder

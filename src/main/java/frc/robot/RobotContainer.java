@@ -96,18 +96,18 @@ public class RobotContainer {
 
   private static void configureOperator() {
     // TODO(shooter): This is wrong, do not use a RunCommand here, just use the Command returned by the getShootCommand function (what this will actually do is continuously run getShootCommand while RB is held)
-    // TODO(shooter): add documentation in this format: Button 'A' (hold) sets subsystem to fast
-    final var cShoot = new RunCommand(Shooter.getInstance()::getShootCommand, Shooter.getInstance());
+    // Button 'RB' (press) Shoots held note
+    final Command cShoot = Shooter.getInstance().getShootCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // TODO(shooter): add documentation in this format: Button 'A' (hold) sets subsystem to fast
-    final var cFeed = new RunCommand(Shooter.getInstance()::invert);
-    OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeed::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeed::cancel);
+    // Button 'X' (hold) inverts shooter wheels while held
+    OI.OPERATOR_CONTROLLER.onTrue(btn.X, Shooter.getInstance()::invert);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.X, Shooter.getInstance()::invert);
 
-    // TODO(shooter): whats this?
-    //new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).onTrue(new )
+    // Feeds shooter if note falls in too deep
+    final Command cFeed = Shooter.getInstance().getFeedCommand();
+    new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).whileTrue(cFeed);
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
