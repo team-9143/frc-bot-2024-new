@@ -12,7 +12,7 @@ import com.revrobotics.RelativeEncoder;
 // TODO(shooter): TLDR theres a lot of stuff here that is clearly unneded or implemented wrong, make sure you understand eveyrthing in here and can explain why its there and when its used.
 
 // TODO(shooter): this should extend SafeSubsystem. see ExampleSubsystem to see how to implement relevant methods
-/** Controls indexer wheels. */ // TODO(shooter): Thought this controlled shooter wheels and indexer wheels?
+/** Controls indexer and shooter wheels. */
 public class Shooter extends SubsystemBase {
   private static Shooter m_instance;
 
@@ -27,12 +27,12 @@ public class Shooter extends SubsystemBase {
   /** Used to apply tension if a game piece is being held in the intake. */
   private static boolean m_holding = false; // TODO(shooter): this is never set to true. Is it needed? delete otherwise.
 
-  /** Used to invert wheels */ // TODO(shooter): invert wheels when? what for? add docs
+  /** Used to invert wheels for intaking */
   private static boolean m_inverted = false;
 
   private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterID, MotorType.kBrushless);
 
-  TalonFX holdingMotor = new TalonFX(0); // TODO(shooter): this variable should be final and follow the naming system used elsewhere (m_holdingMotor or similar). Also, put the ID in ShooterConsts
+  private final static TalonFX m_holdingMotor = new TalonFX(0); // TODO(shooter): this variable should be final and follow the naming system used elsewhere (m_holdingMotor or similar). Also, put the ID in ShooterConsts
 
   private static final RelativeEncoder m_encoder = m_motor.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
 
@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase {
 
     // If inverted and has a game piece, apply tension to hold in a piece
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && m_inverted) {holdingMotor.setVoltage(ShooterConsts.kHoldVolts);}},
+      () -> {if (m_holding && m_inverted) {m_holdingMotor.setVoltage(ShooterConsts.kHoldVolts);}},
       Shooter::stop
     ));
   }
@@ -74,7 +74,7 @@ public class Shooter extends SubsystemBase {
   public Command getFeedCommand() {
     return startEnd(
       () -> {
-        holdingMotor.setVoltage(12); // TODO(shooter): trust me, put this number in ShooterConsts
+        m_holdingMotor.setVoltage(12); // TODO(shooter): trust me, put this number in ShooterConsts
       },
       Shooter::stop);
   }
