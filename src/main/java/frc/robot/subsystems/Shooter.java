@@ -40,12 +40,10 @@ public class Shooter extends SubsystemBase {
     m_encoder.setPosition(0);
   }
 
-  // TODO(shooter): if this is a command, it should say so. Add docs. Also, why is this a command? Finally, why is inverted set to false during the duration of the command? And why doesn't it require any subsystem?
+  /**Reverses current value of m_inverted**/
   public void invert() {
-    m_inverted = m_inverted == true ? false : true;
+    m_inverted = m_inverted == false ? true : false;
   }
-
-  public double getSpeed() {return m_motor.get();} // TODO(shooter): Document units. Do we need this method for anything? If we do, it should be returning RPM or RPS measured by encoder
 
   public static void stop() {
     m_motor.stopMotor();
@@ -56,13 +54,13 @@ public class Shooter extends SubsystemBase {
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_motor.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4); // TODO(shooter): why is this inverted sometimes?
+        m_motor.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4); // ability to invert for source intake
       },
       Shooter::stop
     );
   }
 
-  // TODO(shooter): add documentation, have it stop automatically after fed
+  /**Uses bottom shooter motor to feed the top shooter motors**/
   public Command getFeedCommand() {
     return startEnd(
       () -> {
