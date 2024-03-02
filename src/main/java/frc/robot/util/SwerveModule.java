@@ -93,10 +93,12 @@ public class SwerveModule {
     // Calculate and set drive motor speed
     drive_motor.setVoltage(
       Math.max(-PhysConsts.kNEOMaxVoltage, Math.min(PhysConsts.kNEOMaxVoltage, // Clamp to nominal voltage
-        SwerveConsts.kDriveS.getAsDouble() * Math.signum(speed) // Simple static feedforward
-        + (DriveConsts.kModuleDriveMaxVoltage/DriveConsts.kMaxLinearVelMetersPerSecond * speed) // Simple velocity feedforward
-        + drive_controller.calculate(getVelocity(), speed) // Velocity adjustment feedback controller
-      )) * Math.abs(Math.cos(getAngleError() * Math.PI/180)) // Scale velocity down if not at proper angle
+        Math.max(
+          SwerveConsts.kDriveS.getAsDouble(), // Static feedforward
+          DriveConsts.kModuleDriveMaxVoltage/DriveConsts.kMaxLinearVelMetersPerSecond * Math.abs(speed) // Velocity feedforward
+        ) * Math.signum(speed) // Ensures minimum voltage scaling linearly with velocity
+        + drive_controller.calculate(getVelocity(), speed) // Feedback controller for velocity adjustment (helpful for following auton paths)
+      )) * Math.abs(Math.cos(getAngleError() * Math.PI/180)) // Scale velocity down if not at proper angle to reduce drag/unintended movement
     );
   }
 
