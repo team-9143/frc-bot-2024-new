@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import frc.robot.logger.Logger;
 import frc.robot.util.SwerveDrive;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.StatusSignal;
+
 import frc.robot.devices.OI;
-import frc.robot.devices.CustomPigeon2;
 import frc.robot.Constants.DeviceConsts;
 import frc.robot.Constants.DriveConsts;
 import frc.robot.Constants.SwerveConsts;
@@ -13,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SafeSubsystem {
@@ -27,7 +30,14 @@ public class Drivetrain extends SafeSubsystem {
     return m_instance;
   }
 
-  private static CustomPigeon2 m_gyro = new CustomPigeon2(DeviceConsts.kPigeonID, 0, 0);
+  // Pigeon2 setup
+  private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConsts.kPigeonID);
+  static {
+    m_pigeon2.getConfigurator().apply(DeviceConsts.kPigeonMountPose);
+    m_pigeon2.setYaw(0);
+    StatusSignal.setUpdateFrequencyForAll(50, m_pigeon2.getYaw(), m_pigeon2.getQuatW(), m_pigeon2.getQuatX(), m_pigeon2.getQuatY(), m_pigeon2.getQuatZ());
+    m_pigeon2.optimizeBusUtilization();
+  }
 
   public static final SwerveModuleState[] xStanceStates = new SwerveModuleState[] {
     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
@@ -37,7 +47,7 @@ public class Drivetrain extends SafeSubsystem {
   };
 
   private static final SwerveDrive m_swerve = new SwerveDrive(
-    () -> Rotation2d.fromDegrees(m_gyro.getYaw()),
+    m_pigeon2::getRotation2d,
     SwerveConsts.kSwerve_fl,
     SwerveConsts.kSwerve_fr,
     SwerveConsts.kSwerve_bl,
@@ -118,6 +128,9 @@ public class Drivetrain extends SafeSubsystem {
   /** @return the robot's estimated location */
   public Pose2d getPose() {return m_swerve.getPose();}
 
+  /** @return the gyro's orientation */
+  public Rotation3d getOrientation() {return m_pigeon2.getRotation3d().plus(gyroOffset);}
+
   /** @return the drivetrain's desired velocities */
   public ChassisSpeeds getDesiredSpeeds() {return m_swerve.getDesiredSpeeds();}
 
@@ -140,10 +153,9 @@ public class Drivetrain extends SafeSubsystem {
     Logger.recordOutput(getDirectory()+"measuredSpeeds", getMeasuredSpeeds());
     Logger.recordOutput(getDirectory()+"desiredSpeeds", getDesiredSpeeds());
 
-    Logger.recordOutput(getDirectory()+"3dPosition",
-      new Pose3d(getPose().getX(), getPose().getY(), 0, m_gyro.getRotation3d())); // Height always set to 0
+    Logger.recordOutput(getDirectory()+"3dPosition", new Pose3d(getPose().getX(), getPose().getY(), 0, getOrientation())); // Height always set to 0
 
-    // Uncoment to log angle errors
+    // Uncoment to log azimuth errors
     // Logger.recordOutput(getDirectory()+"AngleErrorFL", m_swerve.modules[0].getAngleError());
     // Logger.recordOutput(getDirectory()+"AngleErrorFR", m_swerve.modules[1].getAngleError());
     // Logger.recordOutput(getDirectory()+"AngleErrorBL", m_swerve.modules[2].getAngleError());

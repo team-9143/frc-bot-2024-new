@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.MountPoseConfigs;
 import frc.robot.util.TunableNumber;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.util.SwerveModule.SwerveModuleConstants;
@@ -20,6 +21,12 @@ public class Constants {
     public static final byte kDriverPort = 0;
     public static final byte kOperatorPort = 1;
     public static final byte kPigeonID = 2;
+
+    // Pigeon mount offsets - REMEMBER TO UPDATE, or configure through PhoenixTuner
+    public static final MountPoseConfigs kPigeonMountPose = new MountPoseConfigs()
+      .withMountPoseYaw(0)
+      .withMountPosePitch(0)
+      .withMountPoseRoll(0);
   }
 
   /** Physical parts of the robot, such as gearboxes or wheel diameters. */
