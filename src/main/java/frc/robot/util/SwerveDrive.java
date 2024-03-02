@@ -104,11 +104,12 @@ public class SwerveDrive extends MotorSafety {
   /**
    * Reset the odometry to a given position.
    *
-   * @param positionMetersCCW robot position (UNIT: meters, ccw native angle)
+   * @param positionMetersCCW new robot position (UNIT: meters, ccw native angle)
+   * @param gyroAngle gyro angle to match current reading (UNIT: ccw native angle)
    */
-  public void resetOdometry(Pose2d positionMetersCCW) {
+  public void resetOdometry(Pose2d positionMetersCCW, Rotation2d gyroAngle) {
     odometry.resetPosition(
-      yawSupplier.get(),
+      gyroAngle,
       new SwerveModulePosition[] {
         new SwerveModulePosition(modules[0].getDistance(), Rotation2d.fromDegrees(modules[0].getAngle())),
         new SwerveModulePosition(modules[1].getDistance(), Rotation2d.fromDegrees(modules[1].getAngle())),

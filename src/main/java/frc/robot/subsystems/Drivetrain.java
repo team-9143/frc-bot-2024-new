@@ -38,6 +38,7 @@ public class Drivetrain extends SafeSubsystem {
     StatusSignal.setUpdateFrequencyForAll(50, m_pigeon2.getYaw(), m_pigeon2.getQuatW(), m_pigeon2.getQuatX(), m_pigeon2.getQuatY(), m_pigeon2.getQuatZ());
     m_pigeon2.optimizeBusUtilization();
   }
+  private static Rotation3d gyroOffset; // To adjust 3d rotation (quaternion from gyro) to match with 2d odometry after a heading reset
 
   public static final SwerveModuleState[] xStanceStates = new SwerveModuleState[] {
     new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
@@ -122,7 +123,10 @@ public class Drivetrain extends SafeSubsystem {
    * @param positionMetersCCW robot position (UNIT: meters, ccw native angle)
    */
   public void resetOdometry(Pose2d positionMetersCCW) {
-    m_swerve.resetOdometry(positionMetersCCW);
+    var gyroAngle = m_pigeon2.getRotation2d();
+
+    gyroOffset = new Rotation3d(0, 0, getPose().getRotation().minus(gyroAngle).getRadians());
+    m_swerve.resetOdometry(positionMetersCCW, gyroAngle);
   }
 
   /** @return the robot's estimated location */
