@@ -142,6 +142,18 @@ public class Drivetrain extends SafeSubsystem {
 
     Logger.recordOutput(getDirectory()+"3dPosition",
       new Pose3d(getPose().getX(), getPose().getY(), 0, m_gyro.getRotation3d())); // Height always set to 0
+
+    // Uncoment to log angle errors
+    // Logger.recordOutput(getDirectory()+"AngleErrorFL", m_swerve.modules[0].getAngleError());
+    // Logger.recordOutput(getDirectory()+"AngleErrorFR", m_swerve.modules[1].getAngleError());
+    // Logger.recordOutput(getDirectory()+"AngleErrorBL", m_swerve.modules[2].getAngleError());
+    // Logger.recordOutput(getDirectory()+"AngleErrorBR", m_swerve.modules[3].getAngleError());
+
+    // Uncomment to log velocity errors
+    // Logger.recordOutput(getDirectory()+"VelErrorFL", getDesiredStates()[0].speedMetersPerSecond - m_swerve.modules[0].getVelocity());
+    // Logger.recordOutput(getDirectory()+"VelErrorFR", getDesiredStates()[1].speedMetersPerSecond - m_swerve.modules[1].getVelocity());
+    // Logger.recordOutput(getDirectory()+"VelErrorBL", getDesiredStates()[2].speedMetersPerSecond - m_swerve.modules[2].getVelocity());
+    // Logger.recordOutput(getDirectory()+"VelErrorBR", getDesiredStates()[3].speedMetersPerSecond - m_swerve.modules[3].getVelocity());
   }
 
   @Override
