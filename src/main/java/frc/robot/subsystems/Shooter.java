@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   /** Used to invert wheels for intaking */
   private static boolean m_inverted = false;
 
-  // TODO(shooter): ID's and names for these first two motors don't match up. Also, how about ShooterTop and ShooterBottom for both? You should be able to set one to follow the other (but inverted) b/c I doubt we'll need more control than that
+  // TODO(shooter): ID's and names for these first two motors don't match up. Also, how about calling them ShooterTop and ShooterBottom? You should be able to set one to follow the other (maybe inverted) b/c I doubt we'll need finer control than that
   private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterMotorID, MotorType.kBrushless);
 
   private final static CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConsts.kMotorID, MotorType.kBrushless);
@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
   // TODO(shooter): Change this to take in a boolean and set the invert variable to that, unless there's a specific reason that this would not be optimal.
   /** Reverses current value of m_inverted */
   public void invert() {
-    m_inverted = m_inverted == false ? true : false; // TODO(shooter): Change to `m_inverted != m_inverted` or `m_inverted ^= true`. Horrendous ternary operator here
+    m_inverted = m_inverted == false ? true : false; // TODO(shooter): Change to `m_inverted = !m_inverted` or `m_inverted ^= true`. Horrendous ternary operator here
   }
 
   // TODO(shooter): still missing a motor here...
@@ -75,6 +75,7 @@ public class Shooter extends SubsystemBase {
       Shooter::stop);
   }
 
+  // TODO(shooter): Why would this ever be inverted if it's for spitting?
   /** @return a command to spit a game piece at partial speed for amp */
   public Command getSpitCommand() {
     return startEnd(
