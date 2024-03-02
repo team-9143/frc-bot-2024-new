@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 
+import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 
 /**
@@ -17,6 +18,11 @@ public class CustomPigeon2 {
   private final Supplier<Double> yawSupplier;
   private final Supplier<Double> pitchSupplier;
   private final Supplier<Double> rollSupplier;
+
+  private final Supplier<Double> WSupplier;
+  private final Supplier<Double> XSupplier;
+  private final Supplier<Double> YSupplier;
+  private final Supplier<Double> ZSupplier;
 
   private final double invertPitch;
   private final double invertRoll;
@@ -57,6 +63,22 @@ public class CustomPigeon2 {
     rollSignal.setUpdateFrequency(50);
     rollSupplier = rollSignal.asSupplier();
 
+    var WSignal = pigeon2.getQuatW();
+    WSignal.setUpdateFrequency(50);
+    WSupplier = WSignal.asSupplier();
+
+    var XSignal = pigeon2.getQuatX();
+    XSignal.setUpdateFrequency(50);
+    XSupplier = XSignal.asSupplier();
+
+    var YSignal = pigeon2.getQuatY();
+    YSignal.setUpdateFrequency(50);
+    YSupplier = YSignal.asSupplier();
+
+    var ZSignal = pigeon2.getQuatZ();
+    ZSignal.setUpdateFrequency(50);
+    ZSupplier = ZSignal.asSupplier();
+
     // Remove all other automatic updates
     pigeon2.optimizeBusUtilization();
   }
@@ -95,6 +117,6 @@ public class CustomPigeon2 {
 
   /** @return IMU orientation as a {@link Rotation3d}. */
   public Rotation3d getRotation3d() {
-    return new Rotation3d(getRoll(), getPitch(), getYaw());
+    return new Rotation3d(new Quaternion(WSupplier.get(), XSupplier.get(), YSupplier.get(), ZSupplier.get()));
   }
 }
