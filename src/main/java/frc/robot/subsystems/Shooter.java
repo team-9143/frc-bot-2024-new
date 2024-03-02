@@ -27,11 +27,11 @@ public class Shooter extends SubsystemBase {
   /** Used to invert wheels for intaking */
   private static boolean m_inverted = false;
 
-  private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterID, MotorType.kBrushless);
+  private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterMotorID, MotorType.kBrushless);
 
   private final static CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConsts.kMotorID, MotorType.kBrushless);
 
-  private final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedID);
+  private final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
   
   private static final RelativeEncoder m_encoder = m_motor.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
 
