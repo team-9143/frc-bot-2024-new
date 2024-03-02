@@ -79,10 +79,12 @@ public class Constants {
   }
 
   public static class ShooterConsts {
-    public static final byte kShooterID = 12; // TODO(shooter): Can't use 12 b/c of swerve
-
+    public static final byte kFeedID = 3;
+    public static final byte kShooterID = 4;
+    public static final byte kMotorID = 5; // TODO(Shooter): Add better name for motor
     public static final int kSourceIntakeVolts = 3;
     public static final int kShootVolts = -12;
+    public static final int kHoldingVolts = 12;
     public static final double kSpitVolts = -4.2;
     public static final double kHoldVolts = -0.6;
   }

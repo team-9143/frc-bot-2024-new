@@ -24,27 +24,20 @@ public class Shooter extends SubsystemBase {
     return m_instance;
   }
 
-  /** Used to apply tension if a game piece is being held in the intake. */
-  private static boolean m_holding = false; // TODO(shooter): this is never set to true. Is it needed? delete otherwise.
-
   /** Used to invert wheels for intaking */
   private static boolean m_inverted = false;
 
   private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterID, MotorType.kBrushless);
 
-  private final static TalonFX m_holdingMotor = new TalonFX(0); // TODO(shooter): this variable should be final and follow the naming system used elsewhere (m_holdingMotor or similar). Also, put the ID in ShooterConsts
+  private final static CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConsts.kMotorID, MotorType.kBrushless);
 
+  private final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedID);
+  
   private static final RelativeEncoder m_encoder = m_motor.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
 
   private Shooter() {
     m_encoder.setMeasurementPeriod(20);
     m_encoder.setPosition(0);
-
-    // If inverted and has a game piece, apply tension to hold in a piece
-    setDefaultCommand(startEnd(
-      () -> {if (m_holding && m_inverted) {m_holdingMotor.setVoltage(ShooterConsts.kHoldVolts);}},
-      Shooter::stop
-    ));
   }
 
   // TODO(shooter): if this is a command, it should say so. Add docs. Also, why is this a command? Finally, why is inverted set to false during the duration of the command? And why doesn't it require any subsystem?
@@ -54,13 +47,12 @@ public class Shooter extends SubsystemBase {
 
   public double getSpeed() {return m_motor.get();} // TODO(shooter): Document units. Do we need this method for anything? If we do, it should be returning RPM or RPS measured by encoder
 
-  // TODO(shooter): theres another motor to stop too...
   public static void stop() {
     m_motor.stopMotor();
+    m_shooterMotor.stopMotor();
   }
 
-  /** @return a command to intake a game piece */
-  // TODO(shooter): then why is it called getShootCommand?
+  /** @return a command to intake a game piece using shooter wheels (only while we don't have an intake) */
   public Command getShootCommand() {
     return startEnd(
       () -> {
@@ -74,7 +66,7 @@ public class Shooter extends SubsystemBase {
   public Command getFeedCommand() {
     return startEnd(
       () -> {
-        m_holdingMotor.setVoltage(12); // TODO(shooter): trust me, put this number in ShooterConsts
+        m_feedMotor.setVoltage(ShooterConsts.kHoldingVolts); 
       },
       Shooter::stop);
   }
@@ -84,7 +76,7 @@ public class Shooter extends SubsystemBase {
     return startEnd(
       () -> {
         m_motor.setVoltage(m_inverted ? -ShooterConsts.kSpitVolts : ShooterConsts.kSpitVolts);
-        m_holding = false;
+  
       },
       Shooter::stop
     );
