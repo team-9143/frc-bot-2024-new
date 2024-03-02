@@ -28,14 +28,14 @@ public class Shooter extends SubsystemBase {
   /** Used to invert wheels for intaking */
   private static boolean m_inverted = false;
 
-  // TODO(shooter): ID's and names for these first two motors don't match up. Also, how about calling them ShooterTop and ShooterBottom? You should be able to set one to follow the other (maybe inverted) b/c I doubt we'll need finer control than that
-  private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kShooterMotorID, MotorType.kBrushless);
+  // TODO(shooter): ID's and names for these first two motors don't match up. Also, how about ShooterTop and ShooterBottom for both? You should be able to set one to follow the other (but inverted) b/c I doubt we'll need more control than that
+  private final static CANSparkMax m_ShooterBottom = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
 
-  private final static CANSparkMax m_shooterMotor = new CANSparkMax(ShooterConsts.kMotorID, MotorType.kBrushless);
+  private final static CANSparkMax m_ShooterTop = new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
 
   private final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
 
-  private static final RelativeEncoder m_encoder = m_motor.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
+  private static final RelativeEncoder m_encoder = m_ShooterBottom.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
 
   private Shooter() {
     m_encoder.setMeasurementPeriod(20);
@@ -48,10 +48,11 @@ public class Shooter extends SubsystemBase {
     m_inverted = m_inverted == false ? true : false; // TODO(shooter): Change to `m_inverted = !m_inverted` or `m_inverted ^= true`. Horrendous ternary operator here
   }
 
-  // TODO(shooter): still missing a motor here...
+
   public static void stop() {
-    m_motor.stopMotor();
-    m_shooterMotor.stopMotor();
+    m_ShooterBottom.stopMotor();
+    m_ShooterTop.stopMotor();
+    m_feedMotor.stopMotor();
   }
 
   // TODO(shooter) If its for intaking, why is it called getShootCommand? Make two separate commands for source intaking and shooting, and use separate constants for the speed of both.
@@ -59,7 +60,7 @@ public class Shooter extends SubsystemBase {
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_motor.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4); // ability to invert for source intake
+        m_ShooterBottom.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4); // ability to invert for source intake
       },
       Shooter::stop
     );
@@ -80,7 +81,7 @@ public class Shooter extends SubsystemBase {
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_motor.setVoltage(m_inverted ? -ShooterConsts.kSpitVolts : ShooterConsts.kSpitVolts);
+        m_ShooterBottom.setVoltage(m_inverted ? -ShooterConsts.kSpitVolts : ShooterConsts.kSpitVolts);
 
       },
       Shooter::stop
