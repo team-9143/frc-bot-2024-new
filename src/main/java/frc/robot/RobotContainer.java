@@ -101,9 +101,6 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // Button 'X' (hold) inverts shooter wheels while held
-    OI.OPERATOR_CONTROLLER.onTrue(btn.X, Shooter.getInstance()::invert);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.X, Shooter.getInstance()::invert);
 
     // TODO(shooter): First off, documentation is not consistent. Secondly, the description is misleading because this is not an automated task, it is operator-reliant. Thirdly, getTriggers() never returns greater than one. Fourthly, why is this using triggers and not a bumper or button or even the d-pad if it is boolean and doesn't require the precision of an axis?
     // Feeds shooter if note falls in too deep

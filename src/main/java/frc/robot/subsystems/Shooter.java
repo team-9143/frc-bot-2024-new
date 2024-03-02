@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 
 // TODO(shooter): TLDR theres a lot of stuff here that is clearly unneded or implemented wrong, make sure you understand eveyrthing in here and can explain why its there and when its used.
 
@@ -24,29 +23,12 @@ public class Shooter extends SubsystemBase {
     return m_instance;
   }
 
-  // TODO(shooter): You shouldn't need this variable. Have a separate command for intaking and a separate one for shooting.
-  /** Used to invert wheels for intaking */
-  private static boolean m_inverted = false;
+  public final static CANSparkMax m_ShooterBottom = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
 
-  // TODO(shooter): ID's and names for these first two motors don't match up. Also, how about ShooterTop and ShooterBottom for both? You should be able to set one to follow the other (but inverted) b/c I doubt we'll need more control than that
-  private final static CANSparkMax m_ShooterBottom = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
+  public final static CANSparkMax m_ShooterTop = new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
 
-  private final static CANSparkMax m_ShooterTop = new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
+  public final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
 
-  private final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
-
-  private static final RelativeEncoder m_encoder = m_ShooterBottom.getEncoder(); // TODO(shooter): what is this encoder used for? delete if unnecessary. Also, you need to set conversion factors for the pulleys/gears before you use this data to have accurate units (ratios go into PhysConsts)
-
-  private Shooter() {
-    m_encoder.setMeasurementPeriod(20);
-    m_encoder.setPosition(0);
-  }
-
-  // TODO(shooter): Change this to take in a boolean and set the invert variable to that, unless there's a specific reason that this would not be optimal.
-  /** Reverses current value of m_inverted */
-  public void invert() {
-    m_inverted = m_inverted == false ? true : false; // TODO(shooter): Change to `m_inverted = !m_inverted` or `m_inverted ^= true`. Horrendous ternary operator here
-  }
 
 
   public static void stop() {
@@ -60,7 +42,8 @@ public class Shooter extends SubsystemBase {
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_ShooterBottom.setVoltage(m_inverted ? ShooterConsts.kSourceIntakeVolts : -ShooterConsts.kSourceIntakeVolts * 4); // ability to invert for source intake
+        m_ShooterBottom.setVoltage(-ShooterConsts.kSourceIntakeVolts); // ability to invert for source intake
+        m_ShooterTop.setVoltage(-ShooterConsts.kSourceIntakeVolts);
       },
       Shooter::stop
     );
@@ -76,12 +59,11 @@ public class Shooter extends SubsystemBase {
       Shooter::stop);
   }
 
-  // TODO(shooter): Why would this ever be inverted if it's for spitting?
   /** @return a command to spit a game piece at partial speed for amp */
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_ShooterBottom.setVoltage(m_inverted ? -ShooterConsts.kSpitVolts : ShooterConsts.kSpitVolts);
+        m_ShooterBottom.setVoltage(ShooterConsts.kSpitVolts);
 
       },
       Shooter::stop
