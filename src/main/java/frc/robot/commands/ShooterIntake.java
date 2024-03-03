@@ -7,16 +7,18 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Shooter;
 
+// TODO(shooter): Consider renaming to `SourceIntake`?
 public class ShooterIntake extends Command {
-  private static final Shooter sShooter = Shooter.getInstance();
+  private static final Shooter sShooter = Shooter.getInstance(); // TODO(shooter): What is this variable for? Is it needed?
   private static final Set<Subsystem> m_requirements = Set.of(sShooter);
 
   @Override
   public void initialize(){}
 
+  // TODO(shooter): Move to `initialize`, only needs to be called once
   @Override
   public void execute() {
-    Shooter.m_ShooterBottom.setVoltage(-ShooterConsts.kSourceIntakeVolts);
+    Shooter.m_ShooterBottom.setVoltage(-ShooterConsts.kSourceIntakeVolts); // TODO(shooter): Make the constant negative, not the implementation (easier to read how it works from constants file)
   }
 
   @Override
@@ -24,6 +26,7 @@ public class ShooterIntake extends Command {
     return false;
   }
 
+  // TODO(shooter): add Shooter.stop() on end, or make the Shooter subsystem's default command call it
   @Override
   public void end(boolean interrupted) {}
 

@@ -11,6 +11,10 @@ import com.revrobotics.CANSparkMax;
 // TODO(shooter): TLDR theres a lot of stuff here that is clearly unneded or implemented wrong, make sure you understand eveyrthing in here and can explain why its there and when its used.
 
 // TODO(shooter): this should extend SafeSubsystem. see ExampleSubsystem to see how to implement relevant methods
+
+// TODO(shooter): Why are we making commands files instead of using the concise inline ones? They are much easier to set up/read and that way, your motor variables aren't public (good practice to have them protected from unknown calls)
+
+// TODO(shooter): Consider making this motor its own "Feeder" subsystem because it isn't directly connected to the shooter (would be much easier to code with after the intake and pivot are added), and would allow for commands to control the shooter wheels and feeder wheels individually (different subsystem req's)
 /** Controls indexer and shooter wheels. */
 public class Shooter extends SubsystemBase {
   private static Shooter m_instance;
@@ -29,14 +33,6 @@ public class Shooter extends SubsystemBase {
 
   public final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
 
-
-
-  public static void stop() {
-    m_ShooterBottom.stopMotor();
-    m_ShooterTop.stopMotor();
-    m_feedMotor.stopMotor();
-  }
-
   // TODO(shooter) If its for intaking, why is it called getShootCommand? Make two separate commands for source intaking and shooting, and use separate constants for the speed of both.
   /** @return a command to intake a game piece using shooter wheels (only while we don't have an intake) */
   public Command getShootCommand() {
@@ -49,7 +45,7 @@ public class Shooter extends SubsystemBase {
     );
   }
 
-  // TODO(shooter): this documentation is confusing, say something like `@return a command to feed a note from the intake to the shooter`. Could also consider making this motor its own "Feeder" subsystem because it isn't directly connected to the shooter (would be much easier to code with after the intake and pivot are added)
+  // TODO(shooter): this documentation is confusing, say something like `@return a command to feed a note from the intake to the shooter`
   /** Uses bottom shooter motor to feed the top shooter motors */
   public Command getFeedCommand() {
     return startEnd(
@@ -68,5 +64,11 @@ public class Shooter extends SubsystemBase {
       },
       Shooter::stop
     );
+  }
+
+  public static void stop() {
+    m_ShooterBottom.stopMotor();
+    m_ShooterTop.stopMotor();
+    m_feedMotor.stopMotor();
   }
 }

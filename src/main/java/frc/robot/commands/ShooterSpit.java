@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterSpit extends Command {
-  private static final Shooter sShooter = Shooter.getInstance();
+  private static final Shooter sShooter = Shooter.getInstance(); // TODO(shooter): What is this variable for? Is it needed?
   private static final Set<Subsystem> m_requirements = Set.of(sShooter);
 
   @Override
   public void initialize(){}
 
+  // TODO(shooter): Move to `initialize`, only needs to be called once
   @Override
   public void execute() {
     Shooter.m_ShooterBottom.setVoltage(ShooterConsts.kSpitVolts);
@@ -24,6 +25,7 @@ public class ShooterSpit extends Command {
     return false;
   }
 
+  // TODO(shooter): add Shooter.stop() on end, or make the Shooter subsystem's default command call it
   @Override
   public void end(boolean interrupted) {}
 
