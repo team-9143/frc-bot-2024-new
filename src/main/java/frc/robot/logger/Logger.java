@@ -96,7 +96,7 @@ public class Logger {
   // Start log manager
   static {
     DataLogManager.start(
-      RobotBase.isSimulation() ? "" : Config.DATA_LOG_DIR, // Log to project directory in simulation
+      RobotBase.isSimulation() ? "/logs/" : Config.DATA_LOG_DIR, // Log to project/logs/ directory in simulation
       "FRC_" + LocalDateTime.now(ZoneId.of("UTC-8")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss")) + ".wpilog"); // File name
 
     m_log = DataLogManager.getLog();
