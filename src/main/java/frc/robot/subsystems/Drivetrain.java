@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.StatusSignal;
 
 import frc.robot.devices.OI;
+import frc.robot.Constants.Config;
 import frc.robot.Constants.DeviceConsts;
 import frc.robot.Constants.DriveConsts;
 import frc.robot.Constants.SwerveConsts;
@@ -33,7 +34,7 @@ public class Drivetrain extends SafeSubsystem {
   // Pigeon2 setup
   private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConsts.kPigeonID);
   static {
-    m_pigeon2.getConfigurator().apply(DeviceConsts.kPigeonMountPose);
+    m_pigeon2.getConfigurator().apply(Config.kPigeonMountPose);
     m_pigeon2.setYaw(0);
     StatusSignal.setUpdateFrequencyForAll(50, m_pigeon2.getYaw(), m_pigeon2.getQuatW(), m_pigeon2.getQuatX(), m_pigeon2.getQuatY(), m_pigeon2.getQuatZ());
     m_pigeon2.optimizeBusUtilization();
