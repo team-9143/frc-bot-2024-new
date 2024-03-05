@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FeederConsts;
-import frc.robot.Constants.ShooterConsts;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+/** Controls feeder wheels */
 public class Feeder extends SafeSubsystem {
     private static Feeder m_instance;
 
@@ -17,26 +17,29 @@ public class Feeder extends SafeSubsystem {
     return m_instance;
   }
 
-  public final static TalonFX m_feedMotor = new TalonFX(ShooterConsts.kFeedMotorID);
+  // TODO(shooter): Make this private for safety
+  public final static TalonFX m_feedMotor = new TalonFX(FeederConsts.kFeedMotorID);
 
+  // TODO(shooter): Create a private constructor here to initialize the talon
 
-      /** @return a command to feed a note from the intake to the shooter */
+  // TODO(shooter): There should be a feed command and a hold command, add and document both properly
+  /** @return a command to feed a note from the intake to the shooter */
   public Command getFeedCommand() {
     return startEnd(
       () -> {
-        m_feedMotor.setVoltage(FeederConsts.kHoldingVolts);
+        m_feedMotor.setVoltage(FeederConsts.kHoldVolts);
       },
-      Shooter.getInstance()::stop);
+      Shooter.getInstance()::stop // TODO(shooter): Change these all into `this::stop` (more readable and less processing)
+    );
   }
 
   @Override
   public void stop() {
     m_feedMotor.stopMotor();
   }
-    @Override
-    public void log() {
-        // TODO Auto-generated method stub
-        
 
-    }
+  @Override
+  public void log() {
+    // TODO(shooter): I can't think of anything to log here, you could leave this method empty
+  }
 }

@@ -1,12 +1,12 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.ShooterConsts;
-import edu.wpi.first.wpilibj2.command.Command;
-
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
-/** Controls indexer and shooter wheels. */
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConsts;
+
+/** Controls shooter wheels. */
 public class Shooter extends SafeSubsystem {
   private static Shooter m_instance;
 
@@ -18,10 +18,11 @@ public class Shooter extends SafeSubsystem {
     return m_instance;
   }
 
+  // TODO(shooter): Make these private for safety
   public final static CANSparkMax m_ShooterBottom = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
-
   public final static CANSparkMax m_ShooterTop = new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
 
+  // TODO(shooter): Create a private constructor here to set current limits for the sparks and initialize the encoders
 
   /** @return a command to intake a game piece using shooter wheels */
   public Command getSourceIntakeCommand() {
@@ -29,7 +30,7 @@ public class Shooter extends SafeSubsystem {
       () -> {
         m_ShooterBottom.setVoltage(ShooterConsts.kSourceIntakeVolts);
       },
-      Shooter.getInstance()::stop
+      Shooter.getInstance()::stop // TODO(shooter): Change these all into `this::stop` (more readable and less processing)
     );
   }
 
@@ -39,18 +40,17 @@ public class Shooter extends SafeSubsystem {
       () -> {
         m_ShooterTop.setVoltage(ShooterConsts.kShootVolts);
       },
-      Shooter.getInstance()::stop
+      Shooter.getInstance()::stop // TODO(shooter): Change these all into `this::stop` (more readable and less processing)
     );
   }
 
-  /** @return a command to spit a game piece at partial speed for amp */
+  /** @return a command to spit a game piece at partial speed for amp scoring */
   public Command getSpitCommand() {
     return startEnd(
       () -> {
         m_ShooterBottom.setVoltage(ShooterConsts.kSpitVolts);
-
       },
-      Shooter.getInstance()::stop
+      Shooter.getInstance()::stop // TODO(shooter): Change these all into `this::stop` (more readable and less processing)
     );
   }
 
@@ -62,8 +62,6 @@ public class Shooter extends SafeSubsystem {
 
   @Override
   public void log() {
-    // TODO Auto-generated method stub
-
+    // TODO(shooter) implement wheel speed logging (use integrated NEO encoders)
   }
-
 }

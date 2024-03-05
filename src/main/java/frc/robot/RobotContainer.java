@@ -95,13 +95,12 @@ public class RobotContainer {
   }
 
   private static void configureOperator() {
-    // Button 'RB' (press) Shoots held note
+    // Button 'RB' (hold) Shoots held note
     final Command cShoot = Shooter.getInstance().getShootCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-
-    // TODO(shooter): First off, documentation is not consistent. Secondly, the description is misleading because this is not an automated task, it is operator-reliant. Thirdly, getTriggers() never returns greater than one. Fourthly, why is this using triggers and not a bumper or button or even the d-pad if it is boolean and doesn't require the precision of an axis?
+    // TODO(shooter): Standardize documentation here as exampled above
     // Feeds shooter if note falls in too deep
     final Command cFeed = Feeder.getInstance().getFeedCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cFeed::schedule);
