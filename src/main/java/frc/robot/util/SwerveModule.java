@@ -59,11 +59,6 @@ public class SwerveModule {
     positionSignal.setUpdateFrequency(50);
     rotationSupplier = () -> positionSignal.refresh().getValue() * 360d; // UNIT: ccw degrees
 
-    // Configure drive PID controller
-    drive_controller = new PIDController(SwerveConsts.kDriveP.getAsDouble(), 0, 0);
-    SwerveConsts.kDriveP.bind(drive_controller::setP);
-    drive_controller.setSetpoint(0);
-
     // Configure azimuth PID controller
     kS = new TunableNumber("S", constants.kS, constants.name);
     kP = new TunableNumber("P", constants.kP, constants.name);
@@ -97,7 +92,7 @@ public class SwerveModule {
           SwerveConsts.kDriveS.getAsDouble(), // Static feedforward
           DriveConsts.kModuleDriveMaxVoltage/DriveConsts.kMaxLinearVelMetersPerSecond * Math.abs(speed) // Velocity feedforward
         ) * Math.signum(speed) // Ensures minimum voltage scaling linearly with velocity
-        + drive_controller.calculate(getVelocity(), speed) // Feedback controller for velocity adjustment (helpful for following auton paths)
+        + SwerveConsts.kDriveP.getAsDouble() * (speed - getVelocity()) // Feedback controller for velocity adjustment (helpful for following velocity-reliant pathing)
       )) * Math.abs(Math.cos(getAngleError() * Math.PI/180)) // Scale velocity down if not at proper angle to reduce drag/unintended movement
     );
   }
@@ -130,11 +125,6 @@ public class SwerveModule {
     return azimuth_controller.getPositionError();
   }
 
-  /** @return the current error in the velocity of the module (UNIT: meters/s) */
-  public double getVelocityError() {
-    return drive_controller.getPositionError();
-  }
-
   /** @return the distance traveled by the module (UNIT: meters) */
   public double getDistance() {
     return drive_encoder.getPosition();
@@ -145,7 +135,6 @@ public class SwerveModule {
     azimuth_motor.stopMotor();
 
     azimuth_controller.reset();
-    drive_controller.reset();
   }
 
   /** Basic constants for the construction of a {@link SwerveModule}. */
