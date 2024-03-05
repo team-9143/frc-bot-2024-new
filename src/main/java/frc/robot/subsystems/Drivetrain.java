@@ -36,7 +36,7 @@ public class Drivetrain extends SafeSubsystem {
   static {
     m_pigeon2.getConfigurator().apply(Config.kPigeonMountPose);
     m_pigeon2.setYaw(0);
-    StatusSignal.setUpdateFrequencyForAll(50, m_pigeon2.getYaw(), m_pigeon2.getQuatW(), m_pigeon2.getQuatX(), m_pigeon2.getQuatY(), m_pigeon2.getQuatZ());
+    StatusSignal.setUpdateFrequencyForAll(1000d/DriveConsts.kPeriodMs, m_pigeon2.getYaw(), m_pigeon2.getQuatW(), m_pigeon2.getQuatX(), m_pigeon2.getQuatY(), m_pigeon2.getQuatZ());
     m_pigeon2.optimizeBusUtilization();
   }
   private static Rotation3d gyroOffset; // To adjust 3d rotation (quaternion from gyro) to match with 2d odometry after a heading reset
@@ -72,11 +72,10 @@ public class Drivetrain extends SafeSubsystem {
     }));
   }
 
-
-  @Override
-  public void periodic() {
-    // Update swerve speeds and odometry
-    m_swerve.update();
+  /** Updates the swerve module states and drivetrain odometry. Should be called as often as possible. */
+  public void update() {
+    m_swerve.updateSpeeds();
+    m_swerve.updateOdometry();
   }
 
   /**

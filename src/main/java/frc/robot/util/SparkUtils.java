@@ -35,6 +35,7 @@ public class SparkUtils {
    */
   @SafeVarargs
   public static void configure(CANSparkBase spark, Supplier<REVLibError>... configs) {
+    // TODO: Fix this with configurations
     configure(spark, spark::restoreFactoryDefaults, 1);
     configure(spark, () -> spark.setCANTimeout(50), 1);
     for (var config : configs) {

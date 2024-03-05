@@ -35,10 +35,10 @@ public class SwerveDrive extends MotorSafety {
 
     // Initialize swerve modules
     modules = new SwerveModule[] {
-      new SwerveModule(consts_fl),
-      new SwerveModule(consts_fr),
-      new SwerveModule(consts_bl),
-      new SwerveModule(consts_br)
+      new SwerveModule(consts_fl, DriveConsts.kPeriodMs),
+      new SwerveModule(consts_fr, DriveConsts.kPeriodMs),
+      new SwerveModule(consts_bl, DriveConsts.kPeriodMs),
+      new SwerveModule(consts_br, DriveConsts.kPeriodMs)
     };
 
     // Initialize kinematics

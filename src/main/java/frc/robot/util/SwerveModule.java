@@ -31,39 +31,51 @@ public class SwerveModule {
   private final CANcoder cancoder;
   private final Supplier<Double> rotationSupplier;
 
-  private final PIDController drive_controller;
   private final PIDController azimuth_controller;
 
   private final TunableNumber kS;
   private final TunableNumber kP;
   private final TunableNumber kD;
 
-  protected SwerveModule(SwerveModuleConstants constants) {
+  /**
+   * Creates a swerve module controlled by NEO V1.1 motors, Spark MAX's, and a CANcoder.
+   *
+   * @param constants module configuration
+   * @param period_ms update rate in milliseconds (limit to [8...64] to fully interface with NEO hall sensor)
+   */
+  protected SwerveModule(SwerveModuleConstants constants, int period_ms) {
+    // Configure drive motor and encoder
     drive_motor = new CANSparkMax(constants.drive_ID, MotorType.kBrushless);
-    drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
-    azimuth_motor = new CANSparkMax(constants.azimuth_ID, MotorType.kBrushless);
-    azimuth_motor.setInverted(SwerveConsts.kAzimuthInverted);
-    azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit);
-
-    // Configure drive encoder
     drive_encoder = drive_motor.getEncoder();
-    drive_encoder.setPositionConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters); // UNIT: meters
-    drive_encoder.setVelocityConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters / 60); // UNIT: meters/s
-    drive_encoder.setMeasurementPeriod(20);
-    drive_encoder.setPosition(0);
+    SparkUtils.setPeriodicFrames(drive_motor, 10, period_ms, period_ms, 0, 0, 0, 0);
+    SparkUtils.configure(drive_motor,
+      () -> drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
+      () -> drive_encoder.setPositionConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters), // UNIT: meters
+      () -> drive_encoder.setVelocityConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters / 60), // UNIT: meters/s
+      () -> drive_encoder.setMeasurementPeriod(Math.max(8, Math.min(period_ms, 64))), // Limit to hall sensor boundaries
+      () -> drive_encoder.setPosition(0)
+    );
+
+    // Configure azimuth motor
+    azimuth_motor = new CANSparkMax(constants.azimuth_ID, MotorType.kBrushless);
+    SparkUtils.setPeriodicFrames(azimuth_motor, 10, 0, 0, 0, 0, 0, 0);
+    SparkUtils.configure(azimuth_motor,
+      () -> SparkUtils.setInverted(azimuth_motor, SwerveConsts.kAzimuthInverted),
+      () -> azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit)
+    );
 
     // Configure CANcoder
     cancoder = new CANcoder(constants.cancoder_ID);
     cancoder.getConfigurator().apply(cancoder_config.withMagnetOffset(constants.cancoderOffset));
     var positionSignal = cancoder.getAbsolutePosition();
-    positionSignal.setUpdateFrequency(50);
+    positionSignal.setUpdateFrequency(1000d / period_ms);
     rotationSupplier = () -> positionSignal.refresh().getValue() * 360d; // UNIT: ccw degrees
 
     // Configure azimuth PID controller
     kS = new TunableNumber("S", constants.kS, constants.name);
     kP = new TunableNumber("P", constants.kP, constants.name);
     kD = new TunableNumber("D", constants.kD, constants.name);
-    azimuth_controller = new PIDController(kP.getAsDouble(), 0, kD.getAsDouble());
+    azimuth_controller = new PIDController(kP.getAsDouble(), 0, kD.getAsDouble(), period_ms / 1000d);
     kP.bind(azimuth_controller::setP);
     kD.bind(azimuth_controller::setD);
     azimuth_controller.enableContinuousInput(-180, 180);

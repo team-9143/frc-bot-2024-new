@@ -54,6 +54,9 @@ public class Constants {
     // Multipliers for all teleop driving
     public static final double kTeleopSpeedMult = 1;
     public static final double kTeleopTurnMult = 9.5 / kMaxTurnVelRadiansPerSecond; // Set maximum teleop turn speed to 1.5 rotations/s
+
+    // Update rate for drivetrain, default period is 20 ms. Stay between 8-64 ms to make best use of NEO hall sensor. (UNIT: milliseconds)
+    public static final int kPeriodMs = 10;
   }
 
   /** Data for each individual swerve module. */
