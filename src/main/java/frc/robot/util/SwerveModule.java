@@ -18,7 +18,6 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-// TODO: Try closed loop azimuth PID controller
 /** Controls a single swerve module. */
 public class SwerveModule {
   private static final MagnetSensorConfigs cancoder_config = new MagnetSensorConfigs()
@@ -48,21 +47,21 @@ public class SwerveModule {
     // Configure drive motor and encoder
     drive_motor = new CANSparkMax(constants.drive_ID, MotorType.kBrushless);
     drive_encoder = drive_motor.getEncoder();
-    SparkUtils.setPeriodicFrames(drive_motor, 10, period_ms, period_ms, 0, 0, 0, 0);
     SparkUtils.configure(drive_motor,
       () -> drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
       () -> drive_encoder.setPositionConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters), // UNIT: meters
       () -> drive_encoder.setVelocityConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters / 60), // UNIT: meters/s
       () -> drive_encoder.setMeasurementPeriod(Math.max(8, Math.min(period_ms, 64))), // Limit to hall sensor boundaries
-      () -> drive_encoder.setPosition(0)
+      () -> drive_encoder.setPosition(0),
+      () -> SparkUtils.setPeriodicFrames(drive_motor, 10, period_ms, period_ms, 0, 0, 0, 0)
     );
 
     // Configure azimuth motor
     azimuth_motor = new CANSparkMax(constants.azimuth_ID, MotorType.kBrushless);
-    SparkUtils.setPeriodicFrames(azimuth_motor, 10, 0, 0, 0, 0, 0, 0);
     SparkUtils.configure(azimuth_motor,
       () -> SparkUtils.setInverted(azimuth_motor, SwerveConsts.kAzimuthInverted),
-      () -> azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit)
+      () -> azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit),
+      () -> SparkUtils.setPeriodicFrames(azimuth_motor, 10, 0, 0, 0, 0, 0, 0)
     );
 
     // Configure CANcoder

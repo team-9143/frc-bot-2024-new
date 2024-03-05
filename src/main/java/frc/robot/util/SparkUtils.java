@@ -35,7 +35,6 @@ public class SparkUtils {
    */
   @SafeVarargs
   public static void configure(CANSparkBase spark, Supplier<REVLibError>... configs) {
-    // TODO: Fix this with configurations
     configure(spark, spark::restoreFactoryDefaults, 1);
     configure(spark, () -> spark.setCANTimeout(50), 1);
     for (var config : configs) {
@@ -75,7 +74,7 @@ public class SparkUtils {
   }
 
   /**
-   * This is a shorthand for {@link CANSparkBase#setPeriodicFramePeriod()}. Use 0 to represent a disabled frame. Does not burn to flash.
+   * This is a shorthand for {@link CANSparkBase#setPeriodicFramePeriod()}. Use 0 to represent a disabled frame. Meant to be passed into {@link SparkUtils#configure()}.
    *
    * <p> Status 7 appears to be useless, only used for IAccum.
    *
@@ -88,9 +87,11 @@ public class SparkUtils {
    * @param status5 duty cycle position | default 200
    * @param status6 duty cycle velocity | default 200
    *
+   * @return {@link REVLibError#kOk}
+   *
    * @see https://docs.revrobotics.com/brushless/spark-max/control-interfaces
    */
-  public static void setPeriodicFrames(CANSparkBase spark, int status0, int status1, int status2, int status3, int status4, int status5, int status6) {
+  public static REVLibError setPeriodicFrames(CANSparkBase spark, int status0, int status1, int status2, int status3, int status4, int status5, int status6) {
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0 != 0 ? status0 : FRAME_STRATEGY_DISABLED), 1);
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus1, status1 != 0 ? status1 : FRAME_STRATEGY_DISABLED), 1);
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus2, status2 != 0 ? status2 : FRAME_STRATEGY_DISABLED), 1);
@@ -99,6 +100,8 @@ public class SparkUtils {
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus5, status5 != 0 ? status5 : FRAME_STRATEGY_DISABLED), 1);
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus6, status6 != 0 ? status6 : FRAME_STRATEGY_DISABLED), 1);
     configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus7, FRAME_STRATEGY_DISABLED), 1);
+
+    return REVLibError.kOk; // Always returns kOk, errors will be logged by calls to configure()
   }
 
   /**
