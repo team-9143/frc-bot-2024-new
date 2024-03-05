@@ -82,7 +82,6 @@ public class Pathing {
     return PathPlannerPath.fromChoreoTrajectory(name);
   }
 
-  // TODO(dev): Add path gen obstacles in Constants? (podiums, stage)
   /**
    * Create a pathplanner path to move directly from one position to another
    *

@@ -40,7 +40,6 @@ public class Constants {
     public static final double kSwerveWheelCircumferenceMeters = 0.099 * Math.PI; // Billet wheels
   }
 
-  // TODO(user): Check all drivetrain measurements and limits and ensure accuracy
   /** Data relating to the entire drivetrain. */
   public static class DriveConsts {
     // Upper bound drivetrain constraints
