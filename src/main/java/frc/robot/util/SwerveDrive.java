@@ -63,30 +63,32 @@ public class SwerveDrive extends MotorSafety {
     );
   }
 
-  /** Updates odometry and pushes desired control to modules. Should be called every robot loop. */
-  public void update() {
-    // Update odometry state estimation
-    odometry.update(yawSupplier.get(), new SwerveModulePosition[] {
-      new SwerveModulePosition(modules[0].getDistance(), Rotation2d.fromDegrees(modules[0].getAngle())),
-      new SwerveModulePosition(modules[1].getDistance(), Rotation2d.fromDegrees(modules[1].getAngle())),
-      new SwerveModulePosition(modules[2].getDistance(), Rotation2d.fromDegrees(modules[2].getAngle())),
-      new SwerveModulePosition(modules[3].getDistance(), Rotation2d.fromDegrees(modules[3].getAngle()))
-    });
-
-    // Normalize and push angles and speeds to modules
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConsts.kMaxLinearVelMetersPerSecond);
+  /** Pushes module states and calculates outputs. Should be called at least every robot loop. */
+  public void updateSpeeds() {
     modules[0].desiredStateDrive(desiredStates[0]);
     modules[1].desiredStateDrive(desiredStates[1]);
     modules[2].desiredStateDrive(desiredStates[2]);
     modules[3].desiredStateDrive(desiredStates[3]);
   }
 
-  /** Sets desired module states, without optimizing. */
+  /** Updates pose estimater with current module angles and positions. Should be called as often as possible. */
+  public void updateOdometry() {
+    odometry.update(yawSupplier.get(), new SwerveModulePosition[] {
+      new SwerveModulePosition(modules[0].getDistance(), Rotation2d.fromDegrees(modules[0].getAngle())),
+      new SwerveModulePosition(modules[1].getDistance(), Rotation2d.fromDegrees(modules[1].getAngle())),
+      new SwerveModulePosition(modules[2].getDistance(), Rotation2d.fromDegrees(modules[2].getAngle())),
+      new SwerveModulePosition(modules[3].getDistance(), Rotation2d.fromDegrees(modules[3].getAngle()))
+    });
+  }
+
+  /** Sets desired module states and normalizes, without optimizing. */
   public void setDesiredStates(SwerveModuleState state_fl, SwerveModuleState state_fr, SwerveModuleState state_bl, SwerveModuleState state_br) {
     desiredStates[0] = state_fl;
     desiredStates[1] = state_fr;
     desiredStates[2] = state_bl;
     desiredStates[3] = state_br;
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConsts.kMaxLinearVelMetersPerSecond);
 
     feed();
   }
