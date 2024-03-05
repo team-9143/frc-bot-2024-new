@@ -61,6 +61,7 @@ public class Constants {
 
   /** Data for each individual swerve module. */
   public static class SwerveConsts {
+    // TODO: Tune drive P
     // Gains for module velocity error -> voltage
     public static final TunableNumber
       kDriveS = new TunableNumber("S", 0.1, "Module Drive"),
@@ -69,6 +70,7 @@ public class Constants {
     // Whether azimuth motor is inverted, use for mk4i's
     public static final boolean kAzimuthInverted = true;
 
+    // TODO: final swerve offset tuning
     public static final SwerveModuleConstants
       kSwerve_fl = new SwerveModuleConstants(
         "SwerveFL",

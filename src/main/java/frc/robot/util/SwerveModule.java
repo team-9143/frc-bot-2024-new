@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+// TODO: Try closed loop azimuth PID controller
 /** Controls a single swerve module. */
 public class SwerveModule {
   private static final MagnetSensorConfigs cancoder_config = new MagnetSensorConfigs()
