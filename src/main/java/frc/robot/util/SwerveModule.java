@@ -169,8 +169,8 @@ public class SwerveModule {
      * @param kP azimuth P gain
      * @param kD azimuth D gain
      * @param cancoderOffsetRotations additive cancoder offset (UNIT: ccw rotations)
-     * @param drive_ID driving motor ID (Spark Max with brushless motor)
-     * @param azimuth_ID azimuth motor ID (Spark Max with brushless motor)
+     * @param drive_ID driving motor ID (Spark MAX with NEO V1.1)
+     * @param azimuth_ID azimuth motor ID (Spark MAX with NEO V1.1)
      * @param cancoder_ID cancoder ID
      * @param location location of the wheel relative to the center of rotation of the robot (forward, left) (UNIT: meters)
      */
