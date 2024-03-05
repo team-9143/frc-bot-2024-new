@@ -95,7 +95,6 @@ public class RobotContainer {
   }
 
   private static void configureOperator() {
-    // TODO(shooter): This is wrong, do not use a RunCommand here, just use the Command returned by the getShootCommand function (what this will actually do is continuously run getShootCommand while RB is held)
     // Button 'RB' (press) Shoots held note
     final Command cShoot = Shooter.getInstance().getShootCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
@@ -105,7 +104,8 @@ public class RobotContainer {
     // TODO(shooter): First off, documentation is not consistent. Secondly, the description is misleading because this is not an automated task, it is operator-reliant. Thirdly, getTriggers() never returns greater than one. Fourthly, why is this using triggers and not a bumper or button or even the d-pad if it is boolean and doesn't require the precision of an axis?
     // Feeds shooter if note falls in too deep
     final Command cFeed = Feeder.getInstance().getFeedCommand();
-    new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).whileTrue(cFeed);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cFeed::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cFeed::cancel);
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */

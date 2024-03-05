@@ -27,7 +27,7 @@ public class Shooter extends SafeSubsystem {
   public Command getSourceIntakeCommand() {
     return startEnd(
       () -> {
-        m_ShooterBottom.setVoltage(-ShooterConsts.kSourceIntakeVolts);
+        m_ShooterBottom.setVoltage(ShooterConsts.kSourceIntakeVolts);
       },
       Shooter.getInstance()::stop
     );
@@ -37,7 +37,7 @@ public class Shooter extends SafeSubsystem {
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_ShooterTop.setVoltage(-ShooterConsts.kShootVolts);
+        m_ShooterTop.setVoltage(ShooterConsts.kShootVolts);
       },
       Shooter.getInstance()::stop
     );
@@ -63,7 +63,7 @@ public class Shooter extends SafeSubsystem {
   @Override
   public void log() {
     // TODO Auto-generated method stub
-    
+
   }
-    
+
 }
