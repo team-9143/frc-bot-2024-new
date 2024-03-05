@@ -104,7 +104,7 @@ public class RobotContainer {
 
     // TODO(shooter): First off, documentation is not consistent. Secondly, the description is misleading because this is not an automated task, it is operator-reliant. Thirdly, getTriggers() never returns greater than one. Fourthly, why is this using triggers and not a bumper or button or even the d-pad if it is boolean and doesn't require the precision of an axis?
     // Feeds shooter if note falls in too deep
-    final Command cFeed = Shooter.getInstance().getFeedCommand();
+    final Command cFeed = Feeder.getInstance().getFeedCommand();
     new Trigger(() -> OI.OPERATOR_CONTROLLER.getTriggers() > 1).whileTrue(cFeed);
   }
 
