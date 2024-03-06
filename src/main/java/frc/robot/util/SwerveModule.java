@@ -104,36 +104,33 @@ public class SwerveModule {
   protected void drive(double speed, double angle) {
     // Calculate and set azimuth motor speed
     azimuth_motor.setVoltage(
+        // Clamp to max voltage
         Math.max(
             -DriveConsts.kModuleAzimuthMaxVoltage,
             Math.min(
-                DriveConsts.kModuleAzimuthMaxVoltage, // Clamp to nominal voltage
-                Math.copySign(kS.getAsDouble(), angle - getAngle()) // Simple static feedforward
-                    + azimuth_controller.calculate(getAngle(), angle) // Azimuth feedback controller
-                )));
+                DriveConsts.kModuleAzimuthMaxVoltage,
+                // Simple static feedforward
+                Math.copySign(kS.getAsDouble(), angle - getAngle())
+                    // Azimuth feedback controller
+                    + azimuth_controller.calculate(getAngle(), angle))));
 
     // Calculate and set drive motor speed
     drive_motor.setVoltage(
+        // Clamp to nominal voltage
         Math.max(
-                -PhysConsts.kNEOMaxVoltage,
+                -DriveConsts.kModuleDriveMaxVoltage,
                 Math.min(
-                    PhysConsts.kNEOMaxVoltage, // Clamp to nominal voltage
-                    Math.copySign(
-                            SwerveConsts.kDriveS.getAsDouble(), speed) // Simple static feedforward
+                    DriveConsts.kModuleDriveMaxVoltage,
+                    // Simple static feedforward
+                    Math.copySign(SwerveConsts.kDriveS.getAsDouble(), speed)
+                        // Simple velocity feedforward
                         + DriveConsts.kModuleDriveMaxVoltage
+                            * speed
                             / DriveConsts.kMaxLinearVelMetersPerSecond
-                            * speed // Simple velocity feedforward
-                        + SwerveConsts.kDriveP.getAsDouble()
-                            * (speed - getVelocity()) // Feedback controller for velocity adjustment
-                    // (helpful for following velocity-reliant pathing)
-                    ))
-            * Math.abs(
-                Math.cos(
-                    getAngleError()
-                        * Math.PI
-                        / 180)) // Scale velocity down if not at proper angle to reduce
-        // drag/unintended movement
-        );
+                        // Feedback controller for velocity adjustment (helpful for pathing)
+                        + SwerveConsts.kDriveP.getAsDouble() * (speed - getVelocity())))
+            // Scale velocity down if not at proper angle to reduce slip
+            * Math.abs(Math.cos(getAngleError() * Math.PI / 180)));
   }
 
   /**
@@ -150,30 +147,22 @@ public class SwerveModule {
     drive(desired.speedMetersPerSecond, desired.angle.getDegrees());
   }
 
-  /**
-   * @return the angle of the module (UNIT: ccw degrees)
-   */
+  /** Returns the angle of the module (UNIT: ccw degrees) */
   public double getAngle() {
     return rotationSupplier.get();
   }
 
-  /**
-   * @return the velocity of the module (UNIT: meters/s)
-   */
+  /** Returns the velocity of the module (UNIT: meters/s) */
   public double getVelocity() {
     return drive_encoder.getVelocity();
   }
 
-  /**
-   * @return the current error in the angle of the module (UNIT: ccw degrees)
-   */
+  /** Returns the current error in the angle of the module (UNIT: ccw degrees) */
   public double getAngleError() {
     return azimuth_controller.getPositionError();
   }
 
-  /**
-   * @return the distance traveled by the module (UNIT: meters)
-   */
+  /** Returns the distance traveled by the module (UNIT: meters) */
   public double getDistance() {
     return drive_encoder.getPosition();
   }

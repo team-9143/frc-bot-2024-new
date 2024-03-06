@@ -149,37 +149,27 @@ public class SwerveDrive extends MotorSafety {
         positionMetersCCW);
   }
 
-  /**
-   * @return the robot's estimated location
-   */
+  /** Returns the robot's estimated location */
   public Pose2d getPose() {
     return odometry.getEstimatedPosition();
   }
 
-  /**
-   * @return the drivetrain's desired velocities
-   */
+  /** Returns the drivetrain's desired velocities */
   public ChassisSpeeds getDesiredSpeeds() {
     return kinematics.toChassisSpeeds(desiredStates);
   }
 
-  /**
-   * @return the drivetrain's actual velocities, as measured by encoders
-   */
+  /** Returns the drivetrain's actual velocities, as measured by encoders */
   public ChassisSpeeds getMeasuredSpeeds() {
     return kinematics.toChassisSpeeds(getMeasuredStates());
   }
 
-  /**
-   * @return individual desired module states
-   */
+  /** Returns individual desired module states */
   public SwerveModuleState[] getDesiredStates() {
     return desiredStates;
   }
 
-  /**
-   * @return individual measured module states
-   */
+  /** Returns individual measured module states */
   public SwerveModuleState[] getMeasuredStates() {
     return new SwerveModuleState[] {
       new SwerveModuleState(

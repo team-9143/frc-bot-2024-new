@@ -32,44 +32,32 @@ public class Limelight {
     cam_pub = m_limelight.getIntegerTopic("camMode").publish();
   }
 
-  /**
-   * @return horizontal angle to target (UNIT: degrees)
-   */
+  /** Returns horizontal angle to target (UNIT: degrees) */
   public double getTx() {
     return tx_sub.getAsDouble();
   }
 
-  /**
-   * @return vertical angle to target (UNIT: degrees)
-   */
+  /** Returns vertical angle to target (UNIT: degrees) */
   public double getTy() {
     return ty_sub.getAsDouble();
   }
 
-  /**
-   * @return percent area of target relative to camera
-   */
+  /** Returns percent area of target relative to camera */
   public double getArea() {
     return ta_sub.getAsDouble();
   }
 
-  /**
-   * @return {@code true} if a valid target exists
-   */
+  /** Returns {@code true} if a valid target exists */
   public boolean getValid() {
     return (tv_sub.getAsDouble() == 1) ? true : false;
   }
 
-  /**
-   * @return ID of the targeted AprilTag
-   */
+  /** Returns ID of the targeted AprilTag */
   public int getTid() {
     return (int) tid_sub.getAsDouble();
   }
 
-  /**
-   * @return active pipeline index [0..9]
-   */
+  /** Returns active pipeline index [0..9] */
   public int getPipeline() {
     return (int) pipeline_sub.getAsDouble();
   }

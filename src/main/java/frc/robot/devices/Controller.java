@@ -86,9 +86,7 @@ public class Controller {
     return 0;
   }
 
-  /**
-   * @return left trigger subtractive and right trigger additive [-1.0..1.0]
-   */
+  /** Returns value: left trigger subtractive and right trigger additive [-1.0..1.0] */
   public double getTriggers() {
     return deadband(getAxis(axis.rightTrigger)) - deadband(getAxis(axis.leftTrigger));
   }

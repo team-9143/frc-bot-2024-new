@@ -71,16 +71,12 @@ public class TunableNumber implements DoubleSupplier {
     this(name, val, "default");
   }
 
-  /**
-   * @return an array of all instances for class-wide changes (e.g. making all numbers mutable)
-   */
+  /** Returns an array of all instances for class-wide changes (e.g. making all numbers mutable) */
   public static TunableNumber[] getAllInstances() {
     return s_instances.toArray(new TunableNumber[s_instances.size()]);
   }
 
-  /**
-   * @return an array of all TunableNumber groups
-   */
+  /** Returns an array of all TunableNumber groups */
   public static String[] getAllGroups() {
     return s_groups.toArray(new String[s_groups.size()]);
   }
@@ -112,9 +108,7 @@ public class TunableNumber implements DoubleSupplier {
     }
   }
 
-  /**
-   * @return {@code true} if the number is mutable
-   */
+  /** Returns {@code true} if the number is mutable */
   public boolean getMutable() {
     return m_mutable;
   }
@@ -140,9 +134,7 @@ public class TunableNumber implements DoubleSupplier {
     set(m_default);
   }
 
-  /**
-   * @return the current value
-   */
+  /** Returns the current value */
   @Override
   public double getAsDouble() {
     return m_value;

@@ -186,11 +186,7 @@ public class MutableChooser<T extends Enum<T> & MutableChooser.Named>
     }
   }
 
-  /**
-   * Returns the selected option, and the default if there is no selection.
-   *
-   * @return the selected option
-   */
+  /** Returns the selected option, and the default if there is no selection. */
   public T getSelected() {
     m_networkLock.lock();
     try {

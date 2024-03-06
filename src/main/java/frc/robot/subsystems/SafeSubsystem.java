@@ -14,9 +14,7 @@ public abstract class SafeSubsystem extends SubsystemBase implements Loggable {
     Logger.registerLoggable(this);
   }
 
-  /**
-   * @return a list of all initalized subsystems
-   */
+  /** Returns a list of all initalized subsystems */
   public static SafeSubsystem[] getAll() {
     return s_subsystems.toArray(SafeSubsystem[]::new);
   }
