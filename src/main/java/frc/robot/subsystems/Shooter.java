@@ -19,11 +19,13 @@ public class Shooter extends SafeSubsystem {
     return m_instance;
   }
 
-  private final static CANSparkMax m_ShooterBottom = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
+  private final static CANSparkMax m_motor = new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
   static {
-    new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless).follow(m_ShooterBottom, true);
+    @SuppressWarnings("resource")
+    var follower = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
+    follower.follow(m_motor, true);
 
-    m_ShooterBottom.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
+    m_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
   }
 
   // TODO(shooter): Extra - Create a private constructor here to initialize the encoders
@@ -32,7 +34,7 @@ public class Shooter extends SafeSubsystem {
   /** @return a command to intake a game piece using shooter wheels */
   public Command getSourceIntakeCommand() {
     return startEnd(
-      () -> m_ShooterBottom.setVoltage(ShooterConsts.kSourceIntakeVolts),
+      () -> m_motor.setVoltage(ShooterConsts.kSourceIntakeVolts),
       this::stop
     );
   }
@@ -40,7 +42,7 @@ public class Shooter extends SafeSubsystem {
   /** @return a command to shoot a game piece using shooter wheels */
   public Command getShootCommand() {
     return startEnd(
-      () -> m_ShooterBottom.setVoltage(ShooterConsts.kShootVolts),
+      () -> m_motor.setVoltage(ShooterConsts.kShootVolts),
       this::stop
     );
   }
@@ -48,14 +50,14 @@ public class Shooter extends SafeSubsystem {
   /** @return a command to spit a game piece at partial speed for amp scoring */
   public Command getSpitCommand() {
     return startEnd(
-      () -> m_ShooterBottom.setVoltage(ShooterConsts.kSpitVolts),
+      () -> m_motor.setVoltage(ShooterConsts.kSpitVolts),
       this::stop
     );
   }
 
   @Override
   public void stop() {
-    m_ShooterBottom.stopMotor();
+    m_motor.stopMotor();
   }
 
   @Override
