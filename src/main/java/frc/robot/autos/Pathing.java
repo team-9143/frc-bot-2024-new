@@ -17,6 +17,8 @@ import frc.robot.Constants.AutoConsts;
 import frc.robot.Constants.DriveConsts;
 import frc.robot.logger.Logger;
 import frc.robot.subsystems.Drivetrain;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Utility class for loading, generating, following, and logging paths through PathPlanner. PID
@@ -39,12 +41,12 @@ public class Pathing {
     PathPlannerLogging.setLogActivePathCallback(
         poses -> Logger.recordOutput(PATH_LOG_DIR + "activePath", poses.toArray(Pose2d[]::new)));
 
+    // Log target pose during command run
+    PathPlannerLogging.setLogTargetPoseCallback(
+        pose -> Logger.recordOutput(PATH_LOG_DIR + "targetPose", pose));
+
     // No need to log current robot pose, drivetrain will do that
     PathPlannerLogging.setLogCurrentPoseCallback(null);
-
-    // Log reference pose during command run
-    PathPlannerLogging.setLogTargetPoseCallback(
-        pose -> Logger.recordOutput(PATH_LOG_DIR + "referencePose", pose));
   }
 
   // Configure AutoBuilder
@@ -93,14 +95,17 @@ public class Pathing {
   public static PathPlannerPath generateDirectPath(
       Pose2d startPoseMetersCCW, Pose2d endPoseMetersCCW) {
     return new PathPlannerPath(
-        // TODO(dev): Test this path generation, start post/end pose rotations may need to be
-        // changed to match with bezier curve
-        PathPlannerPath.bezierFromPoses(
-            startPoseMetersCCW, endPoseMetersCCW), // Create bezier points from waypoints
-        DEFAULT_CONSTRAINTS, // Default constraints
-        new GoalEndState(
-            0, endPoseMetersCCW.getRotation()) // End with 0 velocity at specified rotation
-        );
+        List.of(
+            startPoseMetersCCW.getTranslation(),
+            startPoseMetersCCW.getTranslation(),
+            endPoseMetersCCW.getTranslation(),
+            endPoseMetersCCW.getTranslation()),
+        Collections.emptyList(),
+        Collections.emptyList(),
+        Collections.emptyList(),
+        DEFAULT_CONSTRAINTS,
+        new GoalEndState(0, endPoseMetersCCW.getRotation()),
+        false);
   }
 
   /******
@@ -155,8 +160,9 @@ public class Pathing {
    * @param targetPoseMetersCCW target position for the command
    */
   public static Command getHolonomicTargetPoseCommand(Pose2d targetPoseMetersCCW) {
-    return getHolonomicFollowPathCommand(
-        generateDirectPath(Drivetrain.getPose(), targetPoseMetersCCW));
+    var path = generateDirectPath(Drivetrain.getPose(), targetPoseMetersCCW);
+    path.preventFlipping = true;
+    return getHolonomicFollowPathCommand(path);
   }
 
   /**
