@@ -84,14 +84,12 @@ public class RobotContainer {
     OI.DRIVER_CONTROLLER.onFalse(btn.Y, cXStance::cancel);
   }
 
-  private static void configureOperator() {
-
-  }
+  private static void configureOperator() {}
 
   /** Calls all subsystem stop methods. Does not stop commands. */
   public static void stop() {
-   for (SafeSubsystem e : SafeSubsystem.getAll()) {
-    e.stop();
-   }
+    for (SafeSubsystem e : SafeSubsystem.getAll()) {
+      e.stop();
+    }
   }
 }
