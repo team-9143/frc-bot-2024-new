@@ -80,7 +80,7 @@ public class Constants {
       ),
       kSwerve_fr = new SwerveModuleConstants(
         "SwerveFR",
-        0.095, 0.1, 0.00065, // Gains
+        0.092, 0.1, 0.00065, // Gains
         -0.673096, // Offset
         21, 22, 23,
         new Translation2d(0.14605, -0.24765)
