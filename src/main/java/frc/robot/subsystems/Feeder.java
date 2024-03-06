@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.FeederConsts;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,13 +19,13 @@ public class Feeder extends SafeSubsystem {
 
   private final static TalonFX m_feedMotor = new TalonFX(FeederConsts.kFeedMotorID);
   static {
+    // TODO(shooter): Extra - use the talon configurator to set current limits and neutral mode here.
     m_feedMotor.optimizeBusUtilization();
   }
 
-  // TODO(shooter): Create a private constructor here to initialize the talon (netural mode and current limits)
-  // TODO(shooter): Add a default command that holds a game piece in the feeder wheels while a note is within the bot (between intake and shooting)
   private Feeder() {}
 
+  // TODO(shooter): You have to actually set this variable somewhere (hint - when the source intake and shoot commands start). Also, forgetting "public static" - alternatively, make "private static" and have a setter method (this would actually be better for debugging and code maintanence purposes). I'd prefer static for this field simply because there's no need for it to not be.
   boolean m_holding = true;
 
   public void initDefaultCommand() {
@@ -44,12 +43,9 @@ public class Feeder extends SafeSubsystem {
 
   @Override
   public void stop() {
-    System.out.println("Stopping feeder");
     m_feedMotor.stopMotor();
   }
 
   @Override
-  public void log() {
-    // TODO(shooter): I can't think of anything to log here, you could leave this method empty
-  }
+  public void log() {}
 }

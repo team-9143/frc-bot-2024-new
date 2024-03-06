@@ -26,7 +26,7 @@ public class Shooter extends SafeSubsystem {
     m_ShooterBottom.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
   }
 
-  // TODO(shooter): Create a private constructor here to initialize the encoders
+  // TODO(shooter): Extra - Create a private constructor here to initialize the encoders
   private Shooter() {}
 
   /** @return a command to intake a game piece using shooter wheels */
@@ -55,12 +55,11 @@ public class Shooter extends SafeSubsystem {
 
   @Override
   public void stop() {
-    System.out.println("Stopping shooter");
     m_ShooterBottom.stopMotor();
   }
 
   @Override
   public void log() {
-    // TODO(shooter) implement wheel speed logging (use integrated NEO encoders)
+    // TODO(shooter): Extra - implement wheel speed logging (use integrated NEO encoders)
   }
 }
