@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.FeederConsts;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,6 +27,13 @@ public class Feeder extends SafeSubsystem {
   // TODO(shooter): Add a default command that holds a game piece in the feeder wheels while a note is within the bot (between intake and shooting)
   private Feeder() {}
 
+  boolean m_holding = true;
+
+  public void initDefaultCommand() {
+    setDefaultCommand(run(
+      () -> m_feedMotor.setVoltage(m_holding ? FeederConsts.kFeedVolts : 0)
+    ));
+  }
   /** @return a command to feed a note from the intake to the shooter */
   public Command getFeedCommand() {
     return startEnd(
