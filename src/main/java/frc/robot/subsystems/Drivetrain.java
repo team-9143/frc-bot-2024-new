@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 
-// TODO: Test 100hz swerve and push to template
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SafeSubsystem {
   private static Drivetrain m_instance;
