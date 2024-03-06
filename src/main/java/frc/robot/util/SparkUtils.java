@@ -1,15 +1,16 @@
 package frc.robot.util;
 
-import java.util.function.Supplier;
-
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.REVLibError;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import java.util.function.Supplier;
 
-/** Utility class for configuration of REV Spark motor controllers. Mostly stolen from Team 1155 (thank you Asa) */
+/**
+ * Utility class for configuration of REV Spark motor controllers. Mostly stolen from Team 1155
+ * (thank you Asa)
+ */
 public class SparkUtils {
   public static final int MAX_ATTEMPTS = 3;
   public static final int FRAME_STRATEGY_DISABLED = 65535;
@@ -45,7 +46,7 @@ public class SparkUtils {
     spark.burnFlash();
     var err = spark.getLastError();
     if (err != REVLibError.kOk) {
-      DriverStation.reportError(getName(spark)+": "+err.name(), false);
+      DriverStation.reportError(getName(spark) + ": " + err.name(), false);
     }
   }
 
@@ -59,11 +60,12 @@ public class SparkUtils {
    */
   private static void configure(CANSparkBase spark, Supplier<REVLibError> config, int attempt) {
     if (attempt >= MAX_ATTEMPTS) {
-      DriverStation.reportError(getName(spark)+": FAILED TO SET PARAMETER", false);
+      DriverStation.reportError(getName(spark) + ": FAILED TO SET PARAMETER", false);
       return;
     }
     if (attempt >= 1) {
-      DriverStation.reportWarning(getName(spark)+": setting parameter failed: "+attempt+"/"+MAX_ATTEMPTS, false);
+      DriverStation.reportWarning(
+          getName(spark) + ": setting parameter failed: " + attempt + "/" + MAX_ATTEMPTS, false);
     }
 
     REVLibError error = config.get();
@@ -74,9 +76,10 @@ public class SparkUtils {
   }
 
   /**
-   * This is a shorthand for {@link CANSparkBase#setPeriodicFramePeriod()}. Use 0 to represent a disabled frame. Meant to be passed into {@link SparkUtils#configure()}.
+   * This is a shorthand for {@link CANSparkBase#setPeriodicFramePeriod()}. Use 0 to represent a
+   * disabled frame. Meant to be passed into {@link SparkUtils#configure()}.
    *
-   * <p> Status 7 appears to be useless, only used for IAccum.
+   * <p>Status 7 appears to be useless, only used for IAccum.
    *
    * @param spark The spark to configure.
    * @param status0 applied output, faults | default 10
@@ -86,20 +89,64 @@ public class SparkUtils {
    * @param status4 alternate quadrature encoder | default 20
    * @param status5 duty cycle position | default 200
    * @param status6 duty cycle velocity | default 200
-   *
    * @return {@link REVLibError#kOk}
-   *
    * @see https://docs.revrobotics.com/brushless/spark-max/control-interfaces
    */
-  public static REVLibError setPeriodicFrames(CANSparkBase spark, int status0, int status1, int status2, int status3, int status4, int status5, int status6) {
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0 != 0 ? status0 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus1, status1 != 0 ? status1 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus2, status2 != 0 ? status2 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus3, status3 != 0 ? status3 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus4, status4 != 0 ? status4 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus5, status5 != 0 ? status5 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus6, status6 != 0 ? status6 : FRAME_STRATEGY_DISABLED), 1);
-    configure(spark, () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus7, FRAME_STRATEGY_DISABLED), 1);
+  public static REVLibError setPeriodicFrames(
+      CANSparkBase spark,
+      int status0,
+      int status1,
+      int status2,
+      int status3,
+      int status4,
+      int status5,
+      int status6) {
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus0, status0 != 0 ? status0 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus1, status1 != 0 ? status1 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus2, status2 != 0 ? status2 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus3, status3 != 0 ? status3 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus4, status4 != 0 ? status4 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus5, status5 != 0 ? status5 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () ->
+            spark.setPeriodicFramePeriod(
+                PeriodicFrame.kStatus6, status6 != 0 ? status6 : FRAME_STRATEGY_DISABLED),
+        1);
+    configure(
+        spark,
+        () -> spark.setPeriodicFramePeriod(PeriodicFrame.kStatus7, FRAME_STRATEGY_DISABLED),
+        1);
 
     return REVLibError.kOk; // Always returns kOk, errors will be logged by calls to configure()
   }

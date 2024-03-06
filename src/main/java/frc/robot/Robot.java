@@ -5,12 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.Constants.DriveConsts;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.logger.Logger;
+import frc.robot.Constants.DriveConsts;
 import frc.robot.autos.AutoSelector;
+import frc.robot.logger.Logger;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.TunableNumber;
 
 /**
@@ -29,7 +28,10 @@ public class Robot extends TimedRobot {
     RobotContainer.init();
 
     // Add periodic callback for drivetrain updates
-    addPeriodic(Drivetrain.getInstance()::update, DriveConsts.kPeriodMs / 1000d, (kDefaultPeriod - (DriveConsts.kPeriodMs / 1000d)) / 2);
+    addPeriodic(
+        Drivetrain.getInstance()::update,
+        DriveConsts.kPeriodMs / 1000d,
+        (kDefaultPeriod - (DriveConsts.kPeriodMs / 1000d)) / 2);
   }
 
   @Override
