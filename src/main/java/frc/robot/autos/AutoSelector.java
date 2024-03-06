@@ -12,7 +12,6 @@ public class AutoSelector {
     return new InstantCommand();
   }
 
-  // TODO(user): Create and register named commands here
   static {
     NamedCommands.registerCommand("Empty", new InstantCommand());
   }

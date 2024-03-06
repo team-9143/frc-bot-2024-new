@@ -5,7 +5,6 @@ import frc.robot.util.TunableNumber;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.util.SwerveModule.SwerveModuleConstants;
 
-// TODO(user): Tune all TunableNumbers for better robot control
 /** Global constants. Should not include functional code. */
 public class Constants {
   /** Information for testing and robot configuration that must be updated consistenly. */
@@ -100,6 +99,7 @@ public class Constants {
       );
   }
 
+  // TODO(user): Tune pathfinding PID gains
   public static class AutoConsts {
     // TODO(dev/user): Ensure that drivetrain acceleration limits are strong
     // Upper bound drivetrain accelerations for path following and pose targeting
