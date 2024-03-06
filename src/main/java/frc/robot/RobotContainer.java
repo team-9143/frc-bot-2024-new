@@ -100,8 +100,7 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // TODO(shooter): Standardize documentation here as exampled above
-    // Feeds shooter if note falls in too deep
+    // Button 'LB' (hold) Feeds note through from the intake to the shooter
     final Command cFeed = Feeder.getInstance().getFeedCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cFeed::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cFeed::cancel);

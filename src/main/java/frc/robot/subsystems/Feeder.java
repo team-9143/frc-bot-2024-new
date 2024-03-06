@@ -17,24 +17,26 @@ public class Feeder extends SafeSubsystem {
     return m_instance;
   }
 
-  // TODO(shooter): Make this private for safety
-  public final static TalonFX m_feedMotor = new TalonFX(FeederConsts.kFeedMotorID);
+  private final static TalonFX m_feedMotor = new TalonFX(FeederConsts.kFeedMotorID);
+  static {
+    m_feedMotor.optimizeBusUtilization();
+  }
 
-  // TODO(shooter): Create a private constructor here to initialize the talon
+  // TODO(shooter): Create a private constructor here to initialize the talon (netural mode and current limits)
+  // TODO(shooter): Add a default command that holds a game piece in the feeder wheels while a note is within the bot (between intake and shooting)
+  private Feeder() {}
 
-  // TODO(shooter): There should be a feed command and a hold command, add and document both properly
   /** @return a command to feed a note from the intake to the shooter */
   public Command getFeedCommand() {
     return startEnd(
-      () -> {
-        m_feedMotor.setVoltage(FeederConsts.kHoldVolts);
-      },
-      Shooter.getInstance()::stop // TODO(shooter): Change these all into `this::stop` (more readable and less processing)
+      () -> m_feedMotor.setVoltage(FeederConsts.kFeedVolts),
+      this::stop
     );
   }
 
   @Override
   public void stop() {
+    System.out.println("Stopping feeder");
     m_feedMotor.stopMotor();
   }
 
