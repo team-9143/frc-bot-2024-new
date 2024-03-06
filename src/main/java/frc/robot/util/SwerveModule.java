@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix6.hardware.CANcoder;
 import java.util.function.Supplier;
@@ -48,6 +49,7 @@ public class SwerveModule {
     drive_motor = new CANSparkMax(constants.drive_ID, MotorType.kBrushless);
     drive_encoder = drive_motor.getEncoder();
     SparkUtils.configure(drive_motor,
+      () -> drive_motor.setIdleMode(IdleMode.kBrake),
       () -> drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
       () -> drive_encoder.setPositionConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters), // UNIT: meters
       () -> drive_encoder.setVelocityConversionFactor(PhysConsts.kSwerveDriveGearbox * PhysConsts.kSwerveWheelCircumferenceMeters / 60), // UNIT: meters/s
@@ -59,6 +61,7 @@ public class SwerveModule {
     // Configure azimuth motor
     azimuth_motor = new CANSparkMax(constants.azimuth_ID, MotorType.kBrushless);
     SparkUtils.configure(azimuth_motor,
+      () -> azimuth_motor.setIdleMode(IdleMode.kBrake),
       () -> SparkUtils.setInverted(azimuth_motor, SwerveConsts.kAzimuthInverted),
       () -> azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit),
       () -> SparkUtils.setPeriodicFrames(azimuth_motor, 10, 0, 0, 0, 0, 0, 0)
