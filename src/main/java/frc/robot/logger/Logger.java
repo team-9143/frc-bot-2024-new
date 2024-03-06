@@ -97,9 +97,8 @@ public class Logger {
   // Start log manager
   static {
     DataLogManager.start(
-        RobotBase.isSimulation()
-            ? "/logs/"
-            : Config.DATA_LOG_DIR, // Log to project/logs/ directory in simulation
+        // Log to project/logs/ directory in simulation
+        RobotBase.isSimulation() ? "logs" : Config.DATA_LOG_DIR,
         "FRC_"
             + LocalDateTime.now(ZoneId.of("UTC-8"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
