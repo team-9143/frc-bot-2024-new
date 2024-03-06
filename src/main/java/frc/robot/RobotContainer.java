@@ -83,17 +83,13 @@ public class RobotContainer {
             new InstantCommand(
                 () -> {
                   // Reset odometry so that forward is away from the driver station
-                  Drivetrain.getInstance()
-                      .resetOdometry(
-                          new Pose2d(
-                              Drivetrain.getInstance().getPose().getTranslation(),
-                              new Rotation2d(0)));
+                  Drivetrain.resetOdometry(
+                      new Pose2d(Drivetrain.getPose().getTranslation(), new Rotation2d(0)));
                   cRumble.schedule(); // Rumble to indicate odometry has been reset
                 }));
 
     // Button 'Y' (hold) will set drivetrain to x-stance (for stability)
-    final var cXStance =
-        new RunCommand(Drivetrain.getInstance()::toXStance, Drivetrain.getInstance());
+    final var cXStance = new RunCommand(Drivetrain::toXStance, Drivetrain.getInstance());
     OI.DRIVER_CONTROLLER.onTrue(btn.Y, cXStance::schedule);
     OI.DRIVER_CONTROLLER.onFalse(btn.Y, cXStance::cancel);
   }

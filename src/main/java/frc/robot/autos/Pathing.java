@@ -50,11 +50,10 @@ public class Pathing {
   // Configure AutoBuilder
   static {
     AutoBuilder.configureHolonomic(
-        Drivetrain.getInstance()::getPose, // Pose supplier
-        Drivetrain.getInstance()::resetOdometry, // Reset pose consumer
-        Drivetrain.getInstance()::getDesiredSpeeds, // Current measured speeds
-        Drivetrain.getInstance()
-            ::driveFieldRelativeVelocity, // Drives field relative from ChassisSpeeds
+        Drivetrain::getPose, // Pose supplier
+        Drivetrain::resetOdometry, // Reset pose consumer
+        Drivetrain::getDesiredSpeeds, // Current measured speeds
+        Drivetrain::driveFieldRelativeVelocity, // Drives field relative from ChassisSpeeds
         getHolonomicConfig(new ReplanningConfig(false, false)), // Config
         Pathing::isRedAlliance, // Flip if alliance is red
         Drivetrain.getInstance() // Subsystem
@@ -130,9 +129,9 @@ public class Pathing {
       PathPlannerPath path, ReplanningConfig replanningConfig) {
     return new FollowPathHolonomic(
         path, // Path to follow
-        Drivetrain.getInstance()::getPose, // Pose supplier
-        Drivetrain.getInstance()::getMeasuredSpeeds, // Chassis speeds supplier
-        Drivetrain.getInstance()::driveRobotRelativeVelocity, // Robot-relative velocities consumer
+        Drivetrain::getPose, // Pose supplier
+        Drivetrain::getMeasuredSpeeds, // Chassis speeds supplier
+        Drivetrain::driveRobotRelativeVelocity, // Robot-relative velocities consumer
         getHolonomicConfig(replanningConfig), // Follower configuration
         Pathing::isRedAlliance, // Flip the path if alliance is red
         Drivetrain.getInstance() // Subsystem requirements
@@ -150,16 +149,21 @@ public class Pathing {
   }
 
   /**
-   * Create a command that pathfinds to the target pose and stops.
+   * Create a command that follows a path directly to the target pose and stops. Command should be
+   * scheduled before any other movement happens.
    *
    * @param targetPoseMetersCCW target position for the command
    */
   public static Command getHolonomicTargetPoseCommand(Pose2d targetPoseMetersCCW) {
-    return AutoBuilder.pathfindToPose(targetPoseMetersCCW, DEFAULT_CONSTRAINTS);
+    return getHolonomicFollowPathCommand(
+        generateDirectPath(Drivetrain.getPose(), targetPoseMetersCCW));
   }
 
   /**
    * Create a command that pathfinds to a path and then follows that path.
+   *
+   * <p>Pathfinding may take excessive processing, prefer running a path follower command in
+   * sequence after {@link Pathing#getHolonomicTargetPoseCommand(Pose2d)}.
    *
    * @param path the pathplanner path to target and follow
    */

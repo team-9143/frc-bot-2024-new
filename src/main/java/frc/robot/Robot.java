@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
     // Add periodic callback for drivetrain updates
     addPeriodic(
-        Drivetrain.getInstance()::update,
+        Drivetrain::update,
         DriveConsts.kPeriodMs / 1000d,
         (kDefaultPeriod - (DriveConsts.kPeriodMs / 1000d)) / 2);
   }
