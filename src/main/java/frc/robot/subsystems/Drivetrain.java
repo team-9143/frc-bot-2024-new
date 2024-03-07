@@ -18,13 +18,6 @@ import frc.robot.util.SwerveDrive;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SafeSubsystem {
-  private static final Drivetrain m_instance = new Drivetrain();
-
-  /** Returns the singleton instance */
-  public static synchronized Drivetrain getInstance() {
-    return m_instance;
-  }
-
   // Pigeon2 setup
   private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConsts.kPigeonID);
 
@@ -61,6 +54,13 @@ public class Drivetrain extends SafeSubsystem {
           SwerveConsts.kSwerve_fr,
           SwerveConsts.kSwerve_bl,
           SwerveConsts.kSwerve_br);
+
+  private static final Drivetrain m_instance = new Drivetrain();
+
+  /** Returns the singleton instance */
+  public static Drivetrain getInstance() {
+    return m_instance;
+  }
 
   private Drivetrain() {
     // Default drive command
