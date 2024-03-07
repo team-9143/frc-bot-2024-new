@@ -33,6 +33,14 @@ public class Feeder extends SafeSubsystem {
     );
   }
 
+  /** @return a command to deeply intake a note from the source */
+  public Command getDeepIntakeCommand() {
+    return startEnd(
+      () -> m_feedMotor.setVoltage(FeederConsts.kDeepIntakeVolts),
+      this::stop
+    );
+  }
+
   @Override
   public void stop() {
     m_feedMotor.stopMotor();

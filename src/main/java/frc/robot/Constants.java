@@ -82,16 +82,16 @@ public class Constants {
     public static final byte kTopShooterMotorID = 5;
     public static final byte kBottomShooterMotorID = 4;
 
-    public static final double kSourceIntakeVolts = -3;
-    public static final double kShootVolts = 10;
-    public static final double kSpitVolts = 4.2;
+    public static final double kSourceIntakeVolts = 12;
+    public static final double kShootVolts = -6;
+    public static final double kSpitVolts = -3;
   }
 
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kHoldVolts = 0.6;
-    public static final double kFeedVolts = 8;
+    public static final double kFeedVolts = -12;
+    public static final double kDeepIntakeVolts = 1;
   }
 
   /** Data for each individual swerve module. */
