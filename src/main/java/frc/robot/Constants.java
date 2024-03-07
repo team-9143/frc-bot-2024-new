@@ -10,14 +10,13 @@ public class Constants {
   /** Information for testing and robot configuration that must be updated consistenly. */
   public static class Config {
     /**
-     * Directory for log file. Leave blank to store in default directory on roboRIO or RIO-attached
-     * USB.
+     * Directory for log file. Blank to store in default directory on roboRIO or RIO-attached USB.
      */
     public static final String DATA_LOG_DIR = "";
 
     /**
-     * {@code true} to stream log file data to NetworkTables (takes up bandwith and processing time,
-     * but useful for concurrent running and visualization)
+     * Set true to stream log file data to NetworkTables (takes up bandwith and processing time, but
+     * useful for concurrent running and visualization)
      */
     public static final boolean NTStream = false;
 
@@ -35,50 +34,56 @@ public class Constants {
 
   /** Physical parts of the robot, such as gearboxes or wheel diameters. */
   public static class PhysConsts {
-    public static final int kNEOMaxVoltage = 12; // NEO V1.1 nominal voltage
-    public static final int kNEOCurrentLimit =
-        40; // NEO V1.1 general current limit (40A-60A is advised)
+    /** NEO V1.1 nominal voltage */
+    public static final int kNEOMaxVoltage = 12;
 
-    public static final double kSwerveDriveRPS = 5680d / 60d; // NEO V1.1 empirical free speed
-    public static final double kSwerveDriveGearbox =
-        1d / 5.355; // SDS L3 modules with 16T drive pinion
-    public static final double kSwerveWheelCircumferenceMeters = 0.099 * Math.PI; // Billet wheels
+    /** NEO V1.1 general current limit (40A-60A is advised) */
+    public static final int kNEOCurrentLimit = 40;
+
+    /** NEO V1.1 empirical free speed */
+    public static final double kSwerveDriveRPS = 5680d / 60d;
+
+    /** SDS L3 modules with 16T drive pinion */
+    public static final double kSwerveDriveGearbox = 1d / 5.355;
+
+    /** Billet wheels */
+    public static final double kSwerveWheelCircumferenceMeters = 0.099 * Math.PI;
   }
 
   /** Data relating to the entire drivetrain. */
   public static class DriveConsts {
     // Upper bound drivetrain constraints
+    /** 75% of theoretical max */
     public static final double kMaxLinearVelMetersPerSecond =
         PhysConsts.kSwerveDriveRPS
             * PhysConsts.kSwerveDriveGearbox
             * PhysConsts.kSwerveWheelCircumferenceMeters
-            * 0.75; // 75% of theoretical max (motor RPS * gearbox * wheel circumfrence * 80%)
-    // ω = velocity / radius (use swerve module farthest from COR
+            * 0.75;
+
+    /** ω = velocity / radius (use swerve module farthest from COR */
     public static final double kMaxTurnVelRadiansPerSecond =
         kMaxLinearVelMetersPerSecond
             / Constants.SwerveConsts.kSwerve_bl.location.getDistance(new Translation2d());
 
-    public static final double kModuleAzimuthMaxVoltage =
-        0.65 * PhysConsts.kNEOMaxVoltage; // Maximum azimuth motor voltage
-    public static final double kModuleDriveMaxVoltage =
-        0.95 * PhysConsts.kNEOMaxVoltage; // Maximum drive motor voltage (to avoid brownouts)
+    // To avoid brownouts and overpowering
+    public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysConsts.kNEOMaxVoltage;
+    public static final double kModuleDriveMaxVoltage = 0.95 * PhysConsts.kNEOMaxVoltage;
     public static final int kModuleAzimuthCurrentLimit = 30;
 
     // Multipliers for all teleop driving
     public static final double kTeleopSpeedMult = 1;
-    public static final double kTeleopTurnMult =
-        9.5 / kMaxTurnVelRadiansPerSecond; // Set maximum teleop turn speed to 1.5 rotations/s
+    // Set maximum teleop turn speed to 1.5 rotations/s
+    public static final double kTeleopTurnMult = 9.5 / kMaxTurnVelRadiansPerSecond;
 
-    // Update rate for drivetrain, default period is 20 ms. Stay between 8-64 ms to make best use of
-    // NEO hall sensor. (UNIT: milliseconds)
+    /** Update rate for drivetrain, default 20 ms. 8-64 ms is best for NEO hall sensor. */
     public static final int kPeriodMs = 10;
   }
 
   /** Data for each individual swerve module. */
   public static class SwerveConsts {
     // Gains for module velocity error -> voltage
-    public static final TunableNumber kDriveS = new TunableNumber("S", 0.1, "Module Drive"),
-        kDriveP = new TunableNumber("P", 2, "Module Drive");
+    public static final TunableNumber kDriveS = new TunableNumber("S", 0.1, "Module Drive");
+    public static final TunableNumber kDriveP = new TunableNumber("P", 2, "Module Drive");
 
     // Whether azimuth motor is inverted, use for mk4i's
     public static final boolean kAzimuthInverted = true;
@@ -144,17 +149,16 @@ public class Constants {
     // TODO(dev/user): Ensure that drivetrain acceleration limits are strong
     // Upper bound drivetrain accelerations for path following and pose targeting
     public static final double kMaxLinearAccelMetersPerSecondSquared =
-        DriveConsts.kMaxLinearVelMetersPerSecond / 0.5; // Reaches max speed in 0.5 seconds
+        DriveConsts.kMaxLinearVelMetersPerSecond;
     public static final double kMaxTurnAccelRadiansPerSecondSquared =
-        DriveConsts.kMaxTurnVelRadiansPerSecond / 0.5; // Reaches max speed in 0.5 seconds
+        DriveConsts.kMaxTurnVelRadiansPerSecond;
 
     // Gains for drivetrain position error -> velocity
-    public static final TunableNumber
-        kTranslateP = new TunableNumber("P", 0.03, "Robot Translation"),
-        kTranslateI = new TunableNumber("I", 0, "Robot Translation"),
-        kTranslateD = new TunableNumber("D", 0, "Robot Translation");
-    public static final TunableNumber kRotateP = new TunableNumber("P", 0.05, "Robot Rotation"),
-        kRotateI = new TunableNumber("I", 0, "Robot Rotation"),
-        kRotateD = new TunableNumber("D", 0, "Robot Rotation");
+    public static final TunableNumber kTranslateP = new TunableNumber("P", 5, "Robot Translation");
+    public static final TunableNumber kTranslateI = new TunableNumber("I", 0, "Robot Translation");
+    public static final TunableNumber kTranslateD = new TunableNumber("D", 0, "Robot Translation");
+    public static final TunableNumber kRotateP = new TunableNumber("P", 0.05, "Robot Rotation");
+    public static final TunableNumber kRotateI = new TunableNumber("I", 0, "Robot Rotation");
+    public static final TunableNumber kRotateD = new TunableNumber("D", 0, "Robot Rotation");
   }
 }
