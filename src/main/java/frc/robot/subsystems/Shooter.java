@@ -34,7 +34,10 @@ public class Shooter extends SafeSubsystem {
   /** @return a command to intake a game piece using shooter wheels */
   public Command getSourceIntakeCommand() {
     return startEnd(
-      () -> m_motor.setVoltage(ShooterConsts.kSourceIntakeVolts),
+      () -> {
+        Feeder.setHolding(true);
+        m_motor.setVoltage(ShooterConsts.kSourceIntakeVolts);
+      },
       this::stop
     );
   }
@@ -43,7 +46,10 @@ public class Shooter extends SafeSubsystem {
   public Command getShootCommand() {
     return startEnd(
       () -> m_motor.setVoltage(ShooterConsts.kShootVolts),
-      this::stop
+      () -> {
+        Feeder.setHolding(false);
+        this.stop();
+      }
     );
   }
 
@@ -51,7 +57,10 @@ public class Shooter extends SafeSubsystem {
   public Command getSpitCommand() {
     return startEnd(
       () -> m_motor.setVoltage(ShooterConsts.kSpitVolts),
-      this::stop
+      () -> {
+        Feeder.setHolding(false);
+        this.stop();
+      }
     );
   }
 

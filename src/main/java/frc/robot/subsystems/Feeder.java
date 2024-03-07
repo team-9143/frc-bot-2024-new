@@ -26,11 +26,17 @@ public class Feeder extends SafeSubsystem {
   private Feeder() {}
 
   // TODO(shooter): You have to actually set this variable somewhere (hint - when the source intake and shoot commands start). Also, forgetting "public static" - alternatively, make "private static" and have a setter method (this would actually be better for debugging and code maintanence purposes). I'd prefer static for this field simply because there's no need for it to not be.
-  boolean m_holding = true;
+  private static boolean m_holding = false;
+
+  /** Sets whether the robot indexer is holding a game piece. */
+  public static void setHolding(boolean holding) {
+    m_holding = holding;
+  }
 
   public void initDefaultCommand() {
-    setDefaultCommand(run(
-      () -> m_feedMotor.setVoltage(m_holding ? FeederConsts.kFeedVolts : 0)
+    setDefaultCommand(runEnd(
+      () -> m_feedMotor.setVoltage(m_holding ? FeederConsts.kFeedVolts : 0),
+      this::stop
     ));
   }
   /** @return a command to feed a note from the intake to the shooter */
