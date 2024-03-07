@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConsts;
 import frc.robot.Constants.DriveConsts;
+import frc.robot.Constants.SwerveConsts;
 import frc.robot.logger.Logger;
 import frc.robot.subsystems.Drivetrain;
 import java.util.Collections;
@@ -95,6 +96,7 @@ public class Pathing {
   public static PathPlannerPath generateDirectPath(
       Pose2d startPoseMetersCCW, Pose2d endPoseMetersCCW) {
     return new PathPlannerPath(
+        // Creating bezier points like this enforces a straight-line path
         List.of(
             startPoseMetersCCW.getTranslation(),
             startPoseMetersCCW.getTranslation(),
@@ -191,21 +193,21 @@ public class Pathing {
    */
   private static HolonomicPathFollowerConfig getHolonomicConfig(ReplanningConfig replanningConfig) {
     return new HolonomicPathFollowerConfig(
+        // Translation controller for position error -> velocity
         new PIDConstants(
-            AutoConsts.kTranslateP.getAsDouble(),
-            AutoConsts.kTranslateI.getAsDouble(),
-            AutoConsts.kTranslateD
-                .getAsDouble()), // Translation controller for position error -> velocity
+            AutoConsts.kTranslateP.getAsDouble(), 0, AutoConsts.kTranslateD.getAsDouble()),
+        // Rotational gains are multiplied by "radius" (use swerve module farthest from COR) to
+        // change units from radians to meters so that gains can theoretically be the same
         new PIDConstants(
-            AutoConsts.kRotateP.getAsDouble(),
-            AutoConsts.kRotateI.getAsDouble(),
-            AutoConsts.kRotateD
-                .getAsDouble()), // Rotation controller for angle error -> angular velocity
-        DriveConsts.kMaxLinearVelMetersPerSecond, // Maximum module speed
-        frc.robot.Constants.SwerveConsts.kSwerve_fl.location.getDistance(
-            new Translation2d()), // Radius of drive base
-        replanningConfig // When to replan the path
-        );
+            AutoConsts.kTranslateP.getAsDouble() * SwerveConsts.kDriveBaseRadius,
+            0,
+            AutoConsts.kTranslateD.getAsDouble() * SwerveConsts.kDriveBaseRadius),
+        // Maximum module speed
+        DriveConsts.kMaxLinearVelMetersPerSecond,
+        // Radius of drive base
+        frc.robot.Constants.SwerveConsts.kSwerve_fl.location.getDistance(new Translation2d()),
+        // When to replan the path
+        replanningConfig);
   }
 
   /**

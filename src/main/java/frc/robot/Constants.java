@@ -60,10 +60,9 @@ public class Constants {
             * PhysConsts.kSwerveWheelCircumferenceMeters
             * 0.75;
 
-    /** ω = velocity / radius (use swerve module farthest from COR */
+    // ω = velocity / radius
     public static final double kMaxTurnVelRadiansPerSecond =
-        kMaxLinearVelMetersPerSecond
-            / Constants.SwerveConsts.kSwerve_bl.location.getDistance(new Translation2d());
+        kMaxLinearVelMetersPerSecond / Constants.SwerveConsts.kDriveBaseRadius;
 
     // To avoid brownouts and overpowering
     public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysConsts.kNEOMaxVoltage;
@@ -142,6 +141,10 @@ public class Constants {
                 42,
                 43,
                 new Translation2d(-0.24765, -0.24765));
+
+    /** Drive base radius for angularvelocity calcs (use swerve module farthest from COR) */
+    public static final double kDriveBaseRadius =
+        kSwerve_bl.location.getDistance(new Translation2d());
   }
 
   // TODO(user): Tune pathfinding PID gains
@@ -155,10 +158,6 @@ public class Constants {
 
     // Gains for drivetrain position error -> velocity
     public static final TunableNumber kTranslateP = new TunableNumber("P", 5, "Robot Translation");
-    public static final TunableNumber kTranslateI = new TunableNumber("I", 0, "Robot Translation");
     public static final TunableNumber kTranslateD = new TunableNumber("D", 0, "Robot Translation");
-    public static final TunableNumber kRotateP = new TunableNumber("P", 0.05, "Robot Rotation");
-    public static final TunableNumber kRotateI = new TunableNumber("I", 0, "Robot Rotation");
-    public static final TunableNumber kRotateD = new TunableNumber("D", 0, "Robot Rotation");
   }
 }
