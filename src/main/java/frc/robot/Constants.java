@@ -149,10 +149,11 @@ public class Constants {
         DriveConsts.kMaxTurnVelRadiansPerSecond / 0.5; // Reaches max speed in 0.5 seconds
 
     // Gains for drivetrain position error -> velocity
-    public static final TunableNumber kTranslateP = new TunableNumber("P", 1, "Robot Translation"),
+    public static final TunableNumber
+        kTranslateP = new TunableNumber("P", 0.03, "Robot Translation"),
         kTranslateI = new TunableNumber("I", 0, "Robot Translation"),
         kTranslateD = new TunableNumber("D", 0, "Robot Translation");
-    public static final TunableNumber kRotateP = new TunableNumber("P", 1, "Robot Rotation"),
+    public static final TunableNumber kRotateP = new TunableNumber("P", 0.05, "Robot Rotation"),
         kRotateI = new TunableNumber("I", 0, "Robot Rotation"),
         kRotateD = new TunableNumber("D", 0, "Robot Rotation");
   }

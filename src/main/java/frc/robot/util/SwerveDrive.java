@@ -69,8 +69,7 @@ public class SwerveDrive extends MotorSafety {
               new SwerveModulePosition(
                   modules[3].getDistance(), Rotation2d.fromDegrees(modules[3].getAngle()))
             },
-            new Pose2d() // If using field-relative paths, use field-relative pose here
-            );
+            new Pose2d());
   }
 
   /** Pushes module states and calculates outputs. Should be called at least every robot loop. */
