@@ -10,6 +10,7 @@ public abstract class SafeSubsystem extends SubsystemBase implements Loggable {
   private static final ArrayList<SafeSubsystem> s_subsystems = new ArrayList<>();
 
   public SafeSubsystem() {
+    stop();
     s_subsystems.add(this);
     Logger.registerLoggable(this);
   }

@@ -18,14 +18,10 @@ import frc.robot.util.SwerveDrive;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SafeSubsystem {
-  private static Drivetrain m_instance;
+  private static final Drivetrain m_instance = new Drivetrain();
 
   /** Returns the singleton instance */
   public static synchronized Drivetrain getInstance() {
-    if (m_instance == null) {
-      m_instance = new Drivetrain();
-      m_instance.stop();
-    }
     return m_instance;
   }
 
