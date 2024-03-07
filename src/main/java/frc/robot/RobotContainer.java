@@ -100,15 +100,25 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // Button 'Y' (hold) Spits held note for amp scoring
+    // Button 'A' (hold) Spits held note for amp scoring
     final Command cSpit = Shooter.getInstance().getSpitCommand();
-    OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cSpit::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cSpit::cancel);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.A, cSpit::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.A, cSpit::cancel);
 
-    // Button 'LB' (hold) Feeds note through from the intake to the shooter
+    // Button 'LB' (hold) Intakes game piece using shooter wheels
+    final Command cSourceIntake = Shooter.getInstance().getSourceIntakeCommand();
+    OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cSourceIntake::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
+
+    // Button 'X' (hold) Feeds note through from the intake to the shooter
     final Command cFeed = Feeder.getInstance().getFeedCommand();
-    OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cFeed::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cFeed::cancel);
+    OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeed::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeed::cancel);
+
+    // Button 'Y' (hold) Deeply intakes a note from the source
+    final Command cDeepIntake = Feeder.getInstance().getDeepIntakeCommand();
+    OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cDeepIntake::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cDeepIntake::cancel);
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
