@@ -54,11 +54,11 @@ public class SwerveModule {
         () -> drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
         () ->
             drive_encoder.setPositionConversionFactor(
-                PhysConsts.kSwerveDriveGearbox
+                PhysConsts.kSwerveDriveMechToSens
                     * PhysConsts.kSwerveWheelCircumferenceMeters), // UNIT: meters
         () ->
             drive_encoder.setVelocityConversionFactor(
-                PhysConsts.kSwerveDriveGearbox
+                PhysConsts.kSwerveDriveMechToSens
                     * PhysConsts.kSwerveWheelCircumferenceMeters
                     / 60), // UNIT: meters/s
         () ->

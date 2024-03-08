@@ -41,13 +41,19 @@ public class Constants {
     public static final int kNEOCurrentLimit = 40;
 
     /** NEO V1.1 empirical free speed */
-    public static final double kSwerveDriveRPS = 5680d / 60d;
+    public static final double kSwerveDriveMaxRPS = 5680d / 60d;
 
-    /** SDS L3 modules with 16T drive pinion */
-    public static final double kSwerveDriveGearbox = 1d / 5.355;
+    /** Ratio of drive wheels to motors for SDS L3 modules with 16T drive pinions */
+    public static final double kSwerveDriveMechToSens = 1d / 5.355;
 
     /** Billet wheels */
     public static final double kSwerveWheelCircumferenceMeters = 0.099 * Math.PI;
+
+    /** Ratio of feeder wheels to motor */
+    public static final double kFeederMechToSens = 11d / 32d;
+
+    /** Ratio of shooter wheels to motors */
+    public static final double kShooterMechToSens = 1;
   }
 
   /** Data relating to the entire drivetrain. */
@@ -55,8 +61,8 @@ public class Constants {
     // Upper bound drivetrain constraints
     /** 75% of theoretical max */
     public static final double kMaxLinearVelMetersPerSecond =
-        PhysConsts.kSwerveDriveRPS
-            * PhysConsts.kSwerveDriveGearbox
+        PhysConsts.kSwerveDriveMaxRPS
+            * PhysConsts.kSwerveDriveMechToSens
             * PhysConsts.kSwerveWheelCircumferenceMeters
             * 0.75;
 
@@ -89,8 +95,8 @@ public class Constants {
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kFeedVolts = -3;
-    public static final double kDeepIntakeVolts = 1;
+    public static final double kFeedUpVolts = -3;
+    public static final double kFeedDownVolts = 1;
   }
 
   /** Data for each individual swerve module. */
