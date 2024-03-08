@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -96,18 +98,27 @@ public class RobotContainer {
   }
 
   private static void configureOperator() {
-    // Button 'RB' (hold) Shoots held note
-    final Command cShoot = Shooter.getInstance().getShootCommand();
+    // Button 'RB' (hold) Shoots held note using feeder and shooter wheels
+    final Command cShoot =
+        Shooter.getInstance()
+            .getShootCommand()
+            .alongWith(waitSeconds(0.5).andThen(Feeder.getInstance().getFeedCommand()));
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // Button 'A' (hold) Spits held note for amp scoring
-    final Command cSpit = Shooter.getInstance().getSpitCommand();
+    // Button 'A' (hold) Spits held note for amp scoring using feeder and shooter wheels
+    final Command cSpit =
+        Shooter.getInstance()
+            .getSpitCommand()
+            .alongWith(waitSeconds(0.5).andThen(Feeder.getInstance().getFeedCommand()));
     OI.OPERATOR_CONTROLLER.onTrue(btn.A, cSpit::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.A, cSpit::cancel);
 
-    // Button 'LB' (hold) Intakes game piece using shooter wheels
-    final Command cSourceIntake = Shooter.getInstance().getSourceIntakeCommand();
+    // Button 'LB' (hold) Intakes game piece using shooter and feeder wheels
+    final Command cSourceIntake =
+        Shooter.getInstance()
+            .getSourceIntakeCommand()
+            .alongWith(Feeder.getInstance().getDeepIntakeCommand());
     OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cSourceIntake::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
 
@@ -116,7 +127,7 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeed::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeed::cancel);
 
-    // Button 'Y' (hold) Deeply intakes a note from the source
+    // Button 'Y' (hold) Pushes a note further into the bot
     final Command cDeepIntake = Feeder.getInstance().getDeepIntakeCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cDeepIntake::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cDeepIntake::cancel);
