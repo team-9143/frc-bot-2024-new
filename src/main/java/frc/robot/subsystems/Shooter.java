@@ -45,7 +45,7 @@ public class Shooter extends SafeSubsystem {
   // TODO(shooter): Extra - Create a private constructor here to initialize the encoders
   private Shooter() {
     // Default command will run shooter relative to trigger velocity
-    setDefaultCommand(run(() -> m_motor.setVoltage(OI.OPERATOR_CONTROLLER.getTriggers() * 12)));
+    setDefaultCommand(run(() -> m_motor.setVoltage(-OI.OPERATOR_CONTROLLER.getTriggers() * 12)));
   }
 
   /** Returns a command to intake a game piece using shooter wheels */
