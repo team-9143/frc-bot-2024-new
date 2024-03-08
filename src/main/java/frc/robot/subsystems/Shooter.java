@@ -13,16 +13,6 @@ import frc.robot.util.SparkUtils;
 
 /** Controls shooter wheels. */
 public class Shooter extends SafeSubsystem {
-  private static Shooter m_instance;
-
-  /** Returns the singleton instance */
-  public static synchronized Shooter getInstance() {
-    if (m_instance == null) {
-      m_instance = new Shooter();
-    }
-    return m_instance;
-  }
-
   private static final CANSparkMax m_motor =
       new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
 
@@ -49,6 +39,13 @@ public class Shooter extends SafeSubsystem {
         () -> encoder_top.setMeasurementPeriod(20),
         () -> encoder_top.setVelocityConversionFactor(PhysConsts.kShooterMechToSens / 60),
         () -> SparkUtils.setPeriodicFrames(m_motor, 10, 20, 0, 0, 0, 0, 0));
+  }
+
+  private static final Shooter m_instance = new Shooter();
+
+  /** Returns the singleton instance */
+  public static Shooter getInstance() {
+    return m_instance;
   }
 
   private Shooter() {

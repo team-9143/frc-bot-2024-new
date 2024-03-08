@@ -14,16 +14,6 @@ import java.util.function.Supplier;
 
 /** Controls feeder wheels */
 public class Feeder extends SafeSubsystem {
-  private static Feeder m_instance;
-
-  /** Returns the singleton instance */
-  public static synchronized Feeder getInstance() {
-    if (m_instance == null) {
-      m_instance = new Feeder();
-    }
-    return m_instance;
-  }
-
   private static final TalonFXConfiguration configs =
       new TalonFXConfiguration()
           .withCurrentLimits(
@@ -43,6 +33,13 @@ public class Feeder extends SafeSubsystem {
     velocitySignal.setUpdateFrequency(50);
     m_velocitySupplier = velocitySignal.asSupplier();
     m_motor.optimizeBusUtilization();
+  }
+
+  private static final Feeder m_instance = new Feeder();
+
+  /** Returns the singleton instance */
+  public static Feeder getInstance() {
+    return m_instance;
   }
 
   private Feeder() {}
