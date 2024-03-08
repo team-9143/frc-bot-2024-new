@@ -35,9 +35,10 @@ public class Drivetrain extends SafeSubsystem {
   }
 
   // TODO: Fix gyro offset problem with 3d rotation
-  private static Rotation3d gyroOffset =
-      new Rotation3d(); // To adjust 3d rotation (quaternion from gyro) to match with 2d odometry
-  // after a heading reset
+  /**
+   * To adjust 3d rotation (quaternion from gyro) to match with 2d odometry after a heading reset
+   */
+  private static Rotation3d gyroOffset = new Rotation3d();
 
   public static final SwerveModuleState[] xStanceStates =
       new SwerveModuleState[] {
@@ -67,10 +68,10 @@ public class Drivetrain extends SafeSubsystem {
     setDefaultCommand(
         run(
             () -> {
+              // Left joystick for translation, right joystick for rotation
               double forward = -OI.DRIVER_CONTROLLER.getLeftY();
               double left = -OI.DRIVER_CONTROLLER.getLeftX();
-              double ccw =
-                  -OI.DRIVER_CONTROLLER.getRightX(); // Right joystick horizontal for rotation
+              double ccw = -OI.DRIVER_CONTROLLER.getRightX();
 
               // Field relative control, exponentially scaling inputs to increase sensitivity
               driveFieldRelativeVelocity(
@@ -80,7 +81,7 @@ public class Drivetrain extends SafeSubsystem {
                   Math.copySign(left * left, left)
                       * DriveConsts.kMaxLinearVelMetersPerSecond
                       * DriveConsts.kTeleopSpeedMult,
-                  // Extra sensitivity for fine rotation control
+                  // Extra sensitivity for finer rotation control
                   Math.copySign(ccw * ccw * ccw, ccw)
                       * DriveConsts.kMaxTurnVelRadiansPerSecond
                       * DriveConsts.kTeleopTurnMult);

@@ -60,10 +60,11 @@ public class SwerveModule {
             drive_encoder.setVelocityConversionFactor(
                 PhysConsts.kSwerveDriveMechToSens
                     * PhysConsts.kSwerveWheelCircumferenceMeters
-                    / 60), // UNIT: meters/s
+                    / 60),
         () ->
             drive_encoder.setMeasurementPeriod(
-                Math.max(8, Math.min(period_ms, 64))), // Limit to hall sensor boundaries
+                // Limit to hall sensor boundaries
+                Math.max(8, Math.min(period_ms, 64))),
         () -> drive_encoder.setPosition(0),
         () -> SparkUtils.setPeriodicFrames(drive_motor, 10, period_ms, period_ms, 0, 0, 0, 0));
 
@@ -81,7 +82,7 @@ public class SwerveModule {
     cancoder.getConfigurator().apply(cancoder_config.withMagnetOffset(constants.cancoderOffset));
     var positionSignal = cancoder.getAbsolutePosition();
     positionSignal.setUpdateFrequency(1000d / period_ms);
-    rotationSupplier = () -> positionSignal.refresh().getValue() * 360d; // UNIT: ccw degrees
+    rotationSupplier = () -> positionSignal.refresh().getValue() * 360d;
 
     // Configure azimuth PID controller
     kS = new TunableNumber("S", constants.kS, constants.name);
