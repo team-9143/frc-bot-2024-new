@@ -58,11 +58,6 @@ public class Shooter extends SafeSubsystem {
     return startEnd(() -> m_motor.setVoltage(ShooterConsts.kShootVolts), this::stop);
   }
 
-  /** Returns a command to spit a game piece at partial speed for amp scoring */
-  public Command getSpitCommand() {
-    return startEnd(() -> m_motor.setVoltage(ShooterConsts.kSpitVolts), this::stop);
-  }
-
   @Override
   public void stop() {
     m_motor.stopMotor();

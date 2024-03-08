@@ -84,7 +84,6 @@ public class Constants {
 
     public static final double kSourceIntakeVolts = 9;
     public static final double kShootVolts = -10;
-    public static final double kSpitVolts = -3;
   }
 
   public static class FeederConsts {

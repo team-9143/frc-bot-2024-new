@@ -106,14 +106,6 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
-    // Button 'A' (hold) Spits held note for amp scoring using feeder and shooter wheels
-    final Command cSpit =
-        Shooter.getInstance()
-            .getSpitCommand()
-            .alongWith(waitSeconds(0.5).andThen(Feeder.getInstance().getFeedCommand()));
-    OI.OPERATOR_CONTROLLER.onTrue(btn.A, cSpit::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.A, cSpit::cancel);
-
     // Button 'LB' (hold) Intakes game piece using shooter and feeder wheels
     final Command cSourceIntake =
         Shooter.getInstance()
