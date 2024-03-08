@@ -41,11 +41,9 @@ public class AutoSelector {
   /** Returns a full auto routine */
   public static Command getAuto() {
     var startPose = chooser_startPose.getSelected();
-    return chooser_starter
-        .getSelected()
-        .getAuto()
-        .andThen(chooser_body.getSelected().getAuto(startPose))
-        .beforeStarting(() -> Drivetrain.resetOdometry(startPose.getPose()));
+    return new InstantCommand(() -> Drivetrain.resetOdometry(startPose.getPose()))
+        .andThen(chooser_starter.getSelected().getAuto())
+        .andThen(chooser_body.getSelected().getAuto(startPose));
   }
 
   static {
