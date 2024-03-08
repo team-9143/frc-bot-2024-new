@@ -30,7 +30,7 @@ public class Feeder extends SafeSubsystem {
               new CurrentLimitsConfigs()
                   .withSupplyCurrentLimit(PhysConsts.kNEOCurrentLimit)
                   .withSupplyCurrentLimitEnable(true))
-          .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))
+          .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast))
           .withFeedback(
               new FeedbackConfigs().withSensorToMechanismRatio(1d / PhysConsts.kFeederMechToSens));
 

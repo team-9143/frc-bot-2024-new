@@ -59,12 +59,12 @@ public class Constants {
   /** Data relating to the entire drivetrain. */
   public static class DriveConsts {
     // Upper bound drivetrain constraints
-    /** 75% of theoretical max */
+    /** 80% of theoretical max */
     public static final double kMaxLinearVelMetersPerSecond =
         PhysConsts.kSwerveDriveMaxRPS
             * PhysConsts.kSwerveDriveMechToSens
             * PhysConsts.kSwerveWheelCircumferenceMeters
-            * 0.75;
+            * 0.8;
 
     // ω = velocity / radius
     public static final double kMaxTurnVelRadiansPerSecond =
@@ -95,7 +95,7 @@ public class Constants {
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kFeedUpVolts = -3;
+    public static final double kFeedUpVolts = -5;
     public static final double kFeedDownVolts = 1;
   }
 
