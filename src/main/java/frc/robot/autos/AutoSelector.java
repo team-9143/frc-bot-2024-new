@@ -15,8 +15,6 @@ public class AutoSelector {
 
   /** Initializes shuffleboard choosers for auton */
   public static void init() {
-    var tab = Shuffleboard.getTab("Auton");
-
     chooser_startPose.setAll(StartPose.Front, StartPose.Inner, StartPose.Outer);
     chooser_starter.setAll(Starter.Shoot, Starter.WaitToShoot);
     chooser_body.setAll(Body.MoveBack);
@@ -30,6 +28,11 @@ public class AutoSelector {
           }
         });
 
+    // Add to shuffleboard
+    var tab = Shuffleboard.getTab("Auton");
+    tab.add(chooser_startPose);
+    tab.add(chooser_starter);
+    tab.add(chooser_body);
     tab.addBoolean(
         "Reset needed",
         () ->
