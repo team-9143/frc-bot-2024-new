@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotContainer.init();
+    AutoSelector.init();
 
     // Add periodic callback for drivetrain updates
     addPeriodic(

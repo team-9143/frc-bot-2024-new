@@ -1,14 +1,51 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Drivetrain;
 
 /** Contains auto types, choosers, and compiler. */
 public class AutoSelector {
+  private static final MutableChooser<StartPose> chooser_startPose =
+      new MutableChooser<>(StartPose.Wing);
+  private static final MutableChooser<Starter> chooser_starter = new MutableChooser<>(Starter.None);
+  private static final MutableChooser<Body> chooser_body = new MutableChooser<>(Body.None);
+
+  /** Initializes shuffleboard choosers for auton */
+  public static void init() {
+    var tab = Shuffleboard.getTab("Auton");
+
+    chooser_startPose.setAll(StartPose.Front, StartPose.Inner, StartPose.Outer);
+    chooser_starter.setAll(Starter.Shoot, Starter.WaitToShoot);
+    chooser_body.setAll(Body.MoveBack);
+
+    chooser_startPose.bindTo(
+        (t, u) -> {
+          if (u == StartPose.Wing) {
+            chooser_body.setAll(Body.MoveBack);
+          } else {
+            chooser_body.setAll(Body.EscapeSubwoofer);
+          }
+        });
+
+    tab.addBoolean(
+        "Reset needed",
+        () ->
+            chooser_startPose.isUpdateReq()
+                || chooser_starter.isUpdateReq()
+                || chooser_body.isUpdateReq());
+  }
+
   /** Returns a full auto routine */
   public static Command getAuto() {
-    return new InstantCommand();
+    var startPose = chooser_startPose.getSelected();
+    return chooser_starter
+        .getSelected()
+        .getAuto()
+        .andThen(chooser_body.getSelected().getAuto(startPose))
+        .beforeStarting(() -> Drivetrain.resetOdometry(startPose.getPose()));
   }
 
   static {
