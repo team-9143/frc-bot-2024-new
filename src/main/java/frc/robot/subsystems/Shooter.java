@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConsts;
 import frc.robot.Constants.ShooterConsts;
+import frc.robot.devices.OI;
 import frc.robot.util.SparkUtils;
 
 /** Controls shooter wheels. */
@@ -42,7 +43,10 @@ public class Shooter extends SafeSubsystem {
   }
 
   // TODO(shooter): Extra - Create a private constructor here to initialize the encoders
-  private Shooter() {}
+  private Shooter() {
+    // Default command will run shooter relative to trigger velocity
+    setDefaultCommand(run(() -> m_motor.setVoltage(OI.OPERATOR_CONTROLLER.getTriggers() * 12)));
+  }
 
   /** Returns a command to intake a game piece using shooter wheels */
   public Command getSourceIntakeCommand() {
