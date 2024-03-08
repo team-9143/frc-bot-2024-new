@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConsts;
 import frc.robot.Constants.ShooterConsts;
+import frc.robot.util.SparkUtils;
 
 /** Controls shooter wheels. */
 public class Shooter extends SafeSubsystem {
@@ -22,11 +24,21 @@ public class Shooter extends SafeSubsystem {
       new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
 
   static {
+    // Follower setup
     @SuppressWarnings("resource")
     var follower = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
-    follower.follow(m_motor);
+    SparkUtils.configure(
+        follower,
+        () -> follower.setIdleMode(IdleMode.kCoast),
+        () -> follower.follow(m_motor),
+        () -> SparkUtils.setPeriodicFrames(follower, 10, 0, 0, 0, 0, 0, 0));
 
-    m_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit);
+    // Main motor setup
+    SparkUtils.configure(
+        m_motor,
+        () -> m_motor.setIdleMode(IdleMode.kCoast),
+        () -> m_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
+        () -> SparkUtils.setPeriodicFrames(m_motor, 10, 0, 0, 0, 0, 0, 0));
   }
 
   // TODO(shooter): Extra - Create a private constructor here to initialize the encoders
