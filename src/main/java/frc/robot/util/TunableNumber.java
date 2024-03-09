@@ -12,7 +12,7 @@ import java.util.function.DoubleSupplier;
 
 /** Represents a double that can be changed during runtime. */
 public class TunableNumber implements DoubleSupplier {
-  private static final String LOG_DIR = "/numbers/";
+  private static final String LOG_DIR = "/Numbers/";
 
   /** List of instances. */
   private static final ArrayList<TunableNumber> s_instances = new ArrayList<TunableNumber>();

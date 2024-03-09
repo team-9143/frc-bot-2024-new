@@ -4,7 +4,7 @@ import edu.wpi.first.hal.PowerDistributionFaults;
 import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class LoggedPowerDistribution extends PowerDistribution implements Loggable {
-  private static final String LOG_DIR = "/power/";
+  private static final String LOG_DIR = "/Power/";
 
   // Faults to compare against to log differences
   private PowerDistributionFaults prevFaults = new PowerDistributionFaults(0);
