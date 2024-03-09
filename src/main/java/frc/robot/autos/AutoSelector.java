@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Drivetrain;
 
 // TODO: Test autos and force chooser enums to have a getCommand method
 /** Contains auto types, choosers, and compiler. */
@@ -18,16 +17,7 @@ public class AutoSelector {
   public static void init() {
     chooser_startPose.setAll(StartPose.Front, StartPose.Inner, StartPose.Outer);
     chooser_starter.setAll(Starter.Shoot, Starter.WaitToShoot);
-    chooser_body.setAll(Body.MoveBack);
-
-    chooser_startPose.bindTo(
-        (t, u) -> {
-          if (u == StartPose.Wing) {
-            chooser_body.setAll(Body.MoveBack);
-          } else {
-            chooser_body.setAll(Body.EscapeSubwoofer);
-          }
-        });
+    chooser_body.setAll(Body.Escape);
 
     // Add to shuffleboard
     var tab = Shuffleboard.getTab("Auton");
@@ -45,7 +35,8 @@ public class AutoSelector {
   /** Returns a full auto routine */
   public static Command getAuto() {
     var startPose = chooser_startPose.getSelected();
-    return new InstantCommand(() -> Drivetrain.resetOdometry(startPose.getPose()))
+    return startPose
+        .getAuto()
         .andThen(chooser_starter.getSelected().getAuto())
         .andThen(chooser_body.getSelected().getAuto(startPose));
   }
