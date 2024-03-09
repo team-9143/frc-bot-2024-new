@@ -1,10 +1,11 @@
 package frc.robot.util;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkBase.FaultID;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.REVLibError;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.logger.Logger;
 import java.util.function.Supplier;
 
 /**
@@ -25,47 +26,47 @@ public class SparkUtils {
     return "Spark [" + spark.getDeviceId() + "]";
   }
 
+  // TODO: Log faults
   /**
    * Fully configures a Spark Max/Flex with all provided configs and burns to flash.
    *
-   * <p>Each config is applied until success, or until the number of attempts exceed {@code
-   * MAX_ATTEMPTS}.
+   * <p>Each config is applied until success, or until the number of attempts exceed {@link
+   * SparkUtils#MAX_ATTEMPTS}.
    *
-   * @param spark The spark to configure.
-   * @param config The configuration to apply.
+   * @param spark the spark to configure
+   * @param config the configuration to apply
    */
   @SafeVarargs
   public static void configure(CANSparkBase spark, Supplier<REVLibError>... configs) {
     configure(spark, spark::restoreFactoryDefaults, 1);
     configure(spark, () -> spark.setCANTimeout(50), 1);
+    configure(spark, spark::clearFaults, 1);
     for (var config : configs) {
       configure(spark, config, 1);
     }
     configure(spark, () -> spark.setCANTimeout(20), 1);
 
     spark.burnFlash();
-    var err = spark.getLastError();
-    if (err != REVLibError.kOk) {
-      DriverStation.reportError(getName(spark) + ": " + err.name(), false);
-    }
+    checkErr(spark);
+    checkFaults(spark);
   }
 
   /**
    * Recursively configures a specific value on a spark, until {@code attempt} exceeds {@code
    * MAX_ATTEMPTS}.
    *
-   * @param spark The spark to configure.
-   * @param config The configuration to apply to the spark.
-   * @param attempt The current attempt number.
+   * @param spark the spark to configure
+   * @param config the configuration to apply to the spark
+   * @param attempt the current attempt number
    */
   private static void configure(CANSparkBase spark, Supplier<REVLibError> config, int attempt) {
     if (attempt >= MAX_ATTEMPTS) {
-      DriverStation.reportError(getName(spark) + ": FAILED TO SET PARAMETER", false);
+      Logger.reportError(getName(spark) + ": FAILED TO SET PARAMETER");
       return;
     }
     if (attempt >= 1) {
-      DriverStation.reportWarning(
-          getName(spark) + ": setting parameter failed: " + attempt + "/" + MAX_ATTEMPTS, false);
+      Logger.reportWarning(
+          getName(spark) + ": setting parameter failed: " + attempt + "/" + MAX_ATTEMPTS);
     }
 
     REVLibError error = config.get();
@@ -81,7 +82,7 @@ public class SparkUtils {
    *
    * <p>Status 7 appears to be useless, only used for IAccum.
    *
-   * @param spark The spark to configure.
+   * @param spark The spark to configure
    * @param status0 applied output, faults | default 10
    * @param status1 integrated velocity, temperature, input voltage, current | default 20
    * @param status2 integrated position | default 20
@@ -166,5 +167,31 @@ public class SparkUtils {
   public static REVLibError setInverted(CANSparkBase spark, boolean isInverted) {
     spark.setInverted(isInverted);
     return spark.getLastError();
+  }
+
+  /**
+   * Checks a spark and reports the last error encountered.
+   *
+   * @param spark the spark to check
+   */
+  public static void checkErr(CANSparkBase spark) {
+    var err = spark.getLastError();
+    if (err != REVLibError.kOk) {
+      Logger.reportError(getName(spark) + ": " + err.toString());
+    }
+  }
+
+  /**
+   * Checks a spark and logs the current recorded faults.
+   *
+   * @param spark the spark to check
+   */
+  public static void checkFaults(CANSparkBase spark) {
+    int faults = spark.getFaults();
+    for (FaultID id : FaultID.values()) {
+      if ((faults & (1 << id.value)) > 0) {
+        Logger.reportWarning(getName(spark) + ": fault " + id.toString());
+      }
+    }
   }
 }
