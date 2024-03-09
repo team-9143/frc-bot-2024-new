@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /** Enum of starting positions to set drivetrain odometry and meet path expectations. */
-public enum StartPose implements MutableChooser.Named {
+public enum StartPose {
   SubwooferAmp("Subwoofer amp side", new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))),
   SubwooferSource("Subwoofer source side", new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))),
   SubwooferFront("Subwoofer front", new Pose2d(1.36, 5.55, new Rotation2d())),
@@ -25,7 +25,7 @@ public enum StartPose implements MutableChooser.Named {
     this.pose = pose;
   }
 
-  public String getName() {
+  public String toString() {
     return name;
   }
 

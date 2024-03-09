@@ -7,7 +7,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 /** Enum of starting actions to deal with the preloaded game piece. */
-public enum Starter implements MutableChooser.Named {
+public enum Starter {
   Shoot("Shoot"),
   WaitToShoot("Wait and shoot"),
   None("None");
@@ -18,7 +18,7 @@ public enum Starter implements MutableChooser.Named {
     this.name = name;
   }
 
-  public String getName() {
+  public String toString() {
     return name;
   }
 

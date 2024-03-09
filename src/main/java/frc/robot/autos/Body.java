@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /** If selected, will determine movement configurations depending on starting position. */
-public enum Body implements MutableChooser.Named {
+public enum Body {
   Escape("Escape"),
   None("None");
 
@@ -16,7 +16,7 @@ public enum Body implements MutableChooser.Named {
     this.name = name;
   }
 
-  public String getName() {
+  public String toString() {
     return name;
   }
 
@@ -32,8 +32,8 @@ public enum Body implements MutableChooser.Named {
           return Pathing.getHolonomicFollowPathCommand(path);
         }
 
-        // Make sure that pathplanner path names match start poses
-        return Pathing.getHolonomicFollowPathCommand(Pathing.loadPath(startPose.getName()));
+        // IMP!!! Make sure that pathplanner path names match start poses
+        return Pathing.getHolonomicFollowPathCommand(Pathing.loadPath(startPose.toString()));
 
       default:
         return new InstantCommand();

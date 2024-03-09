@@ -19,11 +19,7 @@ import java.util.function.BiConsumer;
  * allowing for the editing of options. Use {@link MutableChooser#isUpdateReq()} to check if an
  * update is necessary on shuffleboard by selecting the default option.
  */
-public class MutableChooser<T extends Enum<T> & MutableChooser.Named>
-    implements NTSendable, AutoCloseable {
-  public static interface Named {
-    public String getName();
-  }
+public class MutableChooser<T extends Enum<T>> implements NTSendable, AutoCloseable {
 
   /** The key for the default value. */
   private static final String DEFAULT = "default";
@@ -87,7 +83,7 @@ public class MutableChooser<T extends Enum<T> & MutableChooser.Named>
     m_instance = s_instances++;
     SendableRegistry.add(this, "SendableChooser", m_instance);
 
-    m_defaultKey = obj.getName();
+    m_defaultKey = obj.toString();
     m_defaultObj = obj;
     m_selectedKey = m_defaultKey;
 
@@ -106,7 +102,7 @@ public class MutableChooser<T extends Enum<T> & MutableChooser.Named>
 
       m_linkedOptions.clear();
       m_linkedOptions.put(m_defaultKey, m_defaultObj);
-      m_optionsWanted.forEach(e -> m_linkedOptions.put(e.getName(), e));
+      m_optionsWanted.forEach(e -> m_linkedOptions.put(e.toString(), e));
       m_updateReq = false;
     } finally {
       m_networkLock.unlock();
