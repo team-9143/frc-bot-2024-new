@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drivetrain;
 
 public enum StartPose implements MutableChooser.Named {
-  Outer("Subwoofer outer"),
-  Inner("Subwoofer inner"),
-  Front("Subwoofer front"),
+  SubwooferAmp("Subwoofer amp side"),
+  SubwooferSource("Subwoofer source side"),
+  SubwooferFront("Subwoofer front"),
   Wing("Wing");
 
   final String name;
@@ -24,13 +24,13 @@ public enum StartPose implements MutableChooser.Named {
 
   public Command getAuto() {
     switch (this) {
-      case Outer:
+      case SubwooferAmp:
         return new InstantCommand(
             () -> Drivetrain.resetOdometry(new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))));
-      case Inner:
+      case SubwooferSource:
         return new InstantCommand(
             () -> Drivetrain.resetOdometry(new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))));
-      case Front:
+      case SubwooferFront:
         return new InstantCommand(
             () -> Drivetrain.resetOdometry(new Pose2d(1.36, 5.55, new Rotation2d())));
       default:
