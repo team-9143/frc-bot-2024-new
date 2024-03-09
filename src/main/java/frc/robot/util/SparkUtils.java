@@ -60,13 +60,13 @@ public class SparkUtils {
    * @param attempt the current attempt number
    */
   private static void configure(CANSparkBase spark, Supplier<REVLibError> config, int attempt) {
-    if (attempt >= MAX_ATTEMPTS) {
+    if (attempt > MAX_ATTEMPTS) {
       Logger.reportError(getName(spark) + ": FAILED TO SET PARAMETER");
       return;
     }
-    if (attempt >= 1) {
+    if (attempt > 1) {
       Logger.reportWarning(
-          getName(spark) + ": setting parameter failed: " + attempt + "/" + MAX_ATTEMPTS);
+          getName(spark) + ": setting parameter failed: " + (attempt - 1) + "/" + MAX_ATTEMPTS);
     }
 
     REVLibError error = config.get();
