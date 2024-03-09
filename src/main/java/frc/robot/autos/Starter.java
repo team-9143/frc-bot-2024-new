@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Shooter;
 
+/** Enum of starting actions to deal with the preloaded game piece. */
 public enum Starter implements MutableChooser.Named {
   Shoot("Shoot"),
   WaitToShoot("Wait and shoot"),

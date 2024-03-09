@@ -32,7 +32,8 @@ public class AutoSelector {
                 chooser_startPose.isUpdateReq()
                     || chooser_starter.isUpdateReq()
                     || chooser_body.isUpdateReq())
-        .withPosition(0, 0);
+        .withPosition(0, 0)
+        .withSize(2, 2);
   }
 
   /** Returns a full auto routine */
