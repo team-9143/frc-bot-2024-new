@@ -20,7 +20,7 @@ public enum Starter implements MutableChooser.Named {
     return name;
   }
 
-  public Command getAuto() {
+  public Command getCommand() {
     switch (this) {
       case Shoot:
         return getShootCommand();

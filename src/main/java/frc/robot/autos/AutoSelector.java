@@ -39,9 +39,9 @@ public class AutoSelector {
   public static Command getAuto() {
     var startPose = chooser_startPose.getSelected();
     return startPose
-        .getAuto()
-        .andThen(chooser_starter.getSelected().getAuto())
-        .andThen(chooser_body.getSelected().getAuto(startPose));
+        .getCommand()
+        .andThen(chooser_starter.getSelected().getCommand())
+        .andThen(chooser_body.getSelected().getCommand(startPose));
   }
 
   static {
