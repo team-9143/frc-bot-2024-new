@@ -51,17 +51,17 @@ public class RobotContainer {
         LocalDateTime.now(ZoneId.of("UTC-8"))
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
-    Logger.recordMetadata("NT Streaming", Constants.Config.NTStream ? "true" : "false");
+    Logger.recordMetadata("FMS Attached", String.valueOf(DriverStation.isFMSAttached()));
 
-    if (DriverStation.isFMSAttached()) {
-      Logger.recordMetadata(
-          "Match",
-          DriverStation.getEventName()
-              + " "
-              + DriverStation.getMatchType().toString()
-              + " "
-              + DriverStation.getMatchNumber());
-    }
+    Logger.recordMetadata(
+        "Match",
+        DriverStation.getEventName()
+            + " "
+            + DriverStation.getMatchType().toString()
+            + " "
+            + DriverStation.getMatchNumber());
+
+    Logger.recordMetadata("NT Streaming", Constants.Config.NTStream ? "true" : "false");
 
     Logger.recordMetadata(
         "RoborioSerialNum", RobotBase.isReal() ? System.getenv("serialnum") : "Simulation");

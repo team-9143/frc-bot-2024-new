@@ -94,10 +94,12 @@ public class Logger {
   // Cannot be initialized until after start to ensure proper file creation
   private static final DataLog m_log;
 
+  // TODO: Test - is ifFMSAttached ever true?
   // Start log manager
   static {
     String logName;
     if (DriverStation.isFMSAttached()) {
+      // Log file name during event
       logName =
           "FRC_"
               + DriverStation.getEventName()
@@ -106,6 +108,7 @@ public class Logger {
               + "_"
               + DriverStation.getMatchNumber();
     } else {
+      // Log file name out of event
       logName =
           "FRC_"
               + LocalDateTime.now(ZoneId.of("UTC-8"))
