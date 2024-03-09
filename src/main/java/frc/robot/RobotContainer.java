@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.Starter;
 import frc.robot.devices.Controller.btn;
 import frc.robot.devices.OI;
 import frc.robot.logger.LoggedPowerDistribution;
@@ -113,10 +113,7 @@ public class RobotContainer {
 
   private static void configureOperator() {
     // Button 'RB' (hold) Shoots held note using feeder and shooter wheels
-    final Command cShoot =
-        Shooter.getInstance()
-            .getShootCommand()
-            .alongWith(new WaitCommand(0.5).andThen(Feeder.getInstance().getFeedUpCommand()));
+    final Command cShoot = Starter.getShootCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 

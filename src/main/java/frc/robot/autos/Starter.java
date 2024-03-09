@@ -3,6 +3,7 @@ package frc.robot.autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 /** Enum of starting actions to deal with the preloaded game piece. */
@@ -24,17 +25,19 @@ public enum Starter implements MutableChooser.Named {
   public Command getCommand() {
     switch (this) {
       case Shoot:
-        return getShootCommand();
+        return getShootCommand().withTimeout(2);
 
       case WaitToShoot:
-        return new WaitCommand(0.5).andThen(getShootCommand());
+        return new WaitCommand(0.5).andThen(getShootCommand().withTimeout(2));
 
       default:
         return new InstantCommand();
     }
   }
 
-  private static Command getShootCommand() {
-    return Shooter.getInstance().getShootCommand().withTimeout(2);
+  public static Command getShootCommand() {
+    return Shooter.getInstance()
+        .getShootCommand()
+        .alongWith(new WaitCommand(0.5).andThen(Feeder.getInstance().getFeedUpCommand()));
   }
 }
