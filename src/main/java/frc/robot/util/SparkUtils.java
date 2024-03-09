@@ -26,7 +26,6 @@ public class SparkUtils {
     return "Spark [" + spark.getDeviceId() + "]";
   }
 
-  // TODO: Log faults
   /**
    * Fully configures a Spark Max/Flex with all provided configs and burns to flash.
    *
@@ -190,7 +189,7 @@ public class SparkUtils {
     int faults = spark.getFaults();
     for (FaultID id : FaultID.values()) {
       if ((faults & (1 << id.value)) > 0) {
-        Logger.reportWarning(getName(spark) + ": fault " + id.toString());
+        Logger.reportError(getName(spark) + ": fault " + id.toString());
       }
     }
   }
