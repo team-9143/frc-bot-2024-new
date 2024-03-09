@@ -92,17 +92,30 @@ public class Logger {
       new HashMap<>();
 
   // Cannot be initialized until after start to ensure proper file creation
-  private static DataLog m_log;
+  private static final DataLog m_log;
 
   // Start log manager
   static {
+    String logName;
+    if (DriverStation.isFMSAttached()) {
+      logName =
+          "FRC_"
+              + DriverStation.getEventName()
+              + "_"
+              + DriverStation.getMatchType().toString()
+              + "_"
+              + DriverStation.getMatchNumber();
+    } else {
+      logName =
+          "FRC_"
+              + LocalDateTime.now(ZoneId.of("UTC-8"))
+                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
+              + ".wpilog";
+    }
+
     DataLogManager.start(
         // Log to default directory in simulation
-        RobotBase.isSimulation() ? "" : Config.DATA_LOG_DIR,
-        "FRC_"
-            + LocalDateTime.now(ZoneId.of("UTC-8"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
-            + ".wpilog");
+        RobotBase.isSimulation() ? "" : Config.DATA_LOG_DIR, logName);
 
     m_log = DataLogManager.getLog();
     // Disable logging NT values to separate logger and networktables

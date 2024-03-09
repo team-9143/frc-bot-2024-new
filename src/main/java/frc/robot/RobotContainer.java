@@ -35,20 +35,38 @@ public class RobotContainer {
     m_initialized = true;
 
     configureOI();
-    configureMetadata();
+    logMetadata();
     configureBindings();
   }
 
   /** Send metadata to logger. */
-  private static void configureMetadata() {
+  private static void logMetadata() {
+    DriverStation.getAlliance()
+        .ifPresentOrElse(
+            a -> Logger.recordMetadata("Alliance", a.toString()),
+            () -> Logger.recordMetadata("Alliance", "None"));
+
     Logger.recordMetadata(
-        "RoborioSerialNum", RobotBase.isReal() ? System.getenv("serialnum") : "Simulation");
-    Logger.recordMetadata(
-        "BuildDate",
+        "Time",
         LocalDateTime.now(ZoneId.of("UTC-8"))
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    Logger.recordMetadata("PowerDistributionType", powerDist.getType().name());
+
     Logger.recordMetadata("NT Streaming", Constants.Config.NTStream ? "true" : "false");
+
+    if (DriverStation.isFMSAttached()) {
+      Logger.recordMetadata(
+          "Match",
+          DriverStation.getEventName()
+              + " "
+              + DriverStation.getMatchType().toString()
+              + " "
+              + DriverStation.getMatchNumber());
+    }
+
+    Logger.recordMetadata(
+        "RoborioSerialNum", RobotBase.isReal() ? System.getenv("serialnum") : "Simulation");
+
+    Logger.recordMetadata("PowerDistributionType", powerDist.getType().name());
   }
 
   /** Initialize OI devices. */
