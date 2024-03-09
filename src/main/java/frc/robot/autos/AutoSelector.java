@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drivetrain;
 
+// TODO: Test autos and force chooser enums to have a getCommand method
 /** Contains auto types, choosers, and compiler. */
 public class AutoSelector {
   private static final MutableChooser<StartPose> chooser_startPose =
