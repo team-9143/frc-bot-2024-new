@@ -95,7 +95,7 @@ public class Constants {
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kFeedUpVolts = -5;
+    public static final double kFeedUpVolts = -10;
     public static final double kFeedDownVolts = 1;
   }
 
