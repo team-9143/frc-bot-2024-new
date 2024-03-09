@@ -25,6 +25,7 @@ public class AutoSelector {
     tab.add("Start pose", chooser_startPose).withPosition(0, 2).withSize(3, 2);
     tab.add("Starter", chooser_starter).withPosition(3, 2).withSize(3, 2);
     tab.add("Body", chooser_body).withPosition(6, 2).withSize(3, 2);
+
     tab.addBoolean(
             "Reset needed",
             () ->
