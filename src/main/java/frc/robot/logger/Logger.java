@@ -162,7 +162,7 @@ public class Logger {
    * @param err warning message
    */
   public static void reportWarning(String err) {
-    recordOutput("messages", "WARNING: " + err);
+    log("WARNING: " + err);
     DriverStation.reportWarning(err, false);
   }
 
@@ -172,7 +172,7 @@ public class Logger {
    * @param err error message
    */
   public static void reportError(String err) {
-    recordOutput("messages", "ERROR: " + err);
+    log("ERROR: " + err);
     DriverStation.reportError(err, false);
   }
 
