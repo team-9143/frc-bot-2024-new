@@ -367,7 +367,6 @@ public class Logger {
     recordOutput(path, data);
   }
 
-  // TODO: Not showiing up?
   public static void recordMetadata(String path, String value) {
     // Record metadata in log file
     var entry = new StringLogEntry(m_log, METADATA_LOG_DIR + path);

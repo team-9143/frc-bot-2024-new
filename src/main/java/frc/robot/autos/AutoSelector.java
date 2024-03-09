@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-// TODO: Test autos and force chooser enums to have a getCommand method
+// TODO: Test autos
 /** Contains auto types, choosers, and compiler. */
 public class AutoSelector {
   private static final MutableChooser<StartPose> chooser_startPose =
