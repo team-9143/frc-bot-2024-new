@@ -15,21 +15,23 @@ public class AutoSelector {
 
   /** Initializes shuffleboard choosers for auton */
   public static void init() {
-    chooser_startPose.setAll(StartPose.SubwooferFront, StartPose.SubwooferSource, StartPose.SubwooferAmp);
+    chooser_startPose.setAll(
+        StartPose.SubwooferFront, StartPose.SubwooferSource, StartPose.SubwooferAmp);
     chooser_starter.setAll(Starter.Shoot, Starter.WaitToShoot);
     chooser_body.setAll(Body.Escape);
 
     // Add to shuffleboard
     var tab = Shuffleboard.getTab("Auton");
-    tab.add(chooser_startPose);
-    tab.add(chooser_starter);
-    tab.add(chooser_body);
+    tab.add("Start pose", chooser_startPose).withPosition(0, 2).withSize(3, 2);
+    tab.add("Starter", chooser_starter).withPosition(3, 2).withSize(3, 2);
+    tab.add("Body", chooser_body).withPosition(6, 2).withSize(3, 2);
     tab.addBoolean(
-        "Reset needed",
-        () ->
-            chooser_startPose.isUpdateReq()
-                || chooser_starter.isUpdateReq()
-                || chooser_body.isUpdateReq());
+            "Reset needed",
+            () ->
+                chooser_startPose.isUpdateReq()
+                    || chooser_starter.isUpdateReq()
+                    || chooser_body.isUpdateReq())
+        .withPosition(0, 0);
   }
 
   /** Returns a full auto routine */
