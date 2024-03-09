@@ -117,7 +117,7 @@ public class Constants {
                 0.095,
                 0.0006,
                 // CANcoder offset
-                -0.105225,
+                -0.100342,
                 11,
                 12,
                 13,
@@ -130,7 +130,7 @@ public class Constants {
                 0.1,
                 0.00065,
                 // CANcoder offset
-                -0.674561,
+                -0.679443,
                 21,
                 22,
                 23,
@@ -143,7 +143,7 @@ public class Constants {
                 0.105,
                 0.0004,
                 // CANcoder offset
-                -0.088379,
+                -0.088867,
                 31,
                 32,
                 33,
@@ -156,7 +156,7 @@ public class Constants {
                 0.09,
                 0.00065,
                 // CANcoder offset
-                -0.685547,
+                -0.679443,
                 41,
                 42,
                 43,
