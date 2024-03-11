@@ -24,10 +24,11 @@ public enum Body {
     switch (this) {
       case Escape:
         if (startPose == StartPose.Wing) {
+          // Move forward 6 meters from starting position
           var path =
               Pathing.generateDirectPath(
-                  StartPose.Wing.pose,
-                  StartPose.Wing.pose.plus(new Transform2d(6, 0, new Rotation2d())));
+                  StartPose.Wing.getRawPose(),
+                  StartPose.Wing.getRawPose().plus(new Transform2d(6, 0, new Rotation2d())));
           // Path will be flipped automatically during this call, no need to flip above
           return Pathing.getHolonomicFollowPathCommand(path);
         }

@@ -1,7 +1,6 @@
 package frc.robot.autos;
 
-import static com.pathplanner.lib.util.GeometryUtil.flipFieldPose;
-
+import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +17,7 @@ public enum StartPose {
   final String name;
 
   /** Raw unflipped pose */
-  final Pose2d pose;
+  private final Pose2d pose;
 
   StartPose(String name, Pose2d pose) {
     this.name = name;
@@ -31,11 +30,22 @@ public enum StartPose {
 
   /** Resets drivetrain odometry to assumed starting pose */
   public Command getCommand() {
-    return new InstantCommand(() -> Drivetrain.resetOdometry(getPose()));
+    return new InstantCommand(() -> Drivetrain.resetOdometry(getDSRelativePose()));
   }
 
-  /** Returns correctly flipped pose */
-  public Pose2d getPose() {
-    return Pathing.isRedAlliance() ? flipFieldPose(pose) : pose;
+  /** Returns raw unflipped pose */
+  public Pose2d getRawPose() {
+    return pose;
+  }
+
+  /**
+   * Returns pose as seen from driver station rotation (used for driving, matches with ds- and
+   * robot-oriented movement)
+   */
+  public Pose2d getDSRelativePose() {
+    return Pathing.isRedAlliance()
+        ? new Pose2d(
+            GeometryUtil.flipFieldPosition(pose.getTranslation()), pose.getRotation().unaryMinus())
+        : pose;
   }
 }
