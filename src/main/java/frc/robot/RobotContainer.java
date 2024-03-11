@@ -39,19 +39,9 @@ public class RobotContainer {
     configureBindings();
   }
 
-  /** Send metadata to logger. */
-  private static void logMetadata() {
-    DriverStation.getAlliance()
-        .ifPresentOrElse(
-            a -> Logger.recordMetadata("Alliance", a.toString()),
-            () -> Logger.recordMetadata("Alliance", "None"));
-
-    Logger.recordMetadata(
-        "Time",
-        LocalDateTime.now(ZoneId.of("UTC-8"))
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-    Logger.recordMetadata("FMS Attached", String.valueOf(DriverStation.isFMSAttached()));
+  /** Initialize driver station specific data. */
+  public static void initDS() {
+    Logger.recordMetadata("Station", DriverStation.getRawAllianceStation().toString());
 
     Logger.recordMetadata(
         "Match",
@@ -61,7 +51,17 @@ public class RobotContainer {
             + " "
             + DriverStation.getMatchNumber());
 
-    Logger.recordMetadata("NT Streaming", Constants.Config.NTStream ? "true" : "false");
+    Logger.initFilename();
+  }
+
+  /** Send metadata to logger. */
+  private static void logMetadata() {
+    Logger.recordMetadata(
+        "Time",
+        LocalDateTime.now(ZoneId.of("UTC-8"))
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+    Logger.recordMetadata("NT Streaming", String.valueOf(Constants.Config.NTStream));
 
     Logger.recordMetadata(
         "RoborioSerialNum", RobotBase.isReal() ? System.getenv("serialnum") : "Simulation");

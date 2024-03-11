@@ -42,6 +42,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void driverStationConnected() {
+    RobotContainer.initDS();
+  }
+
+  @Override
   public void autonomousInit() {
     AutoSelector.getAuto().schedule();
   }

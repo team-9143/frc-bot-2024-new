@@ -31,7 +31,6 @@ import edu.wpi.first.util.datalog.StringArrayLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Constants.Config;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -94,31 +93,10 @@ public class Logger {
   // Cannot be initialized until after start to ensure proper file creation
   private static final DataLog m_log;
 
-  // TODO: Test - is ifFMSAttached ever true?
   // Start log manager
   static {
-    String logName;
-    if (DriverStation.isFMSAttached()) {
-      // Log file name during event
-      logName =
-          "FRC_"
-              + DriverStation.getEventName()
-              + "_"
-              + DriverStation.getMatchType().toString()
-              + "_"
-              + DriverStation.getMatchNumber();
-    } else {
-      // Log file name out of event
-      logName =
-          "FRC_"
-              + LocalDateTime.now(ZoneId.of("UTC-8"))
-                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
-              + ".wpilog";
-    }
-
-    DataLogManager.start(
-        // Log to default directory in simulation
-        RobotBase.isSimulation() ? "" : Config.DATA_LOG_DIR, logName);
+    // Initializes DataLogManager with random filename
+    DataLogManager.start();
 
     m_log = DataLogManager.getLog();
     // Disable logging NT values to separate logger and networktables
@@ -131,6 +109,28 @@ public class Logger {
       var table = NetworkTableInstance.getDefault().getTable("AdvantageKit");
       outputTable = table.getSubTable("RealOutputs");
       metadataTable = table.getSubTable("RealMetadata");
+    }
+  }
+
+  /** Sets the proper log file name. Should be called after DS connection. */
+  public static void initFilename() {
+    if (DriverStation.isFMSAttached()) {
+      // File name during event
+      m_log.setFilename(
+          "FRC_"
+              + DriverStation.getEventName()
+              + "_"
+              + DriverStation.getMatchType().toString()
+              + "_"
+              + DriverStation.getMatchNumber()
+              + ".wpilog");
+    } else {
+      // File name without FMS connection
+      m_log.setFilename(
+          "FRC_"
+              + LocalDateTime.now(ZoneId.of("UTC-8"))
+                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
+              + ".wpilog");
     }
   }
 

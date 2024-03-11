@@ -10,11 +10,6 @@ public class Constants {
   /** Information for testing and robot configuration that must be updated consistenly. */
   public static class Config {
     /**
-     * Directory for log file. Blank to store in default directory on roboRIO or RIO-attached USB.
-     */
-    public static final String DATA_LOG_DIR = "";
-
-    /**
      * Set true to stream log file data to NetworkTables (takes up bandwith and processing time, but
      * useful for concurrent running and visualization)
      */
@@ -167,7 +162,7 @@ public class Constants {
         kSwerve_bl.location.getDistance(new Translation2d());
   }
 
-  // TODO(user): Tune pathfinding PID gains
+  // TODO(user): Tune pathfinding PID gains (currently at default gains)
   public static class AutoConsts {
     // TODO(dev/user): Ensure that drivetrain acceleration limits are strong
     // Upper bound drivetrain accelerations for path following and pose targeting
