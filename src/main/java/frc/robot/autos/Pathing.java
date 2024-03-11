@@ -55,8 +55,8 @@ public class Pathing {
     AutoBuilder.configureHolonomic(
         Drivetrain::getPose, // Pose supplier
         Drivetrain::resetOdometry, // Reset pose consumer
-        Drivetrain::getDesiredSpeeds, // Current measured speeds
-        Drivetrain::driveFieldRelativeVelocity, // Drives field relative from ChassisSpeeds
+        Drivetrain::getMeasuredSpeeds, // Current measured speeds
+        Drivetrain::driveRobotRelativeVelocity, // Robot-relative velocities consumer
         getHolonomicConfig(new ReplanningConfig(false, false)), // Config
         Pathing::isRedAlliance, // Flip if alliance is red
         Drivetrain.getInstance() // Subsystem
