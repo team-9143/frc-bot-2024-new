@@ -75,16 +75,17 @@ public class Drivetrain extends SafeSubsystem {
 
               // Field relative control, exponentially scaling inputs to increase sensitivity
               driveFieldRelativeVelocity(
-                  Math.copySign(forward * forward, forward)
-                      * DriveConsts.kMaxLinearVelMetersPerSecond
-                      * DriveConsts.kTeleopSpeedMult,
-                  Math.copySign(left * left, left)
-                      * DriveConsts.kMaxLinearVelMetersPerSecond
-                      * DriveConsts.kTeleopSpeedMult,
-                  // Extra sensitivity for finer rotation control
-                  Math.copySign(ccw * ccw * ccw, ccw)
-                      * DriveConsts.kMaxTurnVelRadiansPerSecond
-                      * DriveConsts.kTeleopTurnMult);
+                  new ChassisSpeeds(
+                      Math.copySign(forward * forward, forward)
+                          * DriveConsts.kMaxLinearVelMetersPerSecond
+                          * DriveConsts.kTeleopSpeedMult,
+                      Math.copySign(left * left, left)
+                          * DriveConsts.kMaxLinearVelMetersPerSecond
+                          * DriveConsts.kTeleopSpeedMult,
+                      // Extra sensitivity for finer rotation control
+                      Math.copySign(ccw * ccw * ccw, ccw)
+                          * DriveConsts.kMaxTurnVelRadiansPerSecond
+                          * DriveConsts.kTeleopTurnMult));
             }));
   }
 
@@ -98,24 +99,12 @@ public class Drivetrain extends SafeSubsystem {
   }
 
   /**
-   * Drive with field relative velocities. Must be continuously called. This method is intended for
-   * general teleop drive use.
-   *
-   * @param forward forward speed (UNIT: meters/s)
-   * @param left left speed (UNIT: meters/s)
-   * @param ccw counter-clockwise speed (UNIT: ccw radians/s)
-   */
-  public static void driveFieldRelativeVelocity(double forward, double left, double ccw) {
-    m_swerve.setDesiredVelocityRobotRelative(
-        ChassisSpeeds.fromFieldRelativeSpeeds(forward, left, ccw, getPose().getRotation()));
-  }
-
-  /**
    * Drive with field relative velocities. Must be continuously called.
    *
    * @param speeds {@link ChassisSpeeds} object in meters/s
    */
   public static void driveFieldRelativeVelocity(ChassisSpeeds speeds) {
+    // Rotate by relative rotation to fix path following and driving on red side
     m_swerve.setDesiredVelocityRobotRelative(
         ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getPose().getRotation()));
   }
