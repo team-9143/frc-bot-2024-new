@@ -157,12 +157,11 @@ public class Constants {
                 43,
                 new Translation2d(-0.24765, -0.24765));
 
-    /** Drive base radius for angularvelocity calcs (use swerve module farthest from COR) */
+    /** Drive base radius for angular velocity calcs (use swerve module farthest from COR) */
     public static final double kDriveBaseRadius =
         kSwerve_bl.location.getDistance(new Translation2d());
   }
 
-  // TODO(user): Tune pathfinding PID gains (currently at default gains)
   public static class AutoConsts {
     // TODO(dev/user): Ensure that drivetrain acceleration limits are strong
     // Upper bound drivetrain accelerations for path following and pose targeting
@@ -171,6 +170,7 @@ public class Constants {
     public static final double kMaxTurnAccelRadiansPerSecondSquared =
         DriveConsts.kMaxTurnVelRadiansPerSecond;
 
+    // TODO(user): Tune pathfinding PID gains (currently at default gains)
     // Gains for drivetrain position error -> velocity
     public static final TunableNumber kTranslateP = new TunableNumber("P", 5, "Robot Translation");
     public static final TunableNumber kTranslateD = new TunableNumber("D", 0, "Robot Translation");
