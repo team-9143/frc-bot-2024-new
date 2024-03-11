@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.logger.Logger;
 
-// TODO: Test autos
+// TODO: Test 4 escape autos on both alliances
 /** Contains auto types, choosers, and compiler. */
 public class AutoSelector {
   private static final MutableChooser<StartPose> chooser_startPose =
@@ -28,13 +28,13 @@ public class AutoSelector {
     tab.add("Body", chooser_body).withPosition(6, 2).withSize(3, 2);
 
     tab.addBoolean(
-            "Reset needed",
+            "Reset defaults if red",
             () ->
-                chooser_startPose.isUpdateReq()
+                !(chooser_startPose.isUpdateReq()
                     || chooser_starter.isUpdateReq()
-                    || chooser_body.isUpdateReq())
+                    || chooser_body.isUpdateReq()))
         .withPosition(0, 0)
-        .withSize(2, 2);
+        .withSize(4, 2);
   }
 
   /** Returns a full auto routine */
