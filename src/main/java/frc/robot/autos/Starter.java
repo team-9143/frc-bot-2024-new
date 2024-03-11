@@ -25,17 +25,17 @@ public enum Starter {
   public Command getCommand() {
     switch (this) {
       case Shoot:
-        return getShootCommand().withTimeout(2);
+        return getFullShootCommand().withTimeout(2);
 
       case WaitToShoot:
-        return new WaitCommand(0.5).andThen(getShootCommand().withTimeout(2));
+        return new WaitCommand(0.5).andThen(getFullShootCommand().withTimeout(2));
 
       default:
         return new InstantCommand();
     }
   }
 
-  public static Command getShootCommand() {
+  public static Command getFullShootCommand() {
     return Shooter.getInstance()
         .getShootCommand()
         .alongWith(new WaitCommand(0.5).andThen(Feeder.getInstance().getFeedUpCommand()));

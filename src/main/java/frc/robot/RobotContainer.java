@@ -113,7 +113,7 @@ public class RobotContainer {
 
   private static void configureOperator() {
     // Button 'RB' (hold) Shoots held note using feeder and shooter wheels
-    final Command cShoot = Starter.getShootCommand();
+    final Command cShoot = Starter.getFullShootCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
