@@ -1,55 +1,50 @@
 package frc.robot.logger;
 
-import frc.robot.Constants.Config;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.wpilibj.DataLogManager;
-import java.util.HashMap;
-import java.util.ArrayList;
-
-import edu.wpi.first.wpilibj.RobotBase;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import edu.wpi.first.wpilibj.DriverStation;
-
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.FloatLogEntry;
-import edu.wpi.first.util.datalog.IntegerLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-import edu.wpi.first.util.datalog.BooleanArrayLogEntry;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.util.datalog.FloatArrayLogEntry;
-import edu.wpi.first.util.datalog.IntegerArrayLogEntry;
-import edu.wpi.first.util.datalog.StringArrayLogEntry;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.BooleanArrayPublisher;
+import edu.wpi.first.networktables.BooleanPublisher;
+import edu.wpi.first.networktables.DoubleArrayPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.FloatArrayPublisher;
+import edu.wpi.first.networktables.FloatPublisher;
+import edu.wpi.first.networktables.IntegerArrayPublisher;
+import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
-
-import edu.wpi.first.networktables.BooleanPublisher;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.FloatPublisher;
-import edu.wpi.first.networktables.IntegerPublisher;
-import edu.wpi.first.networktables.StringPublisher;
-import edu.wpi.first.networktables.BooleanArrayPublisher;
-import edu.wpi.first.networktables.DoubleArrayPublisher;
-import edu.wpi.first.networktables.FloatArrayPublisher;
-import edu.wpi.first.networktables.IntegerArrayPublisher;
 import edu.wpi.first.networktables.StringArrayPublisher;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.StringPublisher;
+import edu.wpi.first.util.datalog.BooleanArrayLogEntry;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.FloatArrayLogEntry;
+import edu.wpi.first.util.datalog.FloatLogEntry;
+import edu.wpi.first.util.datalog.IntegerArrayLogEntry;
+import edu.wpi.first.util.datalog.IntegerLogEntry;
+import edu.wpi.first.util.datalog.StringArrayLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants.Config;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
- * <p> Huge thanks to FRC Team 581: Littleton Robotics for the basis for this implementation. </p>
+ * Huge thanks to FRC Team 581: Littleton Robotics for the basis for this implementation.
  *
- * <p> For consistency, logging calls should be done by subsystems and the main robot class (after control logic), and be under a directory corresponding to the same. </p>
- *
- * A logger that is similar to the AdvantageKit `Logger` class. It uses WPILib's DataLog to log the data to a file, and streams the data (if needed) using NetworkTables 4.
+ * <p>For consistency, logging calls should be done by subsystems and the main robot class (after
+ * control logic), and be under a directory corresponding to the same. A logger that is similar to
+ * the AdvantageKit `Logger` class. It uses WPILib's DataLog to log the data to a file, and streams
+ * the data (if needed) using NetworkTables 4.
  *
  * @see https://github.com/team581/frc-2023-charged-up/pull/64
  */
@@ -60,53 +55,54 @@ public class Logger {
   /** List of loggables to be updated each period. */
   private static final ArrayList<Loggable> loggables = new ArrayList<>();
 
-  /** Map to turn keys into integers for better performance on other maps. */
-  private static final HashMap<String, Integer> keyToID = new HashMap<>();
-
   // Entry maps for logging to disk
-  private static final HashMap<Integer, BooleanLogEntry> booleanLogs = new HashMap<>();
-  private static final HashMap<Integer, DoubleLogEntry> doubleLogs = new HashMap<>();
-  private static final HashMap<Integer, FloatLogEntry> floatLogs = new HashMap<>();
-  private static final HashMap<Integer, IntegerLogEntry> integerLogs = new HashMap<>();
-  private static final HashMap<Integer, StringLogEntry> stringLogs = new HashMap<>();
-  private static final HashMap<Integer, BooleanArrayLogEntry> booleanArrayLogs = new HashMap<>();
-  private static final HashMap<Integer, DoubleArrayLogEntry> doubleArrayLogs = new HashMap<>();
-  private static final HashMap<Integer, FloatArrayLogEntry> floatArrayLogs = new HashMap<>();
-  private static final HashMap<Integer, IntegerArrayLogEntry> integerArrayLogs = new HashMap<>();
-  private static final HashMap<Integer, StringArrayLogEntry> stringArrayLogs = new HashMap<>();
+  private static final HashMap<String, BooleanLogEntry> booleanLogs = new HashMap<>();
+  private static final HashMap<String, DoubleLogEntry> doubleLogs = new HashMap<>();
+  private static final HashMap<String, FloatLogEntry> floatLogs = new HashMap<>();
+  private static final HashMap<String, IntegerLogEntry> integerLogs = new HashMap<>();
+  private static final HashMap<String, StringLogEntry> stringLogs = new HashMap<>();
+  private static final HashMap<String, BooleanArrayLogEntry> booleanArrayLogs = new HashMap<>();
+  private static final HashMap<String, DoubleArrayLogEntry> doubleArrayLogs = new HashMap<>();
+  private static final HashMap<String, FloatArrayLogEntry> floatArrayLogs = new HashMap<>();
+  private static final HashMap<String, IntegerArrayLogEntry> integerArrayLogs = new HashMap<>();
+  private static final HashMap<String, StringArrayLogEntry> stringArrayLogs = new HashMap<>();
 
   // Network tables Tables for data logging directories
   private static NetworkTable outputTable;
   private static NetworkTable metadataTable;
+
   /** PubSubOptions to use for logging. */
   private static final PubSubOption pubOptions = PubSubOption.keepDuplicates(true);
 
   // Publisher maps for logging to network tables
-  private static final HashMap<Integer, BooleanPublisher> booleanPublishers = new HashMap<>();
-  private static final HashMap<Integer, DoublePublisher> doublePublishers = new HashMap<>();
-  private static final HashMap<Integer, FloatPublisher> floatPublishers = new HashMap<>();
-  private static final HashMap<Integer, IntegerPublisher> integerPublishers = new HashMap<>();
-  private static final HashMap<Integer, StringPublisher> stringPublishers = new HashMap<>();
-  private static final HashMap<Integer, BooleanArrayPublisher> booleanArrayPublishers = new HashMap<>();
-  private static final HashMap<Integer, DoubleArrayPublisher> doubleArrayPublishers = new HashMap<>();
-  private static final HashMap<Integer, FloatArrayPublisher> floatArrayPublishers = new HashMap<>();
-  private static final HashMap<Integer, IntegerArrayPublisher> integerArrayPublishers = new HashMap<>();
-  private static final HashMap<Integer, StringArrayPublisher> stringArrayPublishers = new HashMap<>();
+  private static final HashMap<String, BooleanPublisher> booleanPublishers = new HashMap<>();
+  private static final HashMap<String, DoublePublisher> doublePublishers = new HashMap<>();
+  private static final HashMap<String, FloatPublisher> floatPublishers = new HashMap<>();
+  private static final HashMap<String, IntegerPublisher> integerPublishers = new HashMap<>();
+  private static final HashMap<String, StringPublisher> stringPublishers = new HashMap<>();
+  private static final HashMap<String, BooleanArrayPublisher> booleanArrayPublishers =
+      new HashMap<>();
+  private static final HashMap<String, DoubleArrayPublisher> doubleArrayPublishers =
+      new HashMap<>();
+  private static final HashMap<String, FloatArrayPublisher> floatArrayPublishers = new HashMap<>();
+  private static final HashMap<String, IntegerArrayPublisher> integerArrayPublishers =
+      new HashMap<>();
+  private static final HashMap<String, StringArrayPublisher> stringArrayPublishers =
+      new HashMap<>();
 
   // Cannot be initialized until after start to ensure proper file creation
-  private static DataLog log;
+  private static final DataLog m_log;
 
   // Start log manager
   static {
-    DataLogManager.start(
-      RobotBase.isSimulation() ? "" : Config.DATA_LOG_DIR, // Log to project directory in simulation
-      "FRC_" + LocalDateTime.now(ZoneId.of("UTC-8")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss")) + ".wpilog"); // File name
+    // Initializes DataLogManager with random filename
+    DataLogManager.start();
 
-    log = DataLogManager.getLog();
+    m_log = DataLogManager.getLog();
     // Disable logging NT values to separate logger and networktables
     DataLogManager.logNetworkTables(false);
     // Log inputs from DriverStation
-    DriverStation.startDataLog(log);
+    DriverStation.startDataLog(m_log);
 
     // Set up network tables for data stream
     if (Config.NTStream) {
@@ -116,7 +112,31 @@ public class Logger {
     }
   }
 
-  /** @param loggable loggable to register for periodic update calls */
+  /** Sets the proper log file name. Should be called after DS connection. */
+  public static void initFilename() {
+    if (DriverStation.isFMSAttached()) {
+      // File name during event
+      m_log.setFilename(
+          "FRC_"
+              + DriverStation.getEventName()
+              + "_"
+              + DriverStation.getMatchType().toString()
+              + "_"
+              + DriverStation.getMatchNumber()
+              + ".wpilog");
+    } else {
+      // File name without FMS connection
+      m_log.setFilename(
+          "FRC_"
+              + LocalDateTime.now(ZoneId.of("UTC-8"))
+                  .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss"))
+              + ".wpilog");
+    }
+  }
+
+  /**
+   * @param loggable loggable to register for periodic update calls
+   */
   public static void registerLoggable(Loggable loggable) {
     loggables.add(loggable);
     log("Device " + loggable.getDirectory() + " initialized");
@@ -128,7 +148,7 @@ public class Logger {
   }
 
   /**
-   * Log a message to the "messages" entry. The message is also printed to standard output.
+   * Logs a message to the "messages" entry and prints to standard output.
    *
    * @param msg message
    */
@@ -136,143 +156,158 @@ public class Logger {
     DataLogManager.log(msg);
   }
 
-  /** Returns the ID of a given key, or creates it if not present. Hopefully will remove performance issues. */
-  public static int getID(String key) {
-    return keyToID.computeIfAbsent(key, k -> keyToID.size());
+  /**
+   * Reports an warning to the DriverStation (without a stack trace) and the "messages" entry.
+   *
+   * @param err warning message
+   */
+  public static void reportWarning(String err) {
+    log("WARNING: " + err);
+    DriverStation.reportWarning(err, false);
+  }
+
+  /**
+   * Reports an error to the DriverStation (without a stack trace) and the "messages" entry.
+   *
+   * @param err error message
+   */
+  public static void reportError(String err) {
+    log("ERROR: " + err);
+    DriverStation.reportError(err, false);
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, boolean value) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     booleanLogs
-      .computeIfAbsent(id, k -> new BooleanLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(value); // Record value to log file
+        .computeIfAbsent(path, k -> new BooleanLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(value);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       booleanPublishers
-      .computeIfAbsent(id, k -> outputTable.getBooleanTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(value); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getBooleanTopic(path).publish(pubOptions))
+          .set(value);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, double value) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     doubleLogs
-      .computeIfAbsent(id, k -> new DoubleLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(value); // Record value to log file
+        .computeIfAbsent(path, k -> new DoubleLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(value);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       doublePublishers
-        .computeIfAbsent(id, k -> outputTable.getDoubleTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(value); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getDoubleTopic(path).publish(pubOptions))
+          .set(value);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, float value) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     floatLogs
-      .computeIfAbsent(id, k -> new FloatLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(value); // Record value to log file
+        .computeIfAbsent(path, k -> new FloatLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(value);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       floatPublishers
-        .computeIfAbsent(id, k -> outputTable.getFloatTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(value); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getFloatTopic(path).publish(pubOptions))
+          .set(value);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, int value) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     integerLogs
-      .computeIfAbsent(id, k -> new IntegerLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(value); // Record value to log file
+        .computeIfAbsent(path, k -> new IntegerLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(value);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       integerPublishers
-        .computeIfAbsent(id, k -> outputTable.getIntegerTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(value); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getIntegerTopic(path).publish(pubOptions))
+          .set(value);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, String value) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     stringLogs
-      .computeIfAbsent(id, k -> new StringLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(value); // Record value to log file
+        .computeIfAbsent(path, k -> new StringLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(value);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       stringPublishers
-        .computeIfAbsent(id, k -> outputTable.getStringTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(value); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getStringTopic(path).publish(pubOptions))
+          .set(value);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, boolean[] values) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     booleanArrayLogs
-      .computeIfAbsent(id, k -> new BooleanArrayLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(values); // Record value to log file
+        .computeIfAbsent(path, k -> new BooleanArrayLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(values);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       booleanArrayPublishers
-        .computeIfAbsent(id, k -> outputTable.getBooleanArrayTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(values); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getBooleanArrayTopic(path).publish(pubOptions))
+          .set(values);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, double[] values) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     doubleArrayLogs
-      .computeIfAbsent(id, k -> new DoubleArrayLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(values); // Record value to log file
+        .computeIfAbsent(path, k -> new DoubleArrayLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(values);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       doubleArrayPublishers
-        .computeIfAbsent(id, k -> outputTable.getDoubleArrayTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(values); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getDoubleArrayTopic(path).publish(pubOptions))
+          .set(values);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, float[] values) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     floatArrayLogs
-      .computeIfAbsent(id, k -> new FloatArrayLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(values); // Record value to log file
+        .computeIfAbsent(path, k -> new FloatArrayLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(values);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       floatArrayPublishers
-        .computeIfAbsent(id, k -> outputTable.getFloatArrayTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(values); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getFloatArrayTopic(path).publish(pubOptions))
+          .set(values);
     }
   }
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, long[] values) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     integerArrayLogs
-      .computeIfAbsent(id, k -> new IntegerArrayLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(values); // Record value to log file
+        .computeIfAbsent(path, k -> new IntegerArrayLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(values);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       integerArrayPublishers
-        .computeIfAbsent(id, k -> outputTable.getIntegerArrayTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(values); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getIntegerArrayTopic(path).publish(pubOptions))
+          .set(values);
     }
   }
 
@@ -288,16 +323,16 @@ public class Logger {
 
   @SuppressWarnings("resource")
   public static void recordOutput(String path, String[] values) {
-    int id = getID(path);
-
+    // Retrieve/create log entry and record value
     stringArrayLogs
-      .computeIfAbsent(id, k -> new StringArrayLogEntry(log, OUTPUT_LOG_DIR + path)) // Retrieve/create log entry
-      .append(values); // Record value to log file
+        .computeIfAbsent(path, k -> new StringArrayLogEntry(m_log, OUTPUT_LOG_DIR + path))
+        .append(values);
 
     if (Config.NTStream) {
+      // Retrieve/create publisher and record value
       stringArrayPublishers
-        .computeIfAbsent(id, k -> outputTable.getStringArrayTopic(path).publish(pubOptions)) // Retrieve/create publisher
-        .set(values); // Record value to network tables
+          .computeIfAbsent(path, k -> outputTable.getStringArrayTopic(path).publish(pubOptions))
+          .set(values);
     }
   }
 
@@ -331,13 +366,17 @@ public class Logger {
 
   public static void recordOutput(String path, Trajectory value) {
     // Map trajectory into Pose2d[]
-    recordOutput(path,
-      value.getStates().stream().map(state -> state.poseMeters).toArray(Pose2d[]::new));
+    recordOutput(
+        path, value.getStates().stream().map(state -> state.poseMeters).toArray(Pose2d[]::new));
   }
 
   public static void recordOutput(String path, ChassisSpeeds value) {
     // Map speeds in double[]
-    recordOutput(path, new double[] {value.vxMetersPerSecond, value.vyMetersPerSecond, value.omegaRadiansPerSecond});
+    recordOutput(
+        path,
+        new double[] {
+          value.vxMetersPerSecond, value.vyMetersPerSecond, value.omegaRadiansPerSecond
+        });
   }
 
   public static void recordOutput(String path, SwerveModuleState... values) {
@@ -353,7 +392,7 @@ public class Logger {
 
   public static void recordMetadata(String path, String value) {
     // Record metadata in log file
-    var entry = new StringLogEntry(log, METADATA_LOG_DIR + path);
+    var entry = new StringLogEntry(m_log, METADATA_LOG_DIR + path);
     entry.append(value);
     entry.finish(); // Close unused entry
 

@@ -1,12 +1,10 @@
 package frc.robot.devices;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.hal.DriverStationJNI;
-
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.event.EventLoop;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
@@ -28,7 +26,10 @@ public class Controller {
     RStick(10);
 
     final byte val;
-    btn (int val) {this.val = (byte) val;}
+
+    btn(int val) {
+      this.val = (byte) val;
+    }
   }
 
   public static enum axis {
@@ -40,7 +41,10 @@ public class Controller {
     rightY(5);
 
     final byte val;
-    axis (int val) {this.val = (byte) val;}
+
+    axis(int val) {
+      this.val = (byte) val;
+    }
   }
 
   public final byte m_port;
@@ -52,7 +56,6 @@ public class Controller {
   protected Controller(byte port) {
     m_port = port;
   }
-
 
   /*
    * Retrieving raw data:
@@ -75,23 +78,34 @@ public class Controller {
    * Shorthands for useful axes:
    */
 
-  /** Apply a 0.02 to 1.00 deadband to the passed value. */
+  /** Apply a 0.05 to 1.00 deadband to the passed value. */
   public static double deadband(double value) {
-    if (Math.abs(value) > 0.02) {
-      return (value - Math.copySign(0.02, value)) / 0.98;
+    if (Math.abs(value) > 0.05) {
+      return (value - Math.copySign(0.05, value)) / 0.95;
     }
     return 0;
   }
 
-  /** @return left trigger subtractive and right trigger additive [-1.0..1.0] */
+  /** Returns value: left trigger subtractive and right trigger additive [-1.0..1.0] */
   public double getTriggers() {
     return deadband(getAxis(axis.rightTrigger)) - deadband(getAxis(axis.leftTrigger));
   }
 
-  public double getLeftX() {return deadband(getAxis(axis.leftX));}
-  public double getLeftY() {return deadband(getAxis(axis.leftY));}
-  public double getRightX() {return deadband(getAxis(axis.rightX));}
-  public double getRightY() {return deadband(getAxis(axis.rightY));}
+  public double getLeftX() {
+    return deadband(getAxis(axis.leftX));
+  }
+
+  public double getLeftY() {
+    return deadband(getAxis(axis.leftY));
+  }
+
+  public double getRightX() {
+    return deadband(getAxis(axis.rightX));
+  }
+
+  public double getRightY() {
+    return deadband(getAxis(axis.rightY));
+  }
 
   /*
    * Setting rumble and other outputs:
@@ -127,10 +141,8 @@ public class Controller {
    * @param seconds duration to rumble for
    */
   public Command getRumbleCommand(double left, double right, double seconds) {
-    return new StartEndCommand(
-      () -> setRumble(left, right),
-      () -> setRumble(0, 0)
-    ).withTimeout(seconds);
+    return new StartEndCommand(() -> setRumble(left, right), () -> setRumble(0, 0))
+        .withTimeout(seconds);
   }
 
   /*
@@ -142,9 +154,12 @@ public class Controller {
   }
 
   public void onTrue(btn btn, Runnable run, EventLoop loop) {
-    loop.bind(() -> {
-      if (DriverStation.getStickButtonPressed(m_port, btn.val)) {run.run();}
-    });
+    loop.bind(
+        () -> {
+          if (DriverStation.getStickButtonPressed(m_port, btn.val)) {
+            run.run();
+          }
+        });
   }
 
   public void onFalse(btn btn, Runnable run) {
@@ -152,9 +167,12 @@ public class Controller {
   }
 
   public void onFalse(btn btn, Runnable run, EventLoop loop) {
-    loop.bind(() -> {
-      if (DriverStation.getStickButtonReleased(m_port, btn.val)) {run.run();}
-    });
+    loop.bind(
+        () -> {
+          if (DriverStation.getStickButtonReleased(m_port, btn.val)) {
+            run.run();
+          }
+        });
   }
 
   public void whileTrue(btn btn, Runnable run) {
@@ -162,8 +180,11 @@ public class Controller {
   }
 
   public void whileTrue(btn btn, Runnable run, EventLoop loop) {
-    loop.bind(() -> {
-      if (DriverStation.getStickButton(m_port, btn.val)) {run.run();}
-    });
+    loop.bind(
+        () -> {
+          if (DriverStation.getStickButton(m_port, btn.val)) {
+            run.run();
+          }
+        });
   }
 }

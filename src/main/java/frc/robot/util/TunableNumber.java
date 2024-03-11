@@ -1,32 +1,34 @@
 package frc.robot.util;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.DoubleConsumer;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleSupplier;
 
 /** Represents a double that can be changed during runtime. */
 public class TunableNumber implements DoubleSupplier {
-  private static final String LOG_DIR = "/numbers/";
+  private static final String LOG_DIR = "/Numbers/";
 
   /** List of instances. */
   private static final ArrayList<TunableNumber> s_instances = new ArrayList<TunableNumber>();
+
   /** List of groups. */
   private static final HashSet<String> s_groups = new HashSet<String>();
 
   /** Descriptor of the TunableNumber for use with dashboards. */
   public final String m_name;
+
   /** Descriptor of associated TunableNumbers for use with dashboards. */
   public final String m_group;
 
   /** Value of the TunableNumber at startup. */
   public final double m_default;
+
   /** Value of the TunableNumber. */
   private double m_value;
 
@@ -69,12 +71,12 @@ public class TunableNumber implements DoubleSupplier {
     this(name, val, "default");
   }
 
-  /** @return an array of all instances for class-wide changes (e.g. making all numbers mutable) */
+  /** Returns an array of all instances for class-wide changes (e.g. making all numbers mutable) */
   public static TunableNumber[] getAllInstances() {
     return s_instances.toArray(new TunableNumber[s_instances.size()]);
   }
 
-  /** @return an array of all TunableNumber groups */
+  /** Returns an array of all TunableNumber groups */
   public static String[] getAllGroups() {
     return s_groups.toArray(new String[s_groups.size()]);
   }
@@ -106,12 +108,14 @@ public class TunableNumber implements DoubleSupplier {
     }
   }
 
-  /** @return {@code true} if the number is mutable */
+  /** Returns {@code true} if the number is mutable */
   public boolean getMutable() {
     return m_mutable;
   }
 
-  /** @param mutable {@code true} if the number should be mutable */
+  /**
+   * @param mutable {@code true} if the number should be mutable
+   */
   public void setMutable(boolean mutable) {
     m_mutable = mutable;
   }
@@ -130,7 +134,7 @@ public class TunableNumber implements DoubleSupplier {
     set(m_default);
   }
 
-  /** @return the current value */
+  /** Returns the current value */
   @Override
   public double getAsDouble() {
     return m_value;
@@ -140,7 +144,6 @@ public class TunableNumber implements DoubleSupplier {
    * Change the value, ignoring duplicates. Only works if the number is mutable.
    *
    * @param val new value
-   *
    * @see TunableNumber#getMutable
    * @see TunableNumber#setMutable
    */
@@ -160,7 +163,8 @@ public class TunableNumber implements DoubleSupplier {
 
     for (var group : groups) {
       var instances = TunableNumber.getGroup(group);
-      var layout = Shuffleboard.getTab("Tunables").getLayout(group, BuiltInLayouts.kList).withSize(2, 6);
+      var layout =
+          Shuffleboard.getTab("Tunables").getLayout(group, BuiltInLayouts.kList).withSize(2, 6);
 
       for (var elem : instances) {
         // Add tunables to shuffleboard if not already added
@@ -168,10 +172,12 @@ public class TunableNumber implements DoubleSupplier {
           // Make unadded tunables mutable
           elem.setMutable(true);
 
-          elem.m_entry = layout.add(elem.m_name, elem.getAsDouble())
-            .withWidget(BuiltInWidgets.kTextView)
-            .withSize(2, 2)
-            .getEntry();
+          elem.m_entry =
+              layout
+                  .add(elem.m_name, elem.getAsDouble())
+                  .withWidget(BuiltInWidgets.kTextView)
+                  .withSize(2, 2)
+                  .getEntry();
         }
       }
     }

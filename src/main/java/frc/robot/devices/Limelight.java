@@ -1,28 +1,17 @@
 package frc.robot.devices;
 
-import edu.wpi.first.networktables.NetworkTable;
-import frc.robot.logger.Loggable;
-import frc.robot.logger.Logger;
-
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.IntegerPublisher;
+import edu.wpi.first.networktables.NetworkTable;
 
+// TODO(dev): Add AprilTag functionality and parameterize subscribers to limit bandwith use
 /** Class for Limelight interfacing. */
-public class Limelight implements Loggable {
+public class Limelight {
   /** Limelight datatable */
   private final NetworkTable m_limelight;
 
-  private final DoubleSubscriber
-    tv_sub,
-    tx_sub,
-    ty_sub,
-    ta_sub,
-    tid_sub,
-    pipeline_sub;
-
-  private final IntegerPublisher
-    pipeline_pub,
-    cam_pub;
+  private final DoubleSubscriber tv_sub, tx_sub, ty_sub, ta_sub, tid_sub, pipeline_sub;
+  private final IntegerPublisher pipeline_pub, cam_pub;
 
   /**
    * Initialize a new limelight.
@@ -43,42 +32,52 @@ public class Limelight implements Loggable {
     cam_pub = m_limelight.getIntegerTopic("camMode").publish();
   }
 
-  /** @return horizontal angle to target (UNIT: degrees) */
-  public double getTx() {return tx_sub.getAsDouble();}
-  /** @return vertical angle to target (UNIT: degrees) */
-  public double getTy() {return ty_sub.getAsDouble();}
-  /** @return percent area of target relative to camera */
-  public double getArea() {return ta_sub.getAsDouble();}
-  /** @return {@code true} if a valid target exists */
-  public boolean getValid() {return (tv_sub.getAsDouble() == 1) ? true : false;}
-  /** @return ID of the targeted AprilTag */
-  public int getTid() {return (int) tid_sub.getAsDouble();}
+  /** Returns horizontal angle to target (UNIT: degrees) */
+  public double getTx() {
+    return tx_sub.getAsDouble();
+  }
 
-  /** @return active pipeline index [0..9] */
-  public int getPipeline() {return (int) pipeline_sub.getAsDouble();}
+  /** Returns vertical angle to target (UNIT: degrees) */
+  public double getTy() {
+    return ty_sub.getAsDouble();
+  }
+
+  /** Returns percent area of target relative to camera */
+  public double getArea() {
+    return ta_sub.getAsDouble();
+  }
+
+  /** Returns {@code true} if a valid target exists */
+  public boolean getValid() {
+    return (tv_sub.getAsDouble() == 1) ? true : false;
+  }
+
+  /** Returns ID of the targeted AprilTag */
+  public int getTid() {
+    return (int) tid_sub.getAsDouble();
+  }
+
+  /** Returns active pipeline index [0..9] */
+  public int getPipeline() {
+    return (int) pipeline_sub.getAsDouble();
+  }
+
   /**
    * Set the limelight pipeline. Recommended to wait for {@link Limelight#getPipeline()} to
    * corroborate before using functional code that depends on it.
    *
    * @param pipeline pipeline index to set [0..9]
    */
-  public void setPipeline(int pipeline) {pipeline_pub.accept(pipeline);}
+  public void setPipeline(int pipeline) {
+    pipeline_pub.accept(pipeline);
+  }
 
   /**
    * Set the limelight operation mode.
    *
    * @param isDriverCam {@code true} for driver camera, {@code false} for vision processing
    */
-  public void setDriverCam(boolean isDriverCam) {cam_pub.accept(isDriverCam ? 1 : 0);}
-
-  @Override
-  public String getDirectory() {
-    return "/"+m_limelight.getPath().substring(m_limelight.getPath().lastIndexOf('/'))+"/";
-  }
-
-  @Override
-  public void log() {
-    Logger.recordOutput(getDirectory()+"valid-target", getValid());
-    Logger.recordOutput(getDirectory()+"apriltag-id", getTid());
+  public void setDriverCam(boolean isDriverCam) {
+    cam_pub.accept(isDriverCam ? 1 : 0);
   }
 }

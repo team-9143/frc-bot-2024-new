@@ -5,10 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.logger.Logger;
+import frc.robot.Constants.DriveConsts;
 import frc.robot.autos.AutoSelector;
+import frc.robot.logger.Logger;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.TunableNumber;
 
 /**
@@ -25,12 +26,24 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotContainer.init();
+    AutoSelector.init();
+
+    // Add periodic callback for drivetrain updates
+    addPeriodic(
+        Drivetrain::update,
+        DriveConsts.kPeriodMs / 1000d,
+        (kDefaultPeriod - (DriveConsts.kPeriodMs / 1000d)) / 2);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Logger.updateLogs();
+  }
+
+  @Override
+  public void driverStationConnected() {
+    RobotContainer.initDS();
   }
 
   @Override
