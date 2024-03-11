@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,25 +21,20 @@ import frc.robot.util.SwerveDrive;
 public class Drivetrain extends SafeSubsystem {
   // Pigeon2 setup
   private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConsts.kPigeonID);
+  private static final StatusSignal<Double> m_yawSignal = m_pigeon2.getYaw();
+  private static final StatusSignal<Double> m_pitchSignal = m_pigeon2.getPitch();
+  private static final StatusSignal<Double> m_rollSignal = m_pigeon2.getRoll();
 
   static {
     m_pigeon2.getConfigurator().apply(Config.kPigeonMountPose);
     m_pigeon2.setYaw(0);
     StatusSignal.setUpdateFrequencyForAll(
-        1000d / DriveConsts.kPeriodMs,
-        m_pigeon2.getYaw(),
-        m_pigeon2.getQuatW(),
-        m_pigeon2.getQuatX(),
-        m_pigeon2.getQuatY(),
-        m_pigeon2.getQuatZ());
+        1000d / DriveConsts.kPeriodMs, m_yawSignal, m_pitchSignal, m_rollSignal);
     m_pigeon2.optimizeBusUtilization();
   }
 
-  // TODO: Fix gyro offset problem with 3d rotation
-  /**
-   * To adjust 3d rotation (quaternion from gyro) to match with 2d odometry after a heading reset
-   */
-  private static Rotation3d gyroOffset = new Rotation3d();
+  /** To adjust 3d rotation to match with 2d odometry after a heading reset */
+  private static Rotation2d yawOffset = new Rotation2d();
 
   public static final SwerveModuleState[] xStanceStates =
       new SwerveModuleState[] {
@@ -132,7 +128,7 @@ public class Drivetrain extends SafeSubsystem {
   public static void resetOdometry(Pose2d positionMetersCCW) {
     var gyroAngle = m_pigeon2.getRotation2d();
 
-    gyroOffset = new Rotation3d(0, 0, getPose().getRotation().minus(gyroAngle).getRadians());
+    yawOffset = getPose().getRotation().minus(gyroAngle);
     m_swerve.resetOdometry(positionMetersCCW, gyroAngle);
   }
 
@@ -143,7 +139,11 @@ public class Drivetrain extends SafeSubsystem {
 
   /** Returns the gyro's orientation */
   public static Rotation3d getOrientation() {
-    return m_pigeon2.getRotation3d().plus(gyroOffset);
+    BaseStatusSignal.refreshAll(m_yawSignal, m_pitchSignal, m_rollSignal);
+    return new Rotation3d(
+        Math.toRadians(m_rollSignal.getValue()),
+        Math.toRadians(m_pitchSignal.getValue()),
+        Math.toRadians(m_rollSignal.getValue()) + yawOffset.getRadians());
   }
 
   /** Returns the drivetrain's desired velocities */
