@@ -43,6 +43,7 @@ public class AutoSelector {
     var starter = chooser_starter.getSelected();
     var body = chooser_body.getSelected();
 
+    // Log alliance and auton selection
     Logger.log((Pathing.isRedAlliance() ? "RED ALLIANCE" : "BLUE ALLIANCE"));
     Logger.log(
         "AUTON: " + startPose.toString() + ", " + starter.toString() + ", " + body.toString());

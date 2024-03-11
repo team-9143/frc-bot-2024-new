@@ -25,6 +25,7 @@ public enum Starter {
     }
   }
 
+  /** Returns full shoot command with both shooter and feeder wheels, public for operator use */
   public static Command getFullShootCommand() {
     return Shooter.getInstance()
         .getShootCommand()
