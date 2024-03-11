@@ -8,26 +8,16 @@ import frc.robot.subsystems.Shooter;
 
 /** Enum of starting actions to deal with the preloaded game piece. */
 public enum Starter {
-  Shoot("Shoot"),
-  WaitToShoot("Wait and shoot"),
-  None("None");
-
-  final String name;
-
-  Starter(String name) {
-    this.name = name;
-  }
-
-  public String toString() {
-    return name;
-  }
+  Shoot,
+  Wait_and_shoot,
+  None;
 
   public Command getCommand() {
     switch (this) {
       case Shoot:
         return getFullShootCommand().withTimeout(2);
 
-      case WaitToShoot:
+      case Wait_and_shoot:
         return new WaitCommand(0.5).andThen(getFullShootCommand().withTimeout(2));
 
       default:

@@ -9,23 +9,16 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Enum of starting positions to set drivetrain odometry and meet path expectations. */
 public enum StartPose {
-  SubwooferAmp("Subwoofer amp side", new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))),
-  SubwooferSource("Subwoofer source side", new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))),
-  SubwooferFront("Subwoofer front", new Pose2d(1.36, 5.55, new Rotation2d())),
-  Wing("Wing", new Pose2d(1.36, 1.62, new Rotation2d()));
-
-  final String name;
+  Subwoofer_amp_side(new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))),
+  Subwoofer_source_side(new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))),
+  Subwoofer_front(new Pose2d(1.36, 5.55, new Rotation2d())),
+  Wing(new Pose2d(1.36, 1.62, new Rotation2d()));
 
   /** Raw unflipped pose */
   private final Pose2d pose;
 
-  StartPose(String name, Pose2d pose) {
-    this.name = name;
+  StartPose(Pose2d pose) {
     this.pose = pose;
-  }
-
-  public String toString() {
-    return name;
   }
 
   /** Resets drivetrain odometry to assumed starting pose */

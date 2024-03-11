@@ -7,18 +7,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /** If selected, will determine movement configurations depending on starting position. */
 public enum Body {
-  Escape("Escape"),
-  None("None");
-
-  final String name;
-
-  Body(String name) {
-    this.name = name;
-  }
-
-  public String toString() {
-    return name;
-  }
+  Escape,
+  None;
 
   public Command getCommand(StartPose startPose) {
     switch (this) {
