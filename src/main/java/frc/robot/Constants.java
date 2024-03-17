@@ -98,8 +98,7 @@ public class Constants {
     public static final byte kLeftClimberID = 6;
     public static final byte kRightClimberID = 7;
 
-    public static final double kLeftClimberVolts = 12;
-    public static final double kRightClimberVolts = -12;
+    public static final double kClimberVolts = -5;
   }
 
   /** Data for each individual swerve module. */
