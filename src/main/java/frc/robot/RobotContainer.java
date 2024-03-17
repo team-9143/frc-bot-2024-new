@@ -14,7 +14,11 @@ import frc.robot.devices.Controller.btn;
 import frc.robot.devices.OI;
 import frc.robot.logger.LoggedPowerDistribution;
 import frc.robot.logger.Logger;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climbers;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.SafeSubsystem;
+import frc.robot.subsystems.Shooter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -134,6 +138,16 @@ public class RobotContainer {
     final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
+
+    // Button 'LStick' (hold) Extends the left climber
+    final Command cExtendClimberLeft = Climbers.getInstance().extendClimberLeft();
+    OI.OPERATOR_CONTROLLER.whileTrue(btn.LStick, cExtendClimberLeft::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.LStick, cExtendClimberLeft::cancel);
+
+    // Button 'RStick' (hold) Extends the left climber
+    final Command cExtendClimberRight = Climbers.getInstance().extendClimberRight();
+    OI.OPERATOR_CONTROLLER.whileTrue(btn.RStick, cExtendClimberRight::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.RStick, cExtendClimberRight::cancel);
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
