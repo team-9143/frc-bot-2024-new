@@ -27,13 +27,13 @@ public class Climbers extends SafeSubsystem {
     // Main motor setup
     SparkUtils.configure(
         m_leftClimberMotor,
-        () -> m_leftClimberMotor.setIdleMode(IdleMode.kCoast),
+        () -> m_leftClimberMotor.setIdleMode(IdleMode.kBrake),
         () -> m_leftClimberMotor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
         () -> SparkUtils.setPeriodicFrames(m_leftClimberMotor, 10, 0, 0, 0, 0, 0, 0));
 
     SparkUtils.configure(
         m_rightClimberMotor,
-        () -> m_rightClimberMotor.setIdleMode(IdleMode.kCoast),
+        () -> m_rightClimberMotor.setIdleMode(IdleMode.kBrake),
         () -> m_rightClimberMotor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
         () -> SparkUtils.setPeriodicFrames(m_rightClimberMotor, 10, 0, 0, 0, 0, 0, 0));
   }
@@ -50,7 +50,7 @@ public class Climbers extends SafeSubsystem {
         () ->
             m_leftClimberMotor.setVoltage(
                 ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY()),
-        this::stop);
+        this::stopLeft);
   }
 
   public Command extendClimberRight() {
@@ -58,7 +58,7 @@ public class Climbers extends SafeSubsystem {
         () ->
             m_rightClimberMotor.setVoltage(
                 ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY()),
-        this::stop);
+        this::stopRight);
   }
 
   @Override
@@ -70,7 +70,13 @@ public class Climbers extends SafeSubsystem {
   @Override
   public void stop() {
     // TODO Auto-generated method stub
-    m_leftClimberMotor.stopMotor();
+  }
+
+  public void stopRight() {
     m_rightClimberMotor.stopMotor();
+  }
+
+  public void stopLeft() {
+    m_leftClimberMotor.stopMotor();
   }
 }
