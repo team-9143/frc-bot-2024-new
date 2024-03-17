@@ -9,6 +9,7 @@ import frc.robot.Constants.PhysConsts;
 import frc.robot.devices.OI;
 import frc.robot.util.SparkUtils;
 
+// TODO(climbers): Time-allowing, might want to use encoders to stop the motors moving too far
 public class Climbers extends SafeSubsystem {
   private static final CANSparkMax m_leftClimberMotor =
       new CANSparkMax(ClimberConsts.kLeftClimberID, MotorType.kBrushless);
@@ -16,6 +17,7 @@ public class Climbers extends SafeSubsystem {
       new CANSparkMax(ClimberConsts.kRightClimberID, MotorType.kBrushless);
 
   static {
+    // TODO(climbers): Seems clear this will be unused (and is still avail in shooter), can delete
     // Follower setup
     // var follower = new CANSparkMax(ClimberConsts.kRightClimberID, MotorType.kBrushless);
     // SparkUtils.configure(
@@ -24,6 +26,7 @@ public class Climbers extends SafeSubsystem {
     //     () -> follower.follow(m_leftClimberMotor),
     //     () -> SparkUtils.setPeriodicFrames(follower, 10, 0, 0, 0, 0, 0, 0));
 
+    // TODO(climbers): See if these current limits can be lowered, I don't think they'll need >25
     // Main motor setup
     SparkUtils.configure(
         m_leftClimberMotor,
@@ -45,7 +48,11 @@ public class Climbers extends SafeSubsystem {
     return m_instance;
   }
 
+  // TODO(climbers): Remember to add a private constructor here, even if empty
+
+  // TODO(climbers): Try to add a small bit of documentation here! See shooter
   public Command extendClimberLeft() {
+    // TODO(climbers): If you want this to update with the joystick, use runEnd()
     return startEnd(
         () ->
             m_leftClimberMotor.setVoltage(
@@ -53,7 +60,9 @@ public class Climbers extends SafeSubsystem {
         this::stopLeft);
   }
 
+  // TODO(climbers): Try to add a small bit of documentation here! See shooter
   public Command extendClimberRight() {
+    // TODO(climbers): If you want this to update with the joystick, use runEnd()
     return startEnd(
         () ->
             m_rightClimberMotor.setVoltage(
@@ -63,19 +72,20 @@ public class Climbers extends SafeSubsystem {
 
   @Override
   public void log() {
-    // TODO Auto-generated method stub
-
+    // TODO(climbers): Just leave this method empty if you want, nothing to log
   }
 
   @Override
   public void stop() {
-    // TODO Auto-generated method stub
+    // TODO(climbers): call both stop methods here
   }
 
+  // TODO(climbers): privatize?
   public void stopRight() {
     m_rightClimberMotor.stopMotor();
   }
 
+  // TODO(climbers): privatize?
   public void stopLeft() {
     m_leftClimberMotor.stopMotor();
   }
