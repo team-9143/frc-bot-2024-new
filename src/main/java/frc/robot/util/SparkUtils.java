@@ -14,7 +14,17 @@ import java.util.function.Supplier;
  */
 public class SparkUtils {
   public static final int MAX_ATTEMPTS = 3;
-  public static final int FRAME_STRATEGY_DISABLED = 65535;
+
+  /**
+   * How does rev even mess up documentation on this its ridiculous
+   *
+   * <p>WHY ARE YOU A SIGNED INTEGER
+   *
+   * <p>Also what happens when I make you -1
+   *
+   * @see https://www.chiefdelphi.com/t/extreme-can-utilization-but-parameters-set-ok/456613/6
+   */
+  public static final int FRAME_STRATEGY_DISABLED = 32767;
 
   /**
    * Formats the name of a spark with its CAN ID.
