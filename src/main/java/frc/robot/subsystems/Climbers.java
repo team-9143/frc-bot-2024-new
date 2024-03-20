@@ -72,21 +72,20 @@ public class Climbers extends SafeSubsystem {
 
   @Override
   public void log() {
-    // TODO(climbers): Just leave this method empty if you want, nothing to log
+
   }
 
   @Override
   public void stop() {
-    // TODO(climbers): call both stop methods here
-  }
-
-  // TODO(climbers): privatize?
-  public void stopRight() {
+    m_leftClimberMotor.stopMotor();
     m_rightClimberMotor.stopMotor();
   }
 
-  // TODO(climbers): privatize?
-  public void stopLeft() {
+  private void stopRight() {
+    m_rightClimberMotor.stopMotor();
+  }
+
+  private void stopLeft() {
     m_leftClimberMotor.stopMotor();
   }
 }
