@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.Starter;
 import frc.robot.devices.Controller.btn;
@@ -139,15 +140,24 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
 
-    // Button 'LStick' (hold) Extends the left climber
     final Command cExtendClimberLeft = Climbers.getInstance().extendClimberLeft();
-    OI.OPERATOR_CONTROLLER.whileTrue(btn.LStick, cExtendClimberLeft::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.LStick, cExtendClimberLeft::cancel);
 
-    // Button 'RStick' (hold) Extends the left climber
     final Command cExtendClimberRight = Climbers.getInstance().extendClimberRight();
-    OI.OPERATOR_CONTROLLER.whileTrue(btn.RStick, cExtendClimberRight::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.RStick, cExtendClimberRight::cancel);
+
+    //Left Joystick controls left climber
+    if (OI.OPERATOR_CONTROLLER.getLeftY() > 15 || OI.OPERATOR_CONTROLLER.getLeftY() < 15){
+      new RunCommand(cExtendClimberLeft::schedule, Climbers.getInstance());
+    }
+    else{
+      new RunCommand(cExtendClimberLeft::cancel, Climbers.getInstance());
+    }
+    //Right Joystick controls right climber
+    if (OI.OPERATOR_CONTROLLER.getRightY() > 15 || OI.OPERATOR_CONTROLLER.getRightY() < 15){
+      new RunCommand(cExtendClimberRight::schedule, Climbers.getInstance());
+    }
+    else{
+      new RunCommand(cExtendClimberRight::cancel, Climbers.getInstance());
+    }
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
