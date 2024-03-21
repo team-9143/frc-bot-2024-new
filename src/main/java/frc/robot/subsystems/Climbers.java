@@ -53,7 +53,7 @@ public class Climbers extends SafeSubsystem {
   // TODO(climbers): Try to add a small bit of documentation here! See shooter
   public Command extendClimberLeft() {
     // TODO(climbers): If you want this to update with the joystick, use runEnd()
-    return startEnd(
+    return runEnd(
         () ->
             m_leftClimberMotor.setVoltage(
                 ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY()),
@@ -63,10 +63,20 @@ public class Climbers extends SafeSubsystem {
   // TODO(climbers): Try to add a small bit of documentation here! See shooter
   public Command extendClimberRight() {
     // TODO(climbers): If you want this to update with the joystick, use runEnd()
-    return startEnd(
+    return runEnd(
         () ->
             m_rightClimberMotor.setVoltage(
                 ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY()),
+        this::stopRight);
+  }
+
+  public Command extendClimber() {
+    return runEnd(
+        () -> {
+            m_rightClimberMotor.setVoltage(
+                ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY());
+            m_leftClimberMotor.setVoltage(
+              ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY());},
         this::stopRight);
   }
 

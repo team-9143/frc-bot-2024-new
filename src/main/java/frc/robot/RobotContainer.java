@@ -140,24 +140,12 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
 
-    final Command cExtendClimberLeft = Climbers.getInstance().extendClimberLeft();
+    final Command cExtendClimbers = Climbers.getInstance().extendClimber();
 
-    final Command cExtendClimberRight = Climbers.getInstance().extendClimberRight();
-
-    //Left Joystick controls left climber
-    if (OI.OPERATOR_CONTROLLER.getLeftY() > 15 || OI.OPERATOR_CONTROLLER.getLeftY() < 15){
-      new RunCommand(cExtendClimberLeft::schedule, Climbers.getInstance());
-    }
-    else{
-      new RunCommand(cExtendClimberLeft::cancel, Climbers.getInstance());
-    }
-    //Right Joystick controls right climber
-    if (OI.OPERATOR_CONTROLLER.getRightY() > 15 || OI.OPERATOR_CONTROLLER.getRightY() < 15){
-      new RunCommand(cExtendClimberRight::schedule, Climbers.getInstance());
-    }
-    else{
-      new RunCommand(cExtendClimberRight::cancel, Climbers.getInstance());
-    }
+    //Joystick Y controls climbers
+    new Trigger(() -> 
+      Math.abs(OI.OPERATOR_CONTROLLER.getLeftY()) > 0.15 || Math.abs(OI.OPERATOR_CONTROLLER.getRightY()) > 0.15)
+        .onTrue(new InstantCommand(() -> cExtendClimbers.schedule()));
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
