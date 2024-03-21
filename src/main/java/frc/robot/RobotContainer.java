@@ -24,6 +24,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+// TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN utilization.
+
+// TODO(!!!IMPORTANT!!!): Run spotless (spotlessApply under VSCode command "Gradle Build") b4 commit
+
 /**
  * Robot structure declaration. Initializes trigger mappings, OI devices, and main stop mechanism.
  */
@@ -139,6 +143,18 @@ public class RobotContainer {
     final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
+
+    /*
+     * TODO(climbers): This in fact will not work how you expect it to...
+     * The command will schedule when the joystick is first moved and then be active forever.
+     * Theres a few things in here that are badly written, I can explain better not in comments.
+     * Also, the joystick calls come with a build-in deadband, see the CustomController class.
+     *
+     * Talk to me for more, or just make the extendClimbers command the default command for the Climbers subsystem so that it's always running. Do this in the constructor.
+     * Also, make a private constructor. Even if its empty.
+     *
+     * Best, Sid
+     */
 
     final Command cExtendClimbers = Climbers.getInstance().extendClimber();
 
