@@ -50,6 +50,8 @@ public class Climbers extends SafeSubsystem {
 
   // TODO(climbers): Remember to add a private constructor here, even if empty
 
+  // TODO(climbers): The below 2 methods seem unused, delete?
+
   // TODO(climbers): Try to add a small bit of documentation here! See shooter
   public Command extendClimberLeft() {
     // TODO(climbers): If you want this to update with the joystick, use runEnd()
@@ -70,6 +72,7 @@ public class Climbers extends SafeSubsystem {
         this::stopRight);
   }
 
+  // TODO(climbers): rename extendClimbers()
   public Command extendClimber() {
     return runEnd(
         () -> {
@@ -77,19 +80,20 @@ public class Climbers extends SafeSubsystem {
                 ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY());
             m_leftClimberMotor.setVoltage(
               ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY());},
+        // TODO(climbers): hmmmmm, somethings wrong in the next line
         this::stopRight);
   }
 
   @Override
-  public void log() {
-
-  }
+  public void log() {}
 
   @Override
   public void stop() {
     m_leftClimberMotor.stopMotor();
     m_rightClimberMotor.stopMotor();
   }
+
+  // TODO(climbers): These next two methods are unused, delete?
 
   private void stopRight() {
     m_rightClimberMotor.stopMotor();
