@@ -84,7 +84,7 @@ public class Constants {
     public static final byte kBottomShooterMotorID = 4;
 
     public static final double kSourceIntakeVolts = 9;
-    public static final double kShootVolts = -10;
+    public static final double kShootVolts = -5; // -10;
   }
 
   public static class FeederConsts {
@@ -92,6 +92,13 @@ public class Constants {
 
     public static final double kFeedUpVolts = -10;
     public static final double kFeedDownVolts = 1;
+  }
+
+  public static class ClimberConsts {
+    public static final byte kLeftClimberID = 6;
+    public static final byte kRightClimberID = 7;
+
+    public static final double kClimberVolts = -12;
   }
 
   /** Data for each individual swerve module. */

@@ -15,10 +15,10 @@ public enum Starter {
   public Command getCommand() {
     switch (this) {
       case Shoot:
-        return getFullShootCommand().withTimeout(2);
+        return getFullShootCommand().withTimeout(1.25);
 
       case Wait_and_shoot:
-        return new WaitCommand(0.5).andThen(getFullShootCommand().withTimeout(2));
+        return new WaitCommand(0.5).andThen(getFullShootCommand().withTimeout(1.25));
 
       default:
         return new InstantCommand();

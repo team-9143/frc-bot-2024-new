@@ -14,10 +14,19 @@ import frc.robot.devices.Controller.btn;
 import frc.robot.devices.OI;
 import frc.robot.logger.LoggedPowerDistribution;
 import frc.robot.logger.Logger;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climbers;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.SafeSubsystem;
+import frc.robot.subsystems.Shooter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+// TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN
+// utilization.
+
+// TODO(!!!IMPORTANT!!!): Run spotless (spotlessApply under VSCode command "Gradle Build") b4 commit
 
 /**
  * Robot structure declaration. Initializes trigger mappings, OI devices, and main stop mechanism.
@@ -134,6 +143,27 @@ public class RobotContainer {
     final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
+
+    /*
+     * TODO(climbers): This in fact will not work how you expect it to...
+     * The command will schedule when the joystick is first moved and then be active forever.
+     * Theres a few things in here that are badly written, I can explain better not in comments.
+     * Also, the joystick calls come with a build-in deadband, see the CustomController class.
+     *
+     * Talk to me for more, or just make the extendClimbers command the default command for the Climbers subsystem so that it's always running. Do this in the constructor.
+     * Also, make a private constructor. Even if its empty.
+     *l
+     * Best, Sid
+     */
+
+    final Command cExtendClimbers = Climbers.getInstance().extendClimber();
+
+    // Joystick Y controls climbers
+    new Trigger(
+            () ->
+                Math.abs(OI.OPERATOR_CONTROLLER.getLeftY()) > 0.15
+                    || Math.abs(OI.OPERATOR_CONTROLLER.getRightY()) > 0.15)
+        .onTrue(new InstantCommand(() -> cExtendClimbers.schedule()));
   }
 
   /** Calls all subsystem stop methods. Does not stop commands. */
