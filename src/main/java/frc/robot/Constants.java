@@ -54,12 +54,12 @@ public class Constants {
   /** Data relating to the entire drivetrain. */
   public static class DriveConsts {
     // Upper bound drivetrain constraints
-    /** 80% of theoretical max */
+    /** Competition speed: 80% of theoretical max */
     public static final double kMaxLinearVelMetersPerSecond =
         PhysConsts.kSwerveDriveMaxRPS
             * PhysConsts.kSwerveDriveMechToSens
             * PhysConsts.kSwerveWheelCircumferenceMeters
-            * 0.8;
+            * 0.6; // Speed during competition was 80%. Reduced to 60% for Sunset Showdown
 
     // ω = velocity / radius
     public static final double kMaxTurnVelRadiansPerSecond =
