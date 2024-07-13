@@ -10,8 +10,14 @@ import frc.robot.subsystems.Drivetrain;
 /** Enum of starting positions to set drivetrain odometry and meet path expectations. */
 public enum StartPose {
   Subwoofer_amp_side(new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))),
+  Subwoofer_amp_side_v2(new Pose2d(0.88, 6.57, Rotation2d.fromDegrees(60))),
   Subwoofer_source_side(new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))),
+  Subwoofer_source_side_v2(new Pose2d(0.88, 4.53, Rotation2d.fromDegrees(-60))),
   Subwoofer_front(new Pose2d(1.36, 5.55, new Rotation2d())),
+  Subwoofer_front_v2(new Pose2d(1.36, 5.55, new Rotation2d())),
+  Subwoofer_source_side_v3(new Pose2d(0.75, 4.46, Rotation2d.fromDegrees(-60))),
+  Subwoofer_amp_side_v3(new Pose2d(0.75, 6.62, Rotation2d.fromDegrees(60))),
+
   Wing(new Pose2d(1.36, 1.62, new Rotation2d()));
 
   /** Raw unflipped pose */
@@ -36,9 +42,6 @@ public enum StartPose {
    * robot-oriented movement)
    */
   public Pose2d getDSRelativePose() {
-    return Pathing.isRedAlliance()
-        ? new Pose2d(
-            GeometryUtil.flipFieldPosition(pose.getTranslation()), pose.getRotation().unaryMinus())
-        : pose;
+    return Pathing.isRedAlliance() ? GeometryUtil.flipFieldPose(pose) : pose;
   }
 }

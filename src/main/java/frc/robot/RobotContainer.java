@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.Starter;
 import frc.robot.devices.Controller.btn;
@@ -24,7 +23,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-// TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN utilization.
+// TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN
+// utilization.
 
 // TODO(!!!IMPORTANT!!!): Run spotless (spotlessApply under VSCode command "Gradle Build") b4 commit
 
@@ -152,15 +152,17 @@ public class RobotContainer {
      *
      * Talk to me for more, or just make the extendClimbers command the default command for the Climbers subsystem so that it's always running. Do this in the constructor.
      * Also, make a private constructor. Even if its empty.
-     *
+     *l
      * Best, Sid
      */
 
     final Command cExtendClimbers = Climbers.getInstance().extendClimber();
 
-    //Joystick Y controls climbers
-    new Trigger(() -> 
-      Math.abs(OI.OPERATOR_CONTROLLER.getLeftY()) > 0.15 || Math.abs(OI.OPERATOR_CONTROLLER.getRightY()) > 0.15)
+    // Joystick Y controls climbers
+    new Trigger(
+            () ->
+                Math.abs(OI.OPERATOR_CONTROLLER.getLeftY()) > 0.15
+                    || Math.abs(OI.OPERATOR_CONTROLLER.getRightY()) > 0.15)
         .onTrue(new InstantCommand(() -> cExtendClimbers.schedule()));
   }
 

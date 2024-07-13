@@ -76,10 +76,11 @@ public class Climbers extends SafeSubsystem {
   public Command extendClimber() {
     return runEnd(
         () -> {
-            m_rightClimberMotor.setVoltage(
-                ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY());
-            m_leftClimberMotor.setVoltage(
-              ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY());},
+          m_rightClimberMotor.setVoltage(
+              ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY());
+          m_leftClimberMotor.setVoltage(
+              ClimberConsts.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY());
+        },
         // TODO(climbers): hmmmmm, somethings wrong in the next line
         this::stopRight);
   }
