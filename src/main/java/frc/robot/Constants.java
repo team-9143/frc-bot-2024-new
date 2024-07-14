@@ -83,8 +83,6 @@ public class Constants {
     public static final byte kTopShooterMotorID = 5;
     public static final byte kBottomShooterMotorID = 4;
 
-    public static final double kSourceIntakeVolts = 9;
-    public static final double kShootVolts = -5; // -10;
   }
 
   public static class FeederConsts {
@@ -119,7 +117,7 @@ public class Constants {
                 0.095,
                 0.0006,
                 // CANcoder offset
-                -0.100342,
+                -0.100341,
                 11,
                 12,
                 13,
@@ -132,7 +130,7 @@ public class Constants {
                 0.1,
                 0.00065,
                 // CANcoder offset
-                -0.679443,
+                -0.678955,
                 21,
                 22,
                 23,
@@ -145,7 +143,7 @@ public class Constants {
                 0.105,
                 0.0004,
                 // CANcoder offset
-                -0.088867,
+                -0.088378,
                 31,
                 32,
                 33,
@@ -158,7 +156,7 @@ public class Constants {
                 0.09,
                 0.00065,
                 // CANcoder offset
-                -0.679443,
+                -0.847900,
                 41,
                 42,
                 43,
