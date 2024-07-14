@@ -83,12 +83,14 @@ public class Constants {
     public static final byte kTopShooterMotorID = 5;
     public static final byte kBottomShooterMotorID = 4;
 
+    public static final double kSourceIntakeVolts = 6; // 9
+    public static final double kShootVolts = -8; // -10;
   }
 
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kFeedUpVolts = -10;
+    public static final double kFeedUpVolts = -8; // -10
     public static final double kFeedDownVolts = 1;
   }
 
