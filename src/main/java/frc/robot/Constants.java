@@ -59,7 +59,7 @@ public class Constants {
         PhysConsts.kSwerveDriveMaxRPS
             * PhysConsts.kSwerveDriveMechToSens
             * PhysConsts.kSwerveWheelCircumferenceMeters
-            * 0.6; // Speed during competition was 80%. Reduced to 60% for Sunset Showdown
+            * 1.0; // Speed during competition was 80%. Reduced to 60% for Sunset Showdown
 
     // ω = velocity / radius
     public static final double kMaxTurnVelRadiansPerSecond =
@@ -83,22 +83,24 @@ public class Constants {
     public static final byte kTopShooterMotorID = 5;
     public static final byte kBottomShooterMotorID = 4;
 
-    public static final double kSourceIntakeVolts = 6; // 9
-    public static final double kShootVolts = -8; // -10;
+    public static final double kSourceIntakeVolts =
+        8; // Competition season speed was 9; changed to 8 for Sunset Showdown
+    public static final double kShootVolts =
+        -8; // Competition season speed was -10; changed to -8 for Sunset Showdown
   }
 
   public static class FeederConsts {
     public static final byte kFeedMotorID = 3;
 
-    public static final double kFeedUpVolts = -8; // -10
-    public static final double kFeedDownVolts = 1;
+    public static final double kFeedUpVolts = -10; // Competition season speed was -10
+    public static final double kFeedDownVolts = 1; // Competition season speed was 1
   }
 
   public static class ClimberConsts {
     public static final byte kLeftClimberID = 6;
     public static final byte kRightClimberID = 7;
 
-    public static final double kClimberVolts = -12;
+    public static final double kClimberVolts = -12; // Competition season speed was -12
   }
 
   /** Data for each individual swerve module. */
@@ -119,11 +121,11 @@ public class Constants {
                 0.095,
                 0.0006,
                 // CANcoder offset
-                -0.100341,
+                -0.53125,
                 11,
                 12,
                 13,
-                new Translation2d(0.14605, 0.24765)),
+                new Translation2d(0.212471, 0.263271)),
         kSwerve_fr =
             new SwerveModuleConstants(
                 "SwerveFR",
@@ -132,11 +134,11 @@ public class Constants {
                 0.1,
                 0.00065,
                 // CANcoder offset
-                -0.678955,
+                -0.680908,
                 21,
                 22,
                 23,
-                new Translation2d(0.14605, -0.24765)),
+                new Translation2d(0.212471, -0.263271)),
         kSwerve_bl =
             new SwerveModuleConstants(
                 "SwerveBL",
@@ -145,11 +147,11 @@ public class Constants {
                 0.105,
                 0.0004,
                 // CANcoder offset
-                -0.088378,
+                -0.609863,
                 31,
                 32,
                 33,
-                new Translation2d(-0.24765, 0.24765)),
+                new Translation2d(-0.212471, 0.263271)),
         kSwerve_br =
             new SwerveModuleConstants(
                 "SwerveBR",
@@ -158,11 +160,11 @@ public class Constants {
                 0.09,
                 0.00065,
                 // CANcoder offset
-                -0.847900,
+                -0.007324,
                 41,
                 42,
                 43,
-                new Translation2d(-0.24765, -0.24765));
+                new Translation2d(-0.212471, -0.263271));
 
     /** Drive base radius for angular velocity calcs (use swerve module farthest from COR) */
     public static final double kDriveBaseRadius =

@@ -30,9 +30,9 @@ public class AutoSelector {
 
     // Add to shuffleboard
     var tab = Shuffleboard.getTab("Auton");
-    tab.add("Start pose", chooser_startPose).withPosition(0, 2).withSize(3, 2);
-    tab.add("Starter", chooser_starter).withPosition(3, 2).withSize(3, 2);
-    tab.add("Body", chooser_body).withPosition(6, 2).withSize(3, 2);
+    tab.add("Start pose", chooser_startPose).withPosition(0, 2).withSize(4, 2);
+    tab.add("Starter", chooser_starter).withPosition(0, 4).withSize(4, 2);
+    tab.add("Body", chooser_body).withPosition(0, 6).withSize(4, 2);
 
     tab.addBoolean(
             "Reset defaults if red",
@@ -42,9 +42,13 @@ public class AutoSelector {
                     || chooser_body.isUpdateReq()))
         .withPosition(0, 0)
         .withSize(4, 2);
+
+    // Limelight stream, maybe
+    // HttpCamera httpCamera = new HttpCamera("Limelight", "http://10.91.43.11:5800/stream.mjpg");
+    // tab.add(httpCamera).withPosition(4, 0).withSize(15, 7);
   }
 
-  /** Returns a full auto routine */
+  /** Returns a fu ll auto routine */
   public static Command getAuto() {
     var startPose = chooser_startPose.getSelected();
     var starter = chooser_starter.getSelected();
