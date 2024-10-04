@@ -78,6 +78,9 @@ public class Robot extends TimedRobot {
 
     // Initialize Tunables
     TunableNumber.initializeShuffleboard();
+
+    // Cancels all running commands at the start of test mode.
+    CommandScheduler.getInstance().cancelAll();
   }
 
   @Override

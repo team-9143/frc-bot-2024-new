@@ -80,7 +80,7 @@ public class Constants {
   }
 
   public static class ShooterConsts {
-    public static final byte kTopShooterMotorID = 5;
+    public static final byte kTopShooterMotorID = 9; // Originally 5; swapped to 8 with KitBot
     public static final byte kBottomShooterMotorID = 4;
 
     public static final double kSourceIntakeVolts =
@@ -97,8 +97,8 @@ public class Constants {
   }
 
   public static class ClimberConsts {
-    public static final byte kLeftClimberID = 6;
-    public static final byte kRightClimberID = 7;
+    public static final byte kLeftClimberID = 7; // Originally 6; swapped to 7 with KitBot
+    public static final byte kRightClimberID = 8; // Originally 7; swapped to 8 with KitBot
 
     public static final double kClimberVolts = -12; // Competition season speed was -12
   }
@@ -117,54 +117,54 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveFL",
                 // Azimuth gains (kS, kP, kD)
-                0.1,
-                0.095,
-                0.0006,
+                0.1, // 0.1
+                0.1, // 0.095
+                0.0005, // 0.0006
                 // CANcoder offset
-                -0.53125,
+                -0.678466,
                 11,
                 12,
                 13,
-                new Translation2d(0.212471, 0.263271)),
+                new Translation2d(-0.212461, -0.263261)), // 0.212471, 0.263271
         kSwerve_fr =
             new SwerveModuleConstants(
                 "SwerveFR",
                 // Azimuth gains (kS, kP, kD)
-                0.092,
-                0.1,
-                0.00065,
+                0.1, // 0.092
+                0.1, // 0.092
+                0.0005, // 0.00065
                 // CANcoder offset
-                -0.680908,
+                -0.183593,
                 21,
                 22,
                 23,
-                new Translation2d(0.212471, -0.263271)),
+                new Translation2d(-0.212461, 0.263261)), // 0.212471, -0.263271
         kSwerve_bl =
             new SwerveModuleConstants(
                 "SwerveBL",
                 // Azimuth gains (kS, kP, kD)
-                0.08,
-                0.105,
-                0.0004,
+                0.1, // 0.08
+                0.1, // 0.105
+                0.0005, // 0.0004
                 // CANcoder offset
-                -0.609863,
+                -0.103759,
                 31,
                 32,
                 33,
-                new Translation2d(-0.212471, 0.263271)),
+                new Translation2d(0.212461, -0.263261)), // -0.212471, 0.263271
         kSwerve_br =
             new SwerveModuleConstants(
                 "SwerveBR",
                 // Azimuth gains (kS, kP, kD)
-                0.092,
-                0.09,
-                0.00065,
+                0.1, // 0.092
+                0.1, // 0.09
+                0.0005, // 0.00065
                 // CANcoder offset
-                -0.007324,
+                -0.499023,
                 41,
                 42,
                 43,
-                new Translation2d(-0.212471, -0.263271));
+                new Translation2d(0.212461, 0.263261)); // -0.212471, -0.263271
 
     /** Drive base radius for angular velocity calcs (use swerve module farthest from COR) */
     public static final double kDriveBaseRadius =
@@ -183,5 +183,24 @@ public class Constants {
     // Gains for drivetrain position error -> velocity
     public static final TunableNumber kTranslateP = new TunableNumber("P", 5, "Robot Translation");
     public static final TunableNumber kTranslateD = new TunableNumber("D", 0, "Robot Translation");
+  }
+
+  public static class LauncherConstants {
+    // PWM ports/CAN IDs for motor controllers
+    public static final int kFeederID = 5;
+    public static final int kLauncherID = 6;
+
+    // Current limit for launcher and feed wheels
+    public static final int kLauncherCurrentLimit = 80;
+    public static final int kFeedCurrentLimit = 80;
+
+    // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
+    // in reverse
+    public static final double kLauncherSpeed = -1;
+    public static final double kLaunchFeederSpeed = -1;
+    public static final double kIntakeLauncherSpeed = 1;
+    public static final double kIntakeFeederSpeed = .3;
+
+    public static final double kLauncherDelay = 1;
   }
 }

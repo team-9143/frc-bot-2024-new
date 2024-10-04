@@ -9,19 +9,25 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.LauncherConstants;
 import frc.robot.autos.Starter;
+import frc.robot.commands.LaunchNote;
+import frc.robot.commands.PrepareLaunch;
 import frc.robot.devices.Controller.btn;
 import frc.robot.devices.OI;
 import frc.robot.logger.LoggedPowerDistribution;
 import frc.robot.logger.Logger;
+import frc.robot.subsystems.CANLauncher;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.SafeSubsystem;
-import frc.robot.subsystems.Shooter;
+// import frc.robot.subsystems.Shooter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 // TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN
 // utilization.
@@ -33,6 +39,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class RobotContainer {
   private static boolean m_initialized = false;
+
+  private static final CANLauncher m_launcher = new CANLauncher();
 
   private static LoggedPowerDistribution powerDist;
 
@@ -86,7 +94,7 @@ public class RobotContainer {
   }
 
   /** Create button bindings. */
-  private static void configureBindings() {
+  public static void configureBindings() {
     // Button 'B' (hold) will continuously stop all movement
     new Trigger(
             () -> OI.DRIVER_CONTROLLER.getButton(btn.B) || OI.OPERATOR_CONTROLLER.getButton(btn.B))
@@ -127,12 +135,12 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
     // Button 'LB' (hold) Intakes game piece (source) using shooter and feeder wheels
-    final Command cSourceIntake =
-        Shooter.getInstance()
-            .getSourceIntakeCommand()
-            .alongWith(Feeder.getInstance().getFeedDownCommand());
-    OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cSourceIntake::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
+    // final Command cSourceIntake =
+    //    Shooter.getInstance()
+    //        .getSourceIntakeCommand()
+    //        .alongWith(Feeder.getInstance().getFeedDownCommand());
+    // OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cSourceIntake::schedule);
+    // OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
 
     // Button 'Y' (hold) Feeds a note upward
     final Command cFeedUp = Feeder.getInstance().getFeedUpCommand();
@@ -140,9 +148,27 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cFeedUp::cancel);
 
     // Button 'A' (hold) Feeds a note downward
-    final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
-    OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
+    // final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
+    // OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
+    // OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
+
+    /*Create a sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
+     * command for 1 seconds and then run the LaunchNote command */
+    final Command prepareLaunchCommand =
+        new PrepareLaunch(m_launcher)
+            .withTimeout(LauncherConstants.kLauncherDelay)
+            .andThen(new LaunchNote(m_launcher))
+            .handleInterrupt(() -> m_launcher.stop());
+
+    OI.OPERATOR_CONTROLLER.onTrue(btn.A, prepareLaunchCommand::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.A, prepareLaunchCommand::cancel);
+
+    // Set up a binding to run the intake command while the operator is pressing and holding the
+    // left Bumper
+    final Command intakeCommand = m_launcher.getIntakeCommand();
+
+    OI.OPERATOR_CONTROLLER.onTrue(btn.LB, intakeCommand::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.LB, intakeCommand::cancel);
 
     /*
      * TODO(climbers): This in fact will not work how you expect it to...
