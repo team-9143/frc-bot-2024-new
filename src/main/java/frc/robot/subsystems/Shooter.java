@@ -1,3 +1,4 @@
+/*
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -6,22 +7,22 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConsts;
-import frc.robot.Constants.ShooterConsts;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.devices.OI;
 import frc.robot.logger.Logger;
 import frc.robot.util.SparkUtils;
 
-/** Controls shooter wheels. */
+// Controls shooter wheels.
 public class Shooter extends SafeSubsystem {
   private static final CANSparkMax m_motor =
-      new CANSparkMax(ShooterConsts.kTopShooterMotorID, MotorType.kBrushless);
+      new CANSparkMax(ShooterConstants.kTopShooterMotorID, MotorType.kBrushless);
 
   private static final RelativeEncoder encoder_top = m_motor.getEncoder();
   private static final RelativeEncoder encoder_bottom;
 
   static {
     // Follower setup
-    var follower = new CANSparkMax(ShooterConsts.kBottomShooterMotorID, MotorType.kBrushless);
+    var follower = new CANSparkMax(ShooterConstants.kBottomShooterMotorID, MotorType.kBrushless);
     encoder_bottom = follower.getEncoder();
     SparkUtils.configure(
         follower,
@@ -43,7 +44,7 @@ public class Shooter extends SafeSubsystem {
 
   private static final Shooter m_instance = new Shooter();
 
-  /** Returns the singleton instance */
+  // Returns the singleton instance
   public static Shooter getInstance() {
     return m_instance;
   }
@@ -53,14 +54,14 @@ public class Shooter extends SafeSubsystem {
     setDefaultCommand(run(() -> m_motor.setVoltage(-OI.OPERATOR_CONTROLLER.getTriggers() * 12)));
   }
 
-  /** Returns a command to intake a game piece using shooter wheels */
+  // Returns a command to intake a game piece using shooter wheels
   public Command getSourceIntakeCommand() {
-    return startEnd(() -> m_motor.setVoltage(ShooterConsts.kSourceIntakeVolts), this::stop);
+    return startEnd(() -> m_motor.setVoltage(ShooterConstants.kSourceIntakeVolts), this::stop);
   }
 
-  /** Returns a command to shoot a game piece using shooter wheels */
+ // Returns a command to shoot a game piece using shooter wheels
   public Command getShootCommand() {
-    return startEnd(() -> m_motor.setVoltage(ShooterConsts.kShootVolts), this::stop);
+    return startEnd(() -> m_motor.setVoltage(ShooterConstants.kShootVolts), this::stop);
   }
 
   @Override
@@ -74,3 +75,4 @@ public class Shooter extends SafeSubsystem {
     Logger.recordOutput(getDirectory() + "bottomRPS", encoder_bottom.getVelocity());
   }
 }
+*/

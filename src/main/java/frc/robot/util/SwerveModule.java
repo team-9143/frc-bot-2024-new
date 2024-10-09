@@ -12,9 +12,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants.DriveConsts;
-import frc.robot.Constants.PhysConsts;
-import frc.robot.Constants.SwerveConsts;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PhysConstants;
+import frc.robot.Constants.SwerveConstants;
 import java.util.function.Supplier;
 
 /** Controls a single swerve module. */
@@ -51,15 +51,15 @@ public class SwerveModule {
     SparkUtils.configure(
         drive_motor,
         () -> drive_motor.setIdleMode(IdleMode.kBrake),
-        () -> drive_motor.setSmartCurrentLimit(PhysConsts.kNEOCurrentLimit),
+        () -> drive_motor.setSmartCurrentLimit(PhysConstants.kNEOCurrentLimit),
         () ->
             drive_encoder.setPositionConversionFactor(
-                PhysConsts.kSwerveDriveMechToSens
-                    * PhysConsts.kSwerveWheelCircumferenceMeters), // UNIT: meters
+                PhysConstants.kSwerveDriveMechToSens
+                    * PhysConstants.kSwerveWheelCircumferenceMeters), // UNIT: meters
         () ->
             drive_encoder.setVelocityConversionFactor(
-                PhysConsts.kSwerveDriveMechToSens
-                    * PhysConsts.kSwerveWheelCircumferenceMeters
+                PhysConstants.kSwerveDriveMechToSens
+                    * PhysConstants.kSwerveWheelCircumferenceMeters
                     / 60),
         () ->
             drive_encoder.setMeasurementPeriod(
@@ -73,8 +73,8 @@ public class SwerveModule {
     SparkUtils.configure(
         azimuth_motor,
         () -> azimuth_motor.setIdleMode(IdleMode.kBrake),
-        () -> SparkUtils.setInverted(azimuth_motor, SwerveConsts.kAzimuthInverted),
-        () -> azimuth_motor.setSmartCurrentLimit(DriveConsts.kModuleAzimuthCurrentLimit),
+        () -> SparkUtils.setInverted(azimuth_motor, SwerveConstants.kAzimuthInverted),
+        () -> azimuth_motor.setSmartCurrentLimit(DriveConstants.kModuleAzimuthCurrentLimit),
         () -> SparkUtils.setPeriodicFrames(azimuth_motor, 10, 0, 0, 0, 0, 0, 0));
 
     // Configure CANcoder
@@ -107,9 +107,9 @@ public class SwerveModule {
     azimuth_motor.setVoltage(
         // Clamp to max voltage
         Math.max(
-            -DriveConsts.kModuleAzimuthMaxVoltage,
+            -DriveConstants.kModuleAzimuthMaxVoltage,
             Math.min(
-                DriveConsts.kModuleAzimuthMaxVoltage,
+                DriveConstants.kModuleAzimuthMaxVoltage,
                 // Simple static feedforward
                 Math.copySign(kS.getAsDouble(), angle - getAngle())
                     // Azimuth feedback controller
@@ -119,17 +119,17 @@ public class SwerveModule {
     drive_motor.setVoltage(
         // Clamp to nominal voltage
         Math.max(
-                -DriveConsts.kModuleDriveMaxVoltage,
+                -DriveConstants.kModuleDriveMaxVoltage,
                 Math.min(
-                    DriveConsts.kModuleDriveMaxVoltage,
+                    DriveConstants.kModuleDriveMaxVoltage,
                     // Simple static feedforward
-                    Math.copySign(SwerveConsts.kDriveS.getAsDouble(), speed)
+                    Math.copySign(SwerveConstants.kDriveS.getAsDouble(), speed)
                         // Simple velocity feedforward
-                        + DriveConsts.kModuleDriveMaxVoltage
+                        + DriveConstants.kModuleDriveMaxVoltage
                             * speed
-                            / DriveConsts.kMaxLinearVelMetersPerSecond
+                            / DriveConstants.kMaxLinearVelMetersPerSecond
                         // Feedback controller for velocity adjustment (helpful for pathing)
-                        + SwerveConsts.kDriveP.getAsDouble() * (speed - getVelocity())))
+                        + SwerveConstants.kDriveP.getAsDouble() * (speed - getVelocity())))
             // Scale velocity down if not at proper angle to reduce slip
             * Math.abs(Math.cos(getAngleError() * Math.PI / 180)));
   }

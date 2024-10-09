@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.DriveConsts;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.autos.AutoSelector;
 import frc.robot.logger.Logger;
 import frc.robot.subsystems.Drivetrain;
@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
     // Add periodic callback for drivetrain updates
     addPeriodic(
         Drivetrain::update,
-        DriveConsts.kPeriodMs / 1000d,
-        (kDefaultPeriod - (DriveConsts.kPeriodMs / 1000d)) / 2);
+        DriveConstants.kPeriodMs / 1000d,
+        (kDefaultPeriod - (DriveConstants.kPeriodMs / 1000d)) / 2);
   }
 
   @Override

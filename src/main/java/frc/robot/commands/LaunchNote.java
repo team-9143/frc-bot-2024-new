@@ -2,22 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/*
 package frc.robot.commands;
 
-import static frc.robot.Constants.LauncherConstants.*;
+import static frc.robot.Constants.KitBotConstants.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 // import frc.robot.subsystems.PWMLauncher;
 import frc.robot.subsystems.CANLauncher;
 
-/*This is an example of creating a command as a class. The base Command class provides a set of methods that your command
- * will override.
- */
+// This is an example of creating a command as a class. The base Command class provides a set of methods that your command will override.
+
 public class LaunchNote extends Command {
   // PWMLauncher m_launcher;
   CANLauncher m_launcher;
 
-  /** Creates a new LaunchNote. */
+  // Creates a new LaunchNote.
   public LaunchNote(CANLauncher launcher) {
     // save the launcher system internally
     m_launcher = launcher;
@@ -31,7 +31,7 @@ public class LaunchNote extends Command {
   public void initialize() {
     // Set the wheels to launching speed
     m_launcher.setLaunchWheel(kLauncherSpeed);
-    m_launcher.setFeedWheel(kLaunchFeederSpeed);
+    m_launcher.setFeedWheel(kFeederSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,3 +57,4 @@ public class LaunchNote extends Command {
     m_launcher.stop();
   }
 }
+*/

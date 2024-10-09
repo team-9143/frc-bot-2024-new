@@ -9,42 +9,34 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.LauncherConstants;
-import frc.robot.autos.Starter;
-import frc.robot.commands.LaunchNote;
-import frc.robot.commands.PrepareLaunch;
 import frc.robot.devices.Controller.btn;
 import frc.robot.devices.OI;
 import frc.robot.logger.LoggedPowerDistribution;
 import frc.robot.logger.Logger;
-import frc.robot.subsystems.CANLauncher;
+import frc.robot.subsystems.Amper;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.KitBot;
 import frc.robot.subsystems.SafeSubsystem;
-// import frc.robot.subsystems.Shooter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-// import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
 // TODO(!!!IMPORTANT!!!): Rebase & merge from the main branch. You will see a 20% drop in CAN
 // utilization.
 
-// TODO(!!!IMPORTANT!!!): Run spotless (spotlessApply under VSCode command "Gradle Build") b4 commit
+// TODO(!!!IMPORTANT!!!): Run spotless (spotlessApply under VSCode command "Gradle Build") before
+// commit.
 
-/**
- * Robot structure declaration. Initializes trigger mappings, OI devices, and main stop mechanism.
- */
+// Robot structure declaration. Initializes trigger mappings, OI devices, and main stop mechanism.
+
 public class RobotContainer {
   private static boolean m_initialized = false;
-
-  private static final CANLauncher m_launcher = new CANLauncher();
-
   private static LoggedPowerDistribution powerDist;
+  public final Amper amper = new Amper(); // Get instance of Amper.
+  public static boolean isHoldPositionActive = false;
 
-  /** Initialize robot container. */
+  // Initialize robot container.
   public static void init() {
     if (m_initialized == true) {
       return;
@@ -56,7 +48,7 @@ public class RobotContainer {
     configureBindings();
   }
 
-  /** Initialize driver station specific data. */
+  // Initialize driver station specific data.
   public static void initDS() {
     Logger.recordMetadata("Station", DriverStation.getRawAllianceStation().toString());
 
@@ -71,7 +63,7 @@ public class RobotContainer {
     Logger.initFilename();
   }
 
-  /** Send metadata to logger. */
+  // Send metadata to logger.
   private static void logMetadata() {
     Logger.recordMetadata(
         "Time",
@@ -86,14 +78,14 @@ public class RobotContainer {
     Logger.recordMetadata("PowerDistributionType", powerDist.getType().name());
   }
 
-  /** Initialize OI devices. */
+  // Initialize OI devices.
   private static void configureOI() {
     powerDist = new LoggedPowerDistribution();
     // Stop those ridiculously persistent messages
     DriverStation.silenceJoystickConnectionWarning(true);
   }
 
-  /** Create button bindings. */
+  // Create button bindings.
   public static void configureBindings() {
     // Button 'B' (hold) will continuously stop all movement
     new Trigger(
@@ -130,9 +122,9 @@ public class RobotContainer {
 
   private static void configureOperator() {
     // Button 'RB' (hold) Shoots held note using feeder and shooter wheels
-    final Command cShoot = Starter.getFullShootCommand();
-    OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
+    // final Command cShoot = Starter.getFullShootCommand();
+    // OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
+    // OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
 
     // Button 'LB' (hold) Intakes game piece (source) using shooter and feeder wheels
     // final Command cSourceIntake =
@@ -143,35 +135,55 @@ public class RobotContainer {
     // OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
 
     // Button 'Y' (hold) Feeds a note upward
-    final Command cFeedUp = Feeder.getInstance().getFeedUpCommand();
-    OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cFeedUp::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cFeedUp::cancel);
+    // final Command cFeedUp = Feeder.getInstance().getFeedUpCommand();
+    // OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cFeedUp::schedule);
+    // OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cFeedUp::cancel);
 
     // Button 'A' (hold) Feeds a note downward
     // final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
     // OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
     // OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
 
-    /*Create a sequence to run when the operator presses and holds the A (green) button. Run the PrepareLaunch
-     * command for 1 seconds and then run the LaunchNote command */
-    final Command prepareLaunchCommand =
-        new PrepareLaunch(m_launcher)
-            .withTimeout(LauncherConstants.kLauncherDelay)
-            .andThen(new LaunchNote(m_launcher))
-            .handleInterrupt(() -> m_launcher.stop());
-
-    OI.OPERATOR_CONTROLLER.onTrue(btn.A, prepareLaunchCommand::schedule);
-    OI.OPERATOR_CONTROLLER.onFalse(btn.A, prepareLaunchCommand::cancel);
-
-    // Set up a binding to run the intake command while the operator is pressing and holding the
-    // left Bumper
-    final Command intakeCommand = m_launcher.getIntakeCommand();
-
+    // Set up a binding to run the KitBot intake command while the operator is pressing and holding
+    // the left bumper.
+    final Command intakeCommand = KitBot.getInstance().getIntakeCommand();
     OI.OPERATOR_CONTROLLER.onTrue(btn.LB, intakeCommand::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.LB, intakeCommand::cancel);
 
+    // Set up a binding to run the KitBot shoot command while the operator is pressing and holding
+    // the right bumper.
+    final Command shootCommand = KitBot.getInstance().getShootCommand();
+    OI.OPERATOR_CONTROLLER.onTrue(btn.RB, shootCommand::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.RB, shootCommand::cancel);
+
+    // Set up a binding to run the Amper intake command while the operator is pressing and holding
+    // the A button.
+    final Command amperIntakeCommand = Amper.getInstance().getIntakeCommand();
+    OI.OPERATOR_CONTROLLER.onTrue(btn.A, amperIntakeCommand::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.A, amperIntakeCommand::cancel);
+
+    // Set up a binding to run the Amper score command while the operator is pressing and holding
+    // the Y button.
+    final Command amperScoreCommand = Amper.getInstance().getScoreCommand();
+    OI.OPERATOR_CONTROLLER.onTrue(btn.Y, amperScoreCommand::schedule);
+    OI.OPERATOR_CONTROLLER.onFalse(btn.Y, amperScoreCommand::cancel);
+
+    // Set up a binding to run the Amper hold position command while the operator is pressing and
+    // holding the X button.
+    OI.OPERATOR_CONTROLLER.onTrue(
+        btn.X,
+        () -> {
+          if (isHoldPositionActive) {
+            Amper.getInstance().stop();
+            isHoldPositionActive = false;
+          } else {
+            Amper.getInstance().getHoldPositionCommand();
+            isHoldPositionActive = true;
+          }
+        });
+
     /*
-     * TODO(climbers): This in fact will not work how you expect it to...
+     * TODO (climbers): This in fact will not work how you expect it to...
      * The command will schedule when the joystick is first moved and then be active forever.
      * Theres a few things in here that are badly written, I can explain better not in comments.
      * Also, the joystick calls come with a build-in deadband, see the CustomController class.
@@ -182,8 +194,7 @@ public class RobotContainer {
      * Best, Sid
      */
 
-    final Command cExtendClimbers = Climbers.getInstance().extendClimber();
-
+    final Command cExtendClimbers = Climbers.getInstance().extendClimbers();
     // Joystick Y controls climbers
     new Trigger(
             () ->
@@ -192,7 +203,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> cExtendClimbers.schedule()));
   }
 
-  /** Calls all subsystem stop methods. Does not stop commands. */
+  // Calls all subsystem stop methods. Does not stop commands.
   public static void stop() {
     for (SafeSubsystem e : SafeSubsystem.getAll()) {
       e.stop();

@@ -1,3 +1,4 @@
+/*
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -12,7 +13,7 @@ import frc.robot.Constants.PhysConsts;
 import frc.robot.logger.Logger;
 import java.util.function.Supplier;
 
-/** Controls feeder wheels */
+// Controls feeder wheels
 public class Feeder extends SafeSubsystem {
   private static final TalonFXConfiguration configs =
       new TalonFXConfiguration()
@@ -37,19 +38,19 @@ public class Feeder extends SafeSubsystem {
 
   private static final Feeder m_instance = new Feeder();
 
-  /** Returns the singleton instance */
+  // Returns the singleton instance
   public static Feeder getInstance() {
     return m_instance;
   }
 
   private Feeder() {}
 
-  /** Returns a command to feed a note from the intake to the shooter */
+  // Returns a command to feed a note from the intake to the shooter
   public Command getFeedUpCommand() {
     return startEnd(() -> m_motor.setVoltage(FeederConsts.kFeedUpVolts), this::stop);
   }
 
-  /** Returns a command to feed a note down from the shooter to intake from the source */
+  // Returns a command to feed a note down from the shooter to intake from the source
   public Command getFeedDownCommand() {
     return startEnd(() -> m_motor.setVoltage(FeederConsts.kFeedDownVolts), this::stop);
   }
@@ -64,3 +65,4 @@ public class Feeder extends SafeSubsystem {
     Logger.recordOutput(getDirectory() + "velRPS", m_velocitySupplier.get());
   }
 }
+*/

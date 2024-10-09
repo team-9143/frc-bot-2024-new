@@ -13,9 +13,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AutoConsts;
-import frc.robot.Constants.DriveConsts;
-import frc.robot.Constants.SwerveConsts;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.logger.Logger;
 import frc.robot.subsystems.Drivetrain;
 import java.util.Collections;
@@ -31,10 +31,10 @@ public class Pathing {
   /** Default constraints for accurately generating and following paths */
   private static final PathConstraints DEFAULT_CONSTRAINTS =
       new PathConstraints(
-          DriveConsts.kMaxLinearVelMetersPerSecond,
-          AutoConsts.kMaxLinearAccelMetersPerSecondSquared,
-          DriveConsts.kMaxTurnVelRadiansPerSecond,
-          AutoConsts.kMaxTurnAccelRadiansPerSecondSquared);
+          DriveConstants.kMaxLinearVelMetersPerSecond,
+          AutoConstants.kMaxLinearAccelMetersPerSecondSquared,
+          DriveConstants.kMaxTurnVelRadiansPerSecond,
+          AutoConstants.kMaxTurnAccelRadiansPerSecondSquared);
 
   // Set up logging for basic path following
   static {
@@ -195,17 +195,17 @@ public class Pathing {
     return new HolonomicPathFollowerConfig(
         // Translation controller for position error -> velocity
         new PIDConstants(
-            AutoConsts.kTranslateP.getAsDouble(), 0, AutoConsts.kTranslateD.getAsDouble()),
+            AutoConstants.kTranslateP.getAsDouble(), 0, AutoConstants.kTranslateD.getAsDouble()),
         // Rotational gains are multiplied by "radius" (use swerve module farthest from COR) to
         // change units from radians to meters so that gains can theoretically be the same
         new PIDConstants(
-            AutoConsts.kTranslateP.getAsDouble() * SwerveConsts.kDriveBaseRadius,
+            AutoConstants.kTranslateP.getAsDouble() * SwerveConstants.kDriveBaseRadius,
             0,
-            AutoConsts.kTranslateD.getAsDouble() * SwerveConsts.kDriveBaseRadius),
+            AutoConstants.kTranslateD.getAsDouble() * SwerveConstants.kDriveBaseRadius),
         // Maximum module speed
-        DriveConsts.kMaxLinearVelMetersPerSecond,
+        DriveConstants.kMaxLinearVelMetersPerSecond,
         // Radius of drive base
-        frc.robot.Constants.SwerveConsts.kSwerve_fl.location.getDistance(new Translation2d()),
+        frc.robot.Constants.SwerveConstants.kSwerve_fl.location.getDistance(new Translation2d()),
         // When to replan the path
         replanningConfig);
   }

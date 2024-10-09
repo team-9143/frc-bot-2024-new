@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.MotorSafety;
-import frc.robot.Constants.DriveConsts;
+import frc.robot.Constants.DriveConstants;
 import java.util.function.Supplier;
 
 /**
@@ -43,10 +43,10 @@ public class SwerveDrive extends MotorSafety {
     // Initialize swerve modules
     modules =
         new SwerveModule[] {
-          new SwerveModule(consts_fl, DriveConsts.kPeriodMs),
-          new SwerveModule(consts_fr, DriveConsts.kPeriodMs),
-          new SwerveModule(consts_bl, DriveConsts.kPeriodMs),
-          new SwerveModule(consts_br, DriveConsts.kPeriodMs)
+          new SwerveModule(consts_fl, DriveConstants.kPeriodMs),
+          new SwerveModule(consts_fr, DriveConstants.kPeriodMs),
+          new SwerveModule(consts_bl, DriveConstants.kPeriodMs),
+          new SwerveModule(consts_br, DriveConstants.kPeriodMs)
         };
 
     // Initialize kinematics
@@ -111,7 +111,7 @@ public class SwerveDrive extends MotorSafety {
     desiredStates[3] = state_br;
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConsts.kMaxLinearVelMetersPerSecond);
+        desiredStates, DriveConstants.kMaxLinearVelMetersPerSecond);
 
     feed();
   }

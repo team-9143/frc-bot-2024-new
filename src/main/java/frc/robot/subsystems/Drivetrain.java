@@ -10,9 +10,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.Config;
-import frc.robot.Constants.DeviceConsts;
-import frc.robot.Constants.DriveConsts;
-import frc.robot.Constants.SwerveConsts;
+import frc.robot.Constants.DeviceConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.devices.OI;
 import frc.robot.logger.Logger;
 import frc.robot.util.SwerveDrive;
@@ -20,7 +20,7 @@ import frc.robot.util.SwerveDrive;
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SafeSubsystem {
   // Pigeon2 setup
-  private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConsts.kPigeonID);
+  private static final Pigeon2 m_pigeon2 = new Pigeon2(DeviceConstants.kPigeonID);
   private static final StatusSignal<Double> m_yawSignal = m_pigeon2.getYaw();
   private static final StatusSignal<Double> m_pitchSignal = m_pigeon2.getPitch();
   private static final StatusSignal<Double> m_rollSignal = m_pigeon2.getRoll();
@@ -29,7 +29,7 @@ public class Drivetrain extends SafeSubsystem {
     m_pigeon2.getConfigurator().apply(Config.kPigeonMountPose);
     m_pigeon2.setYaw(0);
     StatusSignal.setUpdateFrequencyForAll(
-        1000d / DriveConsts.kPeriodMs, m_yawSignal, m_pitchSignal, m_rollSignal);
+        1000d / DriveConstants.kPeriodMs, m_yawSignal, m_pitchSignal, m_rollSignal);
     m_pigeon2.optimizeBusUtilization();
   }
 
@@ -47,10 +47,10 @@ public class Drivetrain extends SafeSubsystem {
   private static final SwerveDrive m_swerve =
       new SwerveDrive(
           m_pigeon2::getRotation2d,
-          SwerveConsts.kSwerve_fl,
-          SwerveConsts.kSwerve_fr,
-          SwerveConsts.kSwerve_bl,
-          SwerveConsts.kSwerve_br);
+          SwerveConstants.kSwerve_fl,
+          SwerveConstants.kSwerve_fr,
+          SwerveConstants.kSwerve_bl,
+          SwerveConstants.kSwerve_br);
 
   private static final Drivetrain m_instance = new Drivetrain();
 
@@ -73,15 +73,15 @@ public class Drivetrain extends SafeSubsystem {
               driveFieldRelativeVelocity(
                   new ChassisSpeeds(
                       Math.copySign(forward * forward, forward)
-                          * DriveConsts.kMaxLinearVelMetersPerSecond
-                          * DriveConsts.kTeleopSpeedMult,
+                          * DriveConstants.kMaxLinearVelMetersPerSecond
+                          * DriveConstants.kTeleopSpeedMult,
                       Math.copySign(left * left, left)
-                          * DriveConsts.kMaxLinearVelMetersPerSecond
-                          * DriveConsts.kTeleopSpeedMult,
+                          * DriveConstants.kMaxLinearVelMetersPerSecond
+                          * DriveConstants.kTeleopSpeedMult,
                       // Extra sensitivity for finer rotation control
                       Math.copySign(ccw * ccw * ccw, ccw)
-                          * DriveConsts.kMaxTurnVelRadiansPerSecond
-                          * DriveConsts.kTeleopTurnMult));
+                          * DriveConstants.kMaxTurnVelRadiansPerSecond
+                          * DriveConstants.kTeleopTurnMult));
             }));
   }
 
