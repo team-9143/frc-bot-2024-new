@@ -28,7 +28,7 @@ public class Constants {
   }
 
   // Physical parts of the robot, such as gearboxes or wheel diameters.
-  public static class PhysConstants {
+  public static class PhysicalConstants {
     // NEO V1.1 nominal voltage
     public static final int kNEOMaxVoltage = 12;
 
@@ -56,9 +56,9 @@ public class Constants {
     // Upper bound drivetrain constraints
     // Competition speed: 80% of theoretical max
     public static final double kMaxLinearVelMetersPerSecond =
-        PhysConstants.kSwerveDriveMaxRPS
-            * PhysConstants.kSwerveDriveMechToSens
-            * PhysConstants.kSwerveWheelCircumferenceMeters
+        PhysicalConstants.kSwerveDriveMaxRPS
+            * PhysicalConstants.kSwerveDriveMechToSens
+            * PhysicalConstants.kSwerveWheelCircumferenceMeters
             * 1.0; // Speed during competition was 80%. Reduced to 60% for Sunset Showdown
 
     // ω = velocity / radius
@@ -66,8 +66,8 @@ public class Constants {
         kMaxLinearVelMetersPerSecond / Constants.SwerveConstants.kDriveBaseRadius;
 
     // To avoid brownouts and overpowering
-    public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysConstants.kNEOMaxVoltage;
-    public static final double kModuleDriveMaxVoltage = 0.95 * PhysConstants.kNEOMaxVoltage;
+    public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysicalConstants.kNEOMaxVoltage;
+    public static final double kModuleDriveMaxVoltage = 0.95 * PhysicalConstants.kNEOMaxVoltage;
     public static final int kModuleAzimuthCurrentLimit = 30;
 
     // Multipliers for all teleop driving

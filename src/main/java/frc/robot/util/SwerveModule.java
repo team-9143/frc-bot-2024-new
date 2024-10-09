@@ -13,7 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.PhysConstants;
+import frc.robot.Constants.PhysicalConstants;
 import frc.robot.Constants.SwerveConstants;
 import java.util.function.Supplier;
 
@@ -51,15 +51,15 @@ public class SwerveModule {
     SparkUtils.configure(
         drive_motor,
         () -> drive_motor.setIdleMode(IdleMode.kBrake),
-        () -> drive_motor.setSmartCurrentLimit(PhysConstants.kNEOCurrentLimit),
+        () -> drive_motor.setSmartCurrentLimit(PhysicalConstants.kNEOCurrentLimit),
         () ->
             drive_encoder.setPositionConversionFactor(
-                PhysConstants.kSwerveDriveMechToSens
-                    * PhysConstants.kSwerveWheelCircumferenceMeters), // UNIT: meters
+                PhysicalConstants.kSwerveDriveMechToSens
+                    * PhysicalConstants.kSwerveWheelCircumferenceMeters), // UNIT: meters
         () ->
             drive_encoder.setVelocityConversionFactor(
-                PhysConstants.kSwerveDriveMechToSens
-                    * PhysConstants.kSwerveWheelCircumferenceMeters
+                PhysicalConstants.kSwerveDriveMechToSens
+                    * PhysicalConstants.kSwerveWheelCircumferenceMeters
                     / 60),
         () ->
             drive_encoder.setMeasurementPeriod(
