@@ -80,32 +80,32 @@ public class Constants {
   }
 
   public static class AmperConstants {
-    // CAN ID for motor controller
+    // CAN ID for motor controller.
     public static final int kAmperID = 4;
 
-    // Current limit for amper wheel
+    // Current limit for amper wheel.
     public static final int kAmperCurrentLimit = 60;
 
     // Speeds for wheels when intaking and scoring. Scoring speed is negative to run the wheel in
     // reverse.
-    public static final double kAmperIntakeSpeed = -0.4;
-    public static final double kAmperScoreSpeed = 0.4;
-    public static final double kAmperStallSpeed = -0.1;
+    public static final double kAmperIntakeSpeed = 0.4;
+    public static final double kAmperScoreSpeed = -0.4;
+    public static final double kAmperHoldPositionSpeed = 0.025;
   }
 
   public static class KitBotConstants {
-    // CAN IDs for motor controllers
+    // CAN IDs for motor controllers.
     public static final int kFeederID = 5;
     public static final int kLauncherID = 6;
 
-    // Current limit for launcher and feed wheels
+    // Current limit for launcher and feed wheels.
     public static final int kLauncherCurrentLimit = 80;
     public static final int kFeedCurrentLimit = 80;
 
     // Speeds for wheels when intaking and launching. Launch speeds are negative to run the wheels
     // in reverse.
-    public static final double kLauncherSpeed = -1;
-    public static final double kFeederSpeed = -1;
+    public static final double kShootLauncherSpeed = -1;
+    public static final double kShootFeederSpeed = -1;
     public static final double kIntakeLauncherSpeed = 1;
     public static final double kIntakeFeederSpeed = .3;
 
@@ -123,7 +123,7 @@ public class Constants {
   }
 
   public static class FeederConsts {
-    public static final byte kFeedMotorID = 3;
+    public static final byte kFeedMotorID = 60;
 
     public static final double kFeedUpVolts = -10; // Competition season speed was -10
     public static final double kFeedDownVolts = 1; // Competition season speed was 1
@@ -131,10 +131,12 @@ public class Constants {
   */
 
   public static class ClimberConstants {
+    // CAN IDs for motor controllers.
     public static final byte kLeftClimberID = 7; // Originally 6; swapped to 7 with KitBot
     public static final byte kRightClimberID = 8; // Originally 7; swapped to 8 with KitBot
 
-    public static final double kClimberVolts = -12; // Competition season speed was -12
+    // Climber motors speed.
+    public static final double kClimberSpeed = -1; // Competition season speed was -12
 
     // Current limit for climber motors.
     public static final int kClimberCurrentLimit = 25;
@@ -155,8 +157,8 @@ public class Constants {
                 "SwerveFL",
                 // Azimuth gains (kS, kP, kD)
                 0.1, // 0.1
-                0.1, // 0.095
-                0.0005, // 0.0006
+                0.095, // 0.095
+                0.0006, // 0.0006
                 // CANcoder offset
                 -0.678466,
                 11,
@@ -167,9 +169,9 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveFR",
                 // Azimuth gains (kS, kP, kD)
-                0.1, // 0.092
-                0.1, // 0.092
-                0.0005, // 0.00065
+                0.092, // 0.092
+                0.092, // 0.092
+                0.00065, // 0.00065
                 // CANcoder offset
                 -0.183593,
                 21,
@@ -180,9 +182,9 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveBL",
                 // Azimuth gains (kS, kP, kD)
-                0.1, // 0.08
-                0.1, // 0.105
-                0.0005, // 0.0004
+                0.08, // 0.08
+                0.105, // 0.105
+                0.0004, // 0.0004
                 // CANcoder offset
                 -0.103759,
                 31,
@@ -193,9 +195,9 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveBR",
                 // Azimuth gains (kS, kP, kD)
-                0.1, // 0.092
-                0.1, // 0.09
-                0.0005, // 0.00065
+                0.092, // 0.092
+                0.09, // 0.09
+                0.00065, // 0.00065
                 // CANcoder offset
                 -0.499023,
                 41,
@@ -209,15 +211,15 @@ public class Constants {
   }
 
   public static class AutoConstants {
-    // TODO (dev/user): Ensure that drivetrain acceleration limits are strong
-    // Upper bound drivetrain accelerations for path following and pose targeting
+    // TODO (dev/user): Ensure that drivetrain acceleration limits are strong.
+    // Upper bound drivetrain accelerations for path following and pose targeting.
     public static final double kMaxLinearAccelMetersPerSecondSquared =
         DriveConstants.kMaxLinearVelMetersPerSecond;
     public static final double kMaxTurnAccelRadiansPerSecondSquared =
         DriveConstants.kMaxTurnVelRadiansPerSecond;
 
-    // TODO(user): Tune pathfinding PID gains (currently at default gains)
-    // Gains for drivetrain position error -> velocity
+    // TODO(user): Tune pathfinding PID gains (currently at default gains).
+    // Gains for drivetrain position error -> velocity.
     public static final TunableNumber kTranslateP = new TunableNumber("P", 5, "Robot Translation");
     public static final TunableNumber kTranslateD = new TunableNumber("D", 0, "Robot Translation");
   }

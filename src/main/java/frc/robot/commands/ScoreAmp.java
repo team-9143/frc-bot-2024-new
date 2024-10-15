@@ -44,7 +44,7 @@ public class ScoreAmp extends Command {
   public void execute() {
     // If the note is held, run the motor at stall speed to hold it in place.
     if (!intake && !score) {
-      amperMotor.set(kAmperStallSpeed);
+      amperMotor.set(kAmperHoldPositionSpeed);
     }
   }
 

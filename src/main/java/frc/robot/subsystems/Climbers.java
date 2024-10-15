@@ -39,9 +39,9 @@ public class Climbers extends SafeSubsystem {
     return runEnd(
         () -> {
           m_rightClimberMotor.setVoltage(
-              ClimberConstants.kClimberVolts * -OI.OPERATOR_CONTROLLER.getRightY());
+              (ClimberConstants.kClimberSpeed * 12) * -OI.OPERATOR_CONTROLLER.getRightY());
           m_leftClimberMotor.setVoltage(
-              ClimberConstants.kClimberVolts * -OI.OPERATOR_CONTROLLER.getLeftY());
+              (ClimberConstants.kClimberSpeed * 12) * -OI.OPERATOR_CONTROLLER.getLeftY());
         },
         this::stop);
   }

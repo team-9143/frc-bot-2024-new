@@ -34,7 +34,6 @@ public class RobotContainer {
   private static boolean m_initialized = false;
   private static LoggedPowerDistribution powerDist;
   public final Amper amper = new Amper(); // Get instance of Amper.
-  public static boolean isHoldPositionActive = false;
 
   // Initialize robot container.
   public static void init() {
@@ -170,15 +169,21 @@ public class RobotContainer {
 
     // Set up a binding to run the Amper hold position command while the operator is pressing and
     // holding the X button.
+    // final Command amperStartHoldPositionCommand = Amper.getInstance().getHoldPositionCommand();
+    // OI.OPERATOR_CONTROLLER.onTrue(btn.Y, amperStartHoldPositionCommand::schedule);
+    // OI.OPERATOR_CONTROLLER.onFalse(btn.Y, Amper.amper_motor.stopMotor());
+
     OI.OPERATOR_CONTROLLER.onTrue(
         btn.X,
         () -> {
-          if (isHoldPositionActive) {
-            Amper.getInstance().stop();
-            isHoldPositionActive = false;
+          if (!Amper.getInstance().isHoldPositionActive) {
+            // Start the hold position command.
+            Amper.getInstance().getHoldPositionCommand().schedule();
+            Amper.getInstance().isHoldPositionActive = true;
           } else {
-            Amper.getInstance().getHoldPositionCommand();
-            isHoldPositionActive = true;
+            // Stop the hold position command.
+            Amper.getInstance().stop();
+            Amper.getInstance().isHoldPositionActive = false;
           }
         });
 

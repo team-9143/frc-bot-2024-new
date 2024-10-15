@@ -31,6 +31,8 @@ public class Amper extends SafeSubsystem {
     return m_amper;
   }
 
+  public boolean isHoldPositionActive = false;
+
   // Method to set the motor for intake mode.
   public Command getIntakeCommand() {
     return startEnd(
@@ -48,7 +50,7 @@ public class Amper extends SafeSubsystem {
   // Method to set the motor at stall speed.
   public Command getHoldPositionCommand() {
     return startEnd(
-        () -> amper_motor.setVoltage(AmperConstants.kAmperStallSpeed * 12),
+        () -> amper_motor.setVoltage(AmperConstants.kAmperHoldPositionSpeed * 12),
         () -> amper_motor.stopMotor());
   }
 

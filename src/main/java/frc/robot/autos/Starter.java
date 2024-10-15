@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.KitBot;
 
-/** Enum of starting actions to deal with the preloaded game piece. */
+// Enum of starting actions to deal with the preloaded game piece.
 public enum Starter {
   Shoot,
   Wait_and_shoot,
