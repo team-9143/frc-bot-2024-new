@@ -59,7 +59,8 @@ public class Constants {
         PhysicalConstants.kSwerveDriveMaxRPS
             * PhysicalConstants.kSwerveDriveMechToSens
             * PhysicalConstants.kSwerveWheelCircumferenceMeters
-            * 1.0; // Original speed during competition was 80%. Increased to 100% for offseason changes and testing.
+            * 1.0; // Original speed during competition was 80%. Increased to 100% for offseason
+    // changes and testing.
 
     // ω = velocity / radius.
     public static final double kMaxTurnVelRadiansPerSecond =

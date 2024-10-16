@@ -144,7 +144,8 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.Y, amperScoreCommand::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.Y, amperScoreCommand::cancel);
 
-    // Set up a binding to toggle the Amper hold position command when the operator presses the X button.
+    // Set up a binding to toggle the Amper hold position command when the operator presses the X
+    // button.
     OI.OPERATOR_CONTROLLER.onTrue(
         btn.X,
         () -> {
