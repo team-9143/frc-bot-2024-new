@@ -120,29 +120,6 @@ public class RobotContainer {
   }
 
   private static void configureOperator() {
-    // Button 'RB' (hold) Shoots held note using feeder and shooter wheels
-    // final Command cShoot = Starter.getFullShootCommand();
-    // OI.OPERATOR_CONTROLLER.onTrue(btn.RB, cShoot::schedule);
-    // OI.OPERATOR_CONTROLLER.onFalse(btn.RB, cShoot::cancel);
-
-    // Button 'LB' (hold) Intakes game piece (source) using shooter and feeder wheels
-    // final Command cSourceIntake =
-    //    Shooter.getInstance()
-    //        .getSourceIntakeCommand()
-    //        .alongWith(Feeder.getInstance().getFeedDownCommand());
-    // OI.OPERATOR_CONTROLLER.onTrue(btn.LB, cSourceIntake::schedule);
-    // OI.OPERATOR_CONTROLLER.onFalse(btn.LB, cSourceIntake::cancel);
-
-    // Button 'Y' (hold) Feeds a note upward
-    // final Command cFeedUp = Feeder.getInstance().getFeedUpCommand();
-    // OI.OPERATOR_CONTROLLER.onTrue(btn.Y, cFeedUp::schedule);
-    // OI.OPERATOR_CONTROLLER.onFalse(btn.Y, cFeedUp::cancel);
-
-    // Button 'A' (hold) Feeds a note downward
-    // final Command cFeedDown = Feeder.getInstance().getFeedDownCommand();
-    // OI.OPERATOR_CONTROLLER.onTrue(btn.X, cFeedDown::schedule);
-    // OI.OPERATOR_CONTROLLER.onFalse(btn.X, cFeedDown::cancel);
-
     // Set up a binding to run the KitBot intake command while the operator is pressing and holding
     // the left bumper.
     final Command intakeCommand = KitBot.getInstance().getIntakeCommand();
@@ -167,12 +144,7 @@ public class RobotContainer {
     OI.OPERATOR_CONTROLLER.onTrue(btn.Y, amperScoreCommand::schedule);
     OI.OPERATOR_CONTROLLER.onFalse(btn.Y, amperScoreCommand::cancel);
 
-    // Set up a binding to run the Amper hold position command while the operator is pressing and
-    // holding the X button.
-    // final Command amperStartHoldPositionCommand = Amper.getInstance().getHoldPositionCommand();
-    // OI.OPERATOR_CONTROLLER.onTrue(btn.Y, amperStartHoldPositionCommand::schedule);
-    // OI.OPERATOR_CONTROLLER.onFalse(btn.Y, Amper.amper_motor.stopMotor());
-
+    // Set up a binding to toggle the Amper hold position command when the operator presses the X button.
     OI.OPERATOR_CONTROLLER.onTrue(
         btn.X,
         () -> {
@@ -188,15 +160,11 @@ public class RobotContainer {
         });
 
     /*
-     * TODO (climbers): This in fact will not work how you expect it to...
      * The command will schedule when the joystick is first moved and then be active forever.
-     * Theres a few things in here that are badly written, I can explain better not in comments.
-     * Also, the joystick calls come with a build-in deadband, see the CustomController class.
+     * The joystick calls come with a build-in deadband, see the CustomController class.
      *
-     * Talk to me for more, or just make the extendClimbers command the default command for the Climbers subsystem so that it's always running. Do this in the constructor.
+     * Make the extendClimbers command the default command for the Climbers subsystem so that it's always running. Do this in the constructor.
      * Also, make a private constructor. Even if its empty.
-     *l
-     * Best, Sid
      */
 
     final Command cExtendClimbers = Climbers.getInstance().extendClimbers();
