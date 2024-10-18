@@ -24,7 +24,7 @@ public class KitBot extends SafeSubsystem {
     // Feeder motor setup
     SparkUtils.configure(
         feeder_motor,
-        () -> feeder_motor.setIdleMode(IdleMode.kBrake),
+        () -> feeder_motor.setIdleMode(IdleMode.kCoast),
         () -> feeder_motor.setSmartCurrentLimit(KitBotConstants.kFeedCurrentLimit));
 
     // Launcher motor setup
@@ -41,26 +41,12 @@ public class KitBot extends SafeSubsystem {
     return m_kitbot;
   }
 
-  // Returns a command to intake a game piece using the feeder wheel.
-  public Command getIntakeFeederCommand() {
-    return startEnd(
-        () -> feeder_motor.setVoltage(KitBotConstants.kIntakeFeederSpeed * 12),
-        () -> feeder_motor.stopMotor());
-  }
-
-  // Returns a command to intake a game piece using the launcher wheel.
-  public Command getIntakeLauncherCommand() {
-    return startEnd(
-        () -> launcher_motor.setVoltage(KitBotConstants.kIntakeLauncherSpeed * 12),
-        () -> launcher_motor.stopMotor());
-  }
-
   // Returns a command to intake a game piece using both wheels.
   public Command getIntakeCommand() {
     return startEnd(
         () -> {
-          feeder_motor.setVoltage(KitBotConstants.kIntakeFeederSpeed * 12);
-          launcher_motor.setVoltage((KitBotConstants.kIntakeLauncherSpeed * 12));
+          feeder_motor.set(KitBotConstants.kIntakeFeederSpeed);
+          launcher_motor.set((KitBotConstants.kIntakeLauncherSpeed));
         },
         () -> {
           feeder_motor.stopMotor();
@@ -68,52 +54,21 @@ public class KitBot extends SafeSubsystem {
         });
   }
 
-  // Returns a command to shoot a game piece using the feeder wheel.
-  public Command getShootFeederCommand() {
-    return startEnd(
-        () -> feeder_motor.setVoltage(KitBotConstants.kShootLauncherSpeed * 12),
-        () -> feeder_motor.stopMotor());
-  }
-
-  // Returns a command to shoot a game piece using the launcher wheel.
-  public Command getShootLauncherCommand() {
-    return startEnd(
-        () -> launcher_motor.setVoltage(KitBotConstants.kShootFeederSpeed * 12),
-        () -> launcher_motor.stopMotor());
-  }
-
   // Returns a command to shoot a game piece using both wheels.
   public Command getShootCommand() {
     return new SequentialCommandGroup(
-        Commands.runOnce(() -> launcher_motor.setVoltage(KitBotConstants.kShootLauncherSpeed * 12)),
+        Commands.runOnce(() -> launcher_motor.set(KitBotConstants.kShootLauncherSpeed)),
         Commands.waitSeconds(KitBotConstants.kFeederDelay),
         startEnd(
             () -> {
-              launcher_motor.setVoltage(KitBotConstants.kShootLauncherSpeed * 12);
-              feeder_motor.setVoltage(KitBotConstants.kShootFeederSpeed * 12);
+              launcher_motor.set(KitBotConstants.kShootLauncherSpeed);
+              feeder_motor.set(KitBotConstants.kShootFeederSpeed);
             },
             () -> {
               launcher_motor.stopMotor();
               feeder_motor.stopMotor();
             }));
   }
-
-  /*
-  public Command getShootCommand() {
-    return new ParallelCommandGroup(
-        // Start launcher motor immediately.
-        startEnd(
-            () -> launcher_motor.setVoltage(KitBotConstants.kLauncherSpeed * 12),
-            () -> launcher_motor.stopMotor()),
-
-        // Start feeder motor after a delay.
-        Commands.sequence(
-            Commands.waitSeconds(KitBotConstants.kFeederDelay),
-            startEnd(
-                () -> feeder_motor.setVoltage(KitBotConstants.kFeederSpeed * 12),
-                () -> feeder_motor.stopMotor())));
-  }
-  */
 
   @Override
   public void stop() {

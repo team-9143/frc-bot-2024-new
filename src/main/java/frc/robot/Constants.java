@@ -106,7 +106,7 @@ public class Constants {
     public static final double kShootLauncherSpeed = -1;
     public static final double kShootFeederSpeed = -1;
     public static final double kIntakeLauncherSpeed = 1;
-    public static final double kIntakeFeederSpeed = .3;
+    public static final double kIntakeFeederSpeed = .2;
 
     // Delay for starting the feeder wheel to allow the launcher wheel to spin up.
     public static final double kFeederDelay = 1;
