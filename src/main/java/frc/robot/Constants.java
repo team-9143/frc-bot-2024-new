@@ -103,8 +103,8 @@ public class Constants {
     public static final int kFeedCurrentLimit = 80;
 
     // Speeds for intaking and launching. Launch speeds are negative to run the motors in reverse.
-    public static final double kShootLauncherSpeed = -1;
-    public static final double kShootFeederSpeed = -1;
+    public static final double kShootLauncherSpeed = -1.5;
+    public static final double kShootFeederSpeed = -1.5;
     public static final double kIntakeLauncherSpeed = 1;
     public static final double kIntakeFeederSpeed = .2;
 
@@ -138,11 +138,11 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveFL",
                 // Azimuth gains (kS, kP, kD).
-                0.1,
-                0.095,
-                0.0006,
+                0.1, // 0.1
+                0.095, // 0.095
+                0.0006, // 0.0006
                 // CANcoder offset.
-                -0.678466,
+                -0.185058,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 11,
                 12,
@@ -152,11 +152,11 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveFR",
                 // Azimuth gains (kS, kP, kD).
-                0.092,
-                0.092,
-                0.00065,
+                0.092, // 0.092
+                0.062, // 0.092
+                0.00065, // 0.00065
                 // CANcoder offset.
-                -0.183593,
+                -0.346191,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 21,
                 22,
@@ -166,11 +166,11 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveBL",
                 // Azimuth gains (kS, kP, kD).
-                0.08,
-                0.105,
-                0.0004,
+                0.08, // 0.08
+                0.105, // 0.105
+                0.0004, // 0.0004
                 // CANcoder offset.
-                -0.103759,
+                -0.604248,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 31,
                 32,
@@ -180,11 +180,11 @@ public class Constants {
             new SwerveModuleConstants(
                 "SwerveBR",
                 // Azimuth gains (kS, kP, kD).
-                0.092,
-                0.09,
-                0.00065,
+                0.092, // 0.092
+                0.09, // 0.09
+                0.00065, // 0.00065
                 // CANcoder offset.
-                -0.499023,
+                -0.009765,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 41,
                 42,
