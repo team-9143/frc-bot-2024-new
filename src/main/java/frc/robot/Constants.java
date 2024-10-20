@@ -59,8 +59,7 @@ public class Constants {
         PhysicalConstants.kSwerveDriveMaxRPS
             * PhysicalConstants.kSwerveDriveMechToSens
             * PhysicalConstants.kSwerveWheelCircumferenceMeters
-            * 1.0; // Original speed during competition was 80%. Increased to 100% for offseason
-    // changes and testing.
+            * 0.8; // Original speed during competition was 80%.
 
     // ω = velocity / radius.
     public static final double kMaxTurnVelRadiansPerSecond =
@@ -140,7 +139,7 @@ public class Constants {
                 // Azimuth gains (kS, kP, kD).
                 0.1, // 0.1
                 0.095, // 0.095
-                0.0006, // 0.0006
+                0.0008, // 0.0006
                 // CANcoder offset.
                 -0.185058,
                 // CAN IDs (driving motor, turning motor, CANCoder).

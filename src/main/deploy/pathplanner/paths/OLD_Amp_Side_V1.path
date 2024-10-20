@@ -11,7 +11,8 @@
         "x": 1.9500959557474673,
         "y": 6.7005175260350525
       },
-      "isLocked": false
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -26,7 +27,8 @@
         "x": 4.173625222250443,
         "y": 6.306027102794945
       },
-      "isLocked": false
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -41,22 +43,24 @@
         "x": 8.309508292147768,
         "y": 6.658481242942779
       },
-      "isLocked": false
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 8.3,
-        "y": 7.15
+        "y": 7.3544053507507865
       },
       "prevControl": {
         "x": 8.3,
-        "y": 7.158946764544906
+        "y": 7.363352115295692
       },
       "nextControl": {
         "x": 8.3,
-        "y": 7.141053235455095
+        "y": 7.345458586205881
       },
-      "isLocked": false
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -68,7 +72,8 @@
         "y": 5.476465290716004
       },
       "nextControl": null,
-      "isLocked": false
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -82,12 +87,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
     "rotation": 60.0,
     "velocity": 0
-  }
+  },
+  "useDefaultConstraints": false
 }
