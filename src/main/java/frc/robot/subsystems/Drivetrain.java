@@ -72,13 +72,12 @@ public class Drivetrain extends SafeSubsystem {
               // Field relative control, exponentially scaling inputs to increase sensitivity
               driveFieldRelativeVelocity(
                   new ChassisSpeeds(
-                      Math.copySign(forward * forward, forward)
+                      Math.copySign(forward * forward * forward * (1/3), forward)
                           * DriveConstants.kMaxLinearVelMetersPerSecond
                           * DriveConstants.kTeleopSpeedMult,
-                      Math.copySign(left * left, left)
+                      Math.copySign(left * left * left * (1/3), left)
                           * DriveConstants.kMaxLinearVelMetersPerSecond
                           * DriveConstants.kTeleopSpeedMult,
-                      // Extra sensitivity for finer rotation control
                       Math.copySign(ccw * ccw * ccw, ccw)
                           * DriveConstants.kMaxTurnVelRadiansPerSecond
                           * DriveConstants.kTeleopTurnMult));
