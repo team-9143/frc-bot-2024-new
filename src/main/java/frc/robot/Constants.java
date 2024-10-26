@@ -102,10 +102,10 @@ public class Constants {
     public static final int kFeedCurrentLimit = 80;
 
     // Speeds for intaking and launching. Launch speeds are negative to run the motors in reverse.
-    public static final double kShootLauncherSpeed = -1.5;
-    public static final double kShootFeederSpeed = -1.5;
-    public static final double kIntakeLauncherSpeed = 1;
-    public static final double kIntakeFeederSpeed = .2;
+    public static final double kShootLauncherSpeed = 1.5;
+    public static final double kShootFeederSpeed = 1.5;
+    public static final double kIntakeLauncherSpeed = -1;
+    public static final double kIntakeFeederSpeed = -.2;
 
     // Delay for starting the feeder wheel to allow the launcher wheel to spin up.
     public static final double kFeederDelay = 1;
