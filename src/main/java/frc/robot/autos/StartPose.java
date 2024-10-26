@@ -9,9 +9,13 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Enum of starting positions to set drivetrain odometry and meet path expectations. */
 public enum StartPose {
-  Front_Side_V2(new Pose2d(1.36, 5.55, new Rotation2d())),
-  Source_Side_V3(new Pose2d(0.75, 4.46, Rotation2d.fromDegrees(-60))),
-  Amp_Side_V4(new Pose2d(0.75, 6.62, Rotation2d.fromDegrees(60))),
+  Front_Side_V3_Stage(new Pose2d(1.35, 5.55, new Rotation2d())),
+  Front_Side_V3_Midfield_Short(new Pose2d(1.35, 5.55, new Rotation2d())),
+  Front_Side_V3_Midfield_Full(new Pose2d(1.35, 5.55, new Rotation2d())),
+  Source_Side_V3_Short(new Pose2d(0.75, 4.46, Rotation2d.fromDegrees(-60))),
+  Source_Side_V3_Full(new Pose2d(0.75, 4.46, Rotation2d.fromDegrees(-60))),
+  Amp_Side_V4_Short(new Pose2d(0.75, 6.62, Rotation2d.fromDegrees(60))),
+  Amp_Side_V4_Full(new Pose2d(0.75, 6.62, Rotation2d.fromDegrees(60))),
   DNU_Source_Side_Short(new Pose2d(0.75, 4.46, Rotation2d.fromDegrees(-60))),
 
   Wing(new Pose2d(1.36, 1.62, new Rotation2d()));

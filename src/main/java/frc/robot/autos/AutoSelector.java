@@ -19,9 +19,13 @@ public class AutoSelector {
   // Initializes shuffleboard choosers for auto.
   public static void init() {
     chooser_startPose.setAll(
-        StartPose.Front_Side_V2,
-        StartPose.Amp_Side_V4,
-        StartPose.Source_Side_V3,
+        StartPose.Front_Side_V3_Stage,
+        StartPose.Front_Side_V3_Midfield_Short,
+        StartPose.Front_Side_V3_Midfield_Full,
+        StartPose.Amp_Side_V4_Short,
+        StartPose.Amp_Side_V4_Full,
+        StartPose.Source_Side_V3_Short,
+        StartPose.Source_Side_V3_Full,
         StartPose.DNU_Source_Side_Short);
     chooser_starter.setAll(Starter.Shoot, Starter.Wait_and_shoot);
     chooser_body.setAll(Body.Escape);

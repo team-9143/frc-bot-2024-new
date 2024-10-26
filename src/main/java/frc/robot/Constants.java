@@ -68,7 +68,7 @@ public class Constants {
     // To avoid brownouts and overpowering.
     public static final double kModuleAzimuthMaxVoltage = 0.65 * PhysicalConstants.kNEOMaxVoltage;
     public static final double kModuleDriveMaxVoltage = 0.95 * PhysicalConstants.kNEOMaxVoltage;
-    public static final int kModuleAzimuthCurrentLimit = 30;
+    public static final int kModuleAzimuthCurrentLimit = 40;
 
     // Multipliers for all teleop driving.
     public static final double kTeleopSpeedMult = 1;
