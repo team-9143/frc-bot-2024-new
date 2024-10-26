@@ -16,9 +16,9 @@ import frc.robot.util.SparkUtils;
 // Controls shooter wheels.
 public class KitBot extends SafeSubsystem {
   private static final CANSparkMax feeder_motor =
-      new CANSparkMax(KitBotConstants.kFeederID, MotorType.kBrushed);
+      new CANSparkMax(KitBotConstants.kFeederID, MotorType.kBrushless);
   private static final CANSparkMax launcher_motor =
-      new CANSparkMax(KitBotConstants.kLauncherID, MotorType.kBrushed);
+      new CANSparkMax(KitBotConstants.kLauncherID, MotorType.kBrushless);
 
   static {
     // Feeder motor setup

@@ -141,7 +141,7 @@ public class Constants {
                 0.094, // 0.095
                 0.0008, // 0.0006
                 // CANcoder offset.
-                -0.190917,
+                -0.188232,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 11,
                 12,
@@ -155,7 +155,7 @@ public class Constants {
                 0.062, // 0.092
                 0.00065, // 0.00065
                 // CANcoder offset.
-                -0.679931,
+                -0.680419,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 21,
                 22,
@@ -169,7 +169,7 @@ public class Constants {
                 0.105, // 0.105
                 0.0004, // 0.0004
                 // CANcoder offset.
-                -0.603271,
+                -0.604248,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 31,
                 32,
@@ -183,7 +183,7 @@ public class Constants {
                 0.09, // 0.09
                 0.00065, // 0.00065
                 // CANcoder offset.
-                -0.598876,
+                -0.005859,
                 // CAN IDs (driving motor, turning motor, CANCoder).
                 41,
                 42,
