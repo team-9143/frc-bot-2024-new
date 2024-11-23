@@ -1,12 +1,19 @@
 /*
 package frc.robot.devices;
 
+public class Limelight {
+  double tx = LimelightHelpers.getTX("");
+}
+*/
+
+package frc.robot.devices;
+
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Class for Limelight interfacing.
 public class Limelight {
@@ -22,9 +29,11 @@ public class Limelight {
   double area = ta.getDouble(0.0);
 
   // Post to smart dashboard periodically
-  SmartDashboard.putNumber("LimelightX", x);
-  SmartDashboard.putNumber("LimelightY", y);
-  SmartDashboard.putNumber("LimelightArea", area);
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area);
+  }
 
   // Limelight datatable.
   private final NetworkTable m_limelight;
@@ -79,7 +88,8 @@ public class Limelight {
     return (int) pipeline_sub.getAsDouble();
   }
 
-  // Set the limelight pipeline. Recommended to wait for {@link Limelight#getPipeline()} to corroborate before using functional code that depends on it.
+  // Set the limelight pipeline. Recommended to wait for {@link Limelight#getPipeline()} to
+  // corroborate before using functional code that depends on it.
   // @param pipeline pipeline index to set [0..9]
 
   public void setPipeline(int pipeline) {
@@ -92,4 +102,3 @@ public class Limelight {
     cam_pub.accept(isDriverCam ? 1 : 0);
   }
 }
-*/

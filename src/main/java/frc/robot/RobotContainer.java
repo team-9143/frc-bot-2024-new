@@ -17,6 +17,7 @@ import frc.robot.subsystems.Amper;
 import frc.robot.subsystems.Climbers;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.KitBot;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SafeSubsystem;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -34,6 +35,8 @@ public class RobotContainer {
   private static boolean m_initialized = false;
   private static LoggedPowerDistribution powerDist;
   public final Amper amper = new Amper(); // Get instance of Amper.
+  private static final LimelightSubsystem limelightSubsystem =
+      new LimelightSubsystem(); // Make static
 
   // Initialize robot container.
   public static void init() {
@@ -96,6 +99,15 @@ public class RobotContainer {
 
     configureDriver();
     configureOperator();
+
+    // Limelight-specific bindings
+    // Toggle between driver camera and vision processing
+    new Trigger(() -> OI.OPERATOR_CONTROLLER.getButton(btn.Back))
+        .onTrue(new InstantCommand(() -> limelightSubsystem.toggleDriverCam()));
+
+    // Log target information to the SmartDashboard
+    new Trigger(() -> OI.OPERATOR_CONTROLLER.getButton(btn.Start))
+        .onTrue(new InstantCommand(() -> limelightSubsystem.logTargetInfo()));
   }
 
   private static void configureDriver() {
