@@ -1,0 +1,57 @@
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdleConfiguration;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.networktables.GenericEntry;
+
+public class Robot extends TimedRobot {
+    private CANdle candle;           // CANdle object for controlling LEDs
+    private boolean ledOn = false;   // Tracks the LED on/off state
+    private GenericEntry ledToggleEntry; // Entry in Shuffleboard for the toggle button
+    
+    // Define the RGB color (for example, red)
+    private final int[] color = {255, 0, 0}; // Set to any RGB color you want
+
+    @Override
+    public void robotInit() {
+        // Initialize the CANdle
+        candle = new CANdle(0);  // Set the correct CAN ID for the CANdle
+        
+        // Configure CANdle settings if necessary
+        CANdleConfiguration config = new CANdleConfiguration();
+        candle.configAllSettings(config);
+
+        // Add a toggle button on Shuffleboard
+        ledToggleEntry = Shuffleboard.getTab("LED Control")  // Create a new tab called "LED Control"
+            .add("LED Toggle", ledOn)                        // Add a toggle entry
+            .withWidget("Toggle Button")                     // Use a toggle button widget
+            .getEntry();
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        // Check if the toggle button has been changed in Shuffleboard
+        boolean toggle = ledToggleEntry.getBoolean(false);
+
+        // If the button state has changed, update LED state
+        if (toggle != ledOn) {
+            ledOn = toggle;  // Update the LED state
+            
+            if (ledOn) {
+                // Turn the LEDs on to the specified color
+                setLEDColor(color[0], color[1], color[2]);
+            } else {
+                // Turn the LEDs off (black color)
+                setLEDColor(0, 0, 0);
+            }
+            
+            // Update the toggle state in Shuffleboard
+            ledToggleEntry.setBoolean(ledOn);
+        }
+    }
+
+    // Helper method to set the LED color
+    public void setLEDColor(int r, int g, int b) {
+        candle.setLEDs(r, g, b);  // Sets LEDs to the specified RGB color
+    }
+}
