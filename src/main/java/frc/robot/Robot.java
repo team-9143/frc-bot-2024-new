@@ -61,7 +61,6 @@ public class Robot extends TimedRobot {
     */
 
     AutoSelector.init();
-    // Limelight.init();
 
     CameraServer.startAutomaticCapture();
 
